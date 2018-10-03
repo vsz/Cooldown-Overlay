@@ -5,7 +5,7 @@ import win32ui
 import time
 import threading
 
-## Define global variables for text
+## Define global variables
 InitText = 'Starting Cooldown Overlay up.\nStay frosty.'
 
 ## Base Text
@@ -35,6 +35,34 @@ HasteDuration = 22.0
 
 # Equipment duration
 LifeRingDuration = 600.0
+
+## Key Press
+# Cooldown Groups
+ItemKey = 110
+AttackSpellsKey = 111
+HaelingSpellsKey = 112
+SupportSpellsKey = 113
+
+# Spells duration
+ManaShieldKey = 114
+HasteKey = 115
+
+# Equipment duration
+LifeRingKey = 116
+
+## Key Status
+# Cooldown Groups
+ItemKey = False
+AttackSpellsPressed = False
+HaelingSpellsPressed = False
+SupportSpellsPressed = False
+
+# Spells duration
+ManaShieldPressed = False
+HastePressed = False
+
+# Equipment duration
+LifeRingPressed = False
 
 def createWindow():
 	#get instance handle
@@ -150,19 +178,22 @@ def wndProc(hWnd, message, wParam, lParam):
         return win32gui.DefWindowProc(hWnd, message, wParam, lParam)
 
 def customDraw(hWindow):
-	global InitText
+	global InitText, ManaShieldText, ManaShieldDuration
 	time.sleep(1.0)
-	InitText = AttackSpellsText + 'Ready\n' + HealingSpellsText + 'Ready\n' + SupportSpellsText + 'Ready\n\n' + ManaShieldText + 'Ready\n' + HasteText + 'Ready\n\n' + LifeRingText + 'Ready\n'
-    
+	InitText = ManaShieldText + str(ManaShieldDuration)
+	
 	while(True):
-		time.sleep(0.05)
+		time.sleep(0.1)
+		ManaShieldDuration = ManaShieldDuration - 0.1
+		
+		InitText = ManaShieldText + '{0:.1f}'.format(ManaShieldDuration)
 		win32gui.RedrawWindow(hWindow, None, None, win32con.RDW_INVALIDATE | win32con.RDW_ERASE)
 
 def main():
-
+	# Create transparent window
 	hWindow = createWindow()
 	
-    # Thread that updates values
+    # Thread that updates values on window
 	thr = threading.Thread(target=customDraw, args=(hWindow,))
 	thr.setDaemon(False)
 	thr.start()
