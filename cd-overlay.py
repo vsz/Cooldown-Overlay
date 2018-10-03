@@ -4,6 +4,7 @@ import win32gui
 import win32ui
 import time
 import threading
+from pyhooked import Hook, KeyboardEvent, MouseEvent
 
 ## Define global variables
 InitText = 'Starting Cooldown Overlay up.\nStay frosty.'
@@ -178,25 +179,57 @@ def wndProc(hWnd, message, wParam, lParam):
         return win32gui.DefWindowProc(hWnd, message, wParam, lParam)
 
 def customDraw(hWindow):
-	global InitText, ManaShieldText, ManaShieldDuration
+	# Global variables
+	global InitText, ManaShieldText, ManaShieldDuration, ManaShieldPressed
+	
+	# Initialize text
 	time.sleep(1.0)
 	InitText = ManaShieldText + str(ManaShieldDuration)
 	
+	# initialize variables
+	ManaShieldTimer = ManaShieldDuration
+	
 	while(True):
-		time.sleep(0.1)
-		ManaShieldDuration = ManaShieldDuration - 0.1
+		print(ManaShieldPressed)
+		if ManaShieldPressed == True :
+			ManaShieldPressed = False
+			ManaShieldTimer = ManaShieldDuration
+			
+		ManaShieldTimer = ManaShieldTimer - 0.1
 		
-		InitText = ManaShieldText + '{0:.1f}'.format(ManaShieldDuration)
+		InitText = ManaShieldText + '{0:.1f}'.format(ManaShieldTimer)
 		win32gui.RedrawWindow(hWindow, None, None, win32con.RDW_INVALIDATE | win32con.RDW_ERASE)
+		
+		# Waits fixed time to update
+		time.sleep(0.1)
+
+# Function for detecting keypress
+def handle_events(args):
+	global ManaShieldPressed
+	if isinstance(args, KeyboardEvent):
+		print(args.key_code)
+		if args.current_key == 'B' and args.event_type == 'key down' and 'Lcontrol' in args.pressed_key:
+			print("Key Pressed!!")
+			ManaShieldPressed = True
+
+def customKeylogger():
+	hk = Hook()
+	hk.handler = handle_events 
+	hk.hook()  # hook into the events, and listen to the presses
 
 def main():
 	# Create transparent window
 	hWindow = createWindow()
 	
+	# Thread that detects keypresses
+	tKeylogger = threading.Thread(target = customKeylogger)
+	tKeylogger.setDaemon(False)
+	tKeylogger.start()
+	
     # Thread that updates values on window
-	thr = threading.Thread(target=customDraw, args=(hWindow,))
-	thr.setDaemon(False)
-	thr.start()
+	tDraw = threading.Thread(target=customDraw, args=(hWindow,))
+	tDraw.setDaemon(False)
+	tDraw.start()
 
     # Dispatch messages
 	win32gui.PumpMessages()
