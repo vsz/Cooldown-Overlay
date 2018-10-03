@@ -36,9 +36,8 @@ HasteDuration = 22.0
 # Equipment duration
 LifeRingDuration = 600.0
 
-
-def main():
-    #get instance handle
+def createWindow():
+	#get instance handle
 	hInstance = win32api.GetModuleHandle()
 
     # the class name
@@ -103,18 +102,9 @@ def main():
     # Show & update the window
     # win32gui.ShowWindow(hWindow, win32con.SW_SHOWNORMAL)
 	win32gui.UpdateWindow(hWindow)
-
-    # New code: Create and start the thread
-	thr = threading.Thread(target=customDraw, args=(hWindow,))
-	thr.setDaemon(False)
-	thr.start()
-
-    # Dispatch messages
-	win32gui.PumpMessages()
-
-
-
-
+	
+	return hWindow
+	
 def wndProc(hWnd, message, wParam, lParam):
 
     if message == win32con.WM_PAINT:
@@ -159,8 +149,6 @@ def wndProc(hWnd, message, wParam, lParam):
     else:
         return win32gui.DefWindowProc(hWnd, message, wParam, lParam)
 
-
-# Thread that updates values on screen
 def customDraw(hWindow):
 	global InitText
 	time.sleep(1.0)
@@ -170,6 +158,17 @@ def customDraw(hWindow):
 		time.sleep(0.05)
 		win32gui.RedrawWindow(hWindow, None, None, win32con.RDW_INVALIDATE | win32con.RDW_ERASE)
 
+def main():
+
+	hWindow = createWindow()
+	
+    # Thread that updates values
+	thr = threading.Thread(target=customDraw, args=(hWindow,))
+	thr.setDaemon(False)
+	thr.start()
+
+    # Dispatch messages
+	win32gui.PumpMessages()
 
 if __name__ == '__main__':
     main()
