@@ -6,64 +6,50 @@ import time
 import threading
 from pyhooked import Hook, KeyboardEvent, MouseEvent
 
-## Define global variables
-InitText = 'Starting Cooldown Overlay up.\nStay frosty.'
-
 ## Base Text
-# Cooldown Groups
 ItemText = 'Potion'
 AttackSpellsText = 'Attack'
 HealingSpellsText = 'Healing'
 SupportSpellsText = 'Support'
-
-# Spells duration
 ManaShieldText = 'Mana Shield'
 HasteText = 'Haste'
-
-# Equipment duration
 LifeRingText = 'Life Ring'
 
 ## Cooldown and base duration values
-# Cooldown Groups
 ItemCD = 1.0
 AttackSpellsCD = 2.0
 HealingSpellsCD = 1.0
 SupportSpellsCD = 2.0
-
-# Spells duration
 ManaShieldDuration = 200.0
 HasteDuration = 22.0
-
-# Equipment duration
 LifeRingDuration = 600.0
 
 ## Timer values
-# Timer Groups
-ItemTimer = 1.0
-AttackSpellsTimer = 2.0
-HealingSpellsTimer = 1.0
-SupportSpellsTimer = 2.0
-
-# Spells timer
-ManaShieldTimer = 200.0
-HasteTimer = 22.0
-
-# Equipment timer
-LifeRingTimer = 600.0
+ItemTimer = 0.0
+AttackSpellsTimer = 0.0
+HealingSpellsTimer = 0.0
+SupportSpellsTimer = 0.0
+ManaShieldTimer = 0.0
+HasteTimer = 0.0
+LifeRingTimer = 0.0
 
 ## Key Press
-# Cooldown Groups
 ItemKeyPressed = False
 AttackSpellsKeyPressed = False
 HealingSpellsKeyPressed = False
 SupportSpellsKeyPressed = False
-
-# Spells duration
 ManaShieldKeyPressed = False
 HasteKeyPressed = False
-
-# Equipment duration
 LifeRingKeyPressed = False
+
+## Key bindings
+ItemKeys = ['1','Oem_5','Oem_1']
+AttackSpellsKeys = ['Oem_5','Oem_6','Oem_1']
+HealingSpellsKeys = ['2','3']
+SupportSpellsKeys = ['4','5']
+ManaShieldKeys = ['4']
+HasteKeys = ['5']
+	
 
 def createWindow():
 	#get instance handle
@@ -170,70 +156,70 @@ def wndProc(hWnd, message, wParam, lParam):
 		w = rect[2]
 		h = rect[3]
 		
-		pos11 = (int(0.751*w),int(0.1*h),int(w),int(0.55*h))
-		pos21 = (int(0.751*w),int(0.115*h),int(w),int(0.55*h))
-		pos31 = (int(0.751*w),int(0.130*h),int(w),int(0.55*h))
-		pos41 = (int(0.751*w),int(0.145*h),int(w),int(0.55*h))
-		pos51 = (int(0.751*w),int(0.175*h),int(w),int(0.55*h))
-		pos61 = (int(0.751*w),int(0.19*h),int(w),int(0.55*h))
+		pleft = int(0.752*w)
+		ptop = int(0.1*h)
+		pright = int(0.8165*w)
+		pbottom = int(0.55*h)
+		spc = int(0.015*h)
 		
-		pos12 = (int(0.742*w),int(0.1*h),int(0.8165*w),int(0.55*h))
-		pos22 = (int(0.742*w),int(0.115*h),int(0.8165*w),int(0.55*h))
-		pos32 = (int(0.742*w),int(0.130*h),int(0.8165*w),int(0.55*h))
-		pos42 = (int(0.742*w),int(0.145*h),int(0.8165*w),int(0.55*h))
-		pos52 = (int(0.742*w),int(0.175*h),int(0.8165*w),int(0.55*h))
-		pos62 = (int(0.742*w),int(0.19*h),int(0.8165*w),int(0.55*h))
+		# RECT : left, top, right, bottom
+		pos1 = (pleft,ptop,pright,pbottom)
+		pos2 = (pleft,ptop+spc,pright,pbottom)
+		pos3 = (pleft,ptop+2*spc,pright,pbottom)
+		pos4 = (pleft,ptop+3*spc,pright,pbottom)
+		pos5 = (pleft,ptop+5*spc,pright,pbottom)
+		pos6 = (pleft,ptop+6*spc,pright,pbottom)
 		
 		# # Base Text
 		# Item Text
 		win32gui.SetTextColor(hdc, pink)
-		win32gui.DrawText(hdc,ItemText,-1,pos11,win32con.DT_LEFT | win32con.DT_VCENTER)
+		win32gui.DrawText(hdc,ItemText,-1,pos1,win32con.DT_LEFT | win32con.DT_VCENTER)
 
 		# Attack Spell Text
 		win32gui.SetTextColor(hdc, red)
-		win32gui.DrawText(hdc,AttackSpellsText,-1,pos21,win32con.DT_LEFT | win32con.DT_VCENTER)
+		win32gui.DrawText(hdc,AttackSpellsText,-1,pos2,win32con.DT_LEFT | win32con.DT_VCENTER)
 
 		# Healing Spell Text
 		win32gui.SetTextColor(hdc, lblue)
-		win32gui.DrawText(hdc,HealingSpellsText,-1,pos31,win32con.DT_LEFT | win32con.DT_VCENTER)
+		win32gui.DrawText(hdc,HealingSpellsText,-1,pos3,win32con.DT_LEFT | win32con.DT_VCENTER)
 			
 		# Support Spell Text
 		win32gui.SetTextColor(hdc, dgreen)
-		win32gui.DrawText(hdc,SupportSpellsText,-1,pos41,win32con.DT_LEFT | win32con.DT_VCENTER)
+		win32gui.DrawText(hdc,SupportSpellsText,-1,pos4,win32con.DT_LEFT | win32con.DT_VCENTER)
 			
 		# Mana Shield Text
 		win32gui.SetTextColor(hdc, white)
-		win32gui.DrawText(hdc,ManaShieldText,-1,pos51,win32con.DT_LEFT | win32con.DT_VCENTER)
+		win32gui.DrawText(hdc,ManaShieldText,-1,pos5,win32con.DT_LEFT | win32con.DT_VCENTER)
 		
 		# Haste Text
 		win32gui.SetTextColor(hdc, gray)
-		win32gui.DrawText(hdc,HasteText,-1,pos61,win32con.DT_LEFT | win32con.DT_VCENTER)
+		win32gui.DrawText(hdc,HasteText,-1,pos6,win32con.DT_LEFT | win32con.DT_VCENTER)
 
 
 		## Timers
 		# Item Timer
 		win32gui.SetTextColor(hdc, pink)
-		win32gui.DrawText(hdc,'{0:.1f}'.format(ItemTimer),-1,pos12,win32con.DT_RIGHT | win32con.DT_VCENTER)
+		win32gui.DrawText(hdc,'{0:.1f}'.format(ItemTimer),-1,pos1,win32con.DT_RIGHT | win32con.DT_VCENTER)
 
 		# Attack Timer
 		win32gui.SetTextColor(hdc, red)
-		win32gui.DrawText(hdc,'{0:.1f}'.format(AttackSpellsTimer),-1,pos22,win32con.DT_RIGHT | win32con.DT_VCENTER)
+		win32gui.DrawText(hdc,'{0:.1f}'.format(AttackSpellsTimer),-1,pos2,win32con.DT_RIGHT | win32con.DT_VCENTER)
 
 		# Healing Spell Timer
 		win32gui.SetTextColor(hdc, lblue)
-		win32gui.DrawText(hdc,'{0:.1f}'.format(HealingSpellsTimer),-1,pos32,win32con.DT_RIGHT | win32con.DT_VCENTER)
+		win32gui.DrawText(hdc,'{0:.1f}'.format(HealingSpellsTimer),-1,pos3,win32con.DT_RIGHT | win32con.DT_VCENTER)
 			
 		# Support Spell Timer
 		win32gui.SetTextColor(hdc, dgreen)
-		win32gui.DrawText(hdc,'{0:.1f}'.format(SupportSpellsTimer),-1,pos42,win32con.DT_RIGHT | win32con.DT_VCENTER)
+		win32gui.DrawText(hdc,'{0:.1f}'.format(SupportSpellsTimer),-1,pos4,win32con.DT_RIGHT | win32con.DT_VCENTER)
 			
 		# Mana Shield Timer
 		win32gui.SetTextColor(hdc, white)
-		win32gui.DrawText(hdc,'{0:.1f}'.format(ManaShieldTimer),-1,pos52,win32con.DT_RIGHT | win32con.DT_VCENTER)
+		win32gui.DrawText(hdc,'{0:.1f}'.format(ManaShieldTimer),-1,pos5,win32con.DT_RIGHT | win32con.DT_VCENTER)
 		
 		# Haste Timer
 		win32gui.SetTextColor(hdc, gray)
-		win32gui.DrawText(hdc,'{0:.1f}'.format(HasteTimer),-1,pos62,win32con.DT_RIGHT | win32con.DT_VCENTER)
+		win32gui.DrawText(hdc,'{0:.1f}'.format(HasteTimer),-1,pos6,win32con.DT_RIGHT | win32con.DT_VCENTER)
 
 
 		win32gui.EndPaint(hWnd, paintStruct)
@@ -247,42 +233,134 @@ def wndProc(hWnd, message, wParam, lParam):
 	else:
 		return win32gui.DefWindowProc(hWnd, message, wParam, lParam)
 
-def customDraw(hWindow):
+def updateTimers(hWindow):
 	# Global variables
-	global ItemTimer, AttackSpellsTimer, HealingSpellsTimer, SupportSpellsTimer, ManaShieldTimer, HasteTimer, ItemKeyPressed, AttackSpellsKeyPressed, HealingSpellsKeyPressed, SupportSpellsKeyPressed, ManaShieldKeyPressed, HasteKeyPressed
+	global ItemTimer, AttackSpellsTimer, HealingSpellsTimer, SupportSpellsTimer, ManaShieldTimer, HasteTimer
+	global ItemKeyPressed, AttackSpellsKeyPressed, HealingSpellsKeyPressed, SupportSpellsKeyPressed, ManaShieldKeyPressed, HasteKeyPressed
+	global ItemCD, AttackSpellsCD, HealingSpellsCD, SupportSpellsCD, ManaShieldDuration, HasteDuration
 
 	# initialize variables
-	StartTimer = False
+	StartItemTimer = False
+	StartAttackSpellsTimer = False
+	StartHealingSpellsTimer = False
+	StartSupportSpellsTimer = False
+	StartManaShieldTimer = False
+	StartHasteTimer = False
+	
+	# Window and Timer update period
+	Ts = 0.05
 	
 	while(True):
+		# Start Timers for pressed keys and reset command
+		# Item
+		if ItemKeyPressed :
+			StartItemTimer = True
+			ItemTimer = ItemCD
+			ItemKeyPressed = False
+
+		# Attack Spells
+		if AttackSpellsKeyPressed :
+			StartAttackSpellsTimer = True
+			AttackSpellsTimer = AttackSpellsCD
+			AttackSpellsKeyPressed = False
+			
+		# Healing Spells
+		if HealingSpellsKeyPressed :
+			StartHealingSpellsTimer = True
+			HealingSpellsTimer = HealingSpellsCD
+			HealingSpellsKeyPressed = False
+
+		# Support Spells
+		if SupportSpellsKeyPressed :
+			StartSupportSpellsTimer = True
+			SupportSpellsTimer = SupportSpellsCD
+			SupportSpellsKeyPressed = False
+
+		# Mana Shield
+		if ManaShieldKeyPressed :
+			StartManaShieldTimer = True
+			ManaShieldTimer = ManaShieldDuration
+			ManaShieldKeyPressed = False
+
+		# Haste
 		if HasteKeyPressed :
-			StartTimer = True
+			StartHasteTimer = True
 			HasteTimer = HasteDuration
 			HasteKeyPressed = False
 		
-		if StartTimer :
-			HasteTimer = HasteTimer - 0.1
+		# Decrements timers
+		if StartItemTimer : ItemTimer = ItemTimer - Ts
+		if StartAttackSpellsTimer : AttackSpellsTimer = AttackSpellsTimer - Ts
+		if StartHealingSpellsTimer : HealingSpellsTimer = HealingSpellsTimer - Ts
+		if StartSupportSpellsTimer : SupportSpellsTimer = SupportSpellsTimer - Ts
+		if StartManaShieldTimer : ManaShieldTimer = ManaShieldTimer - Ts
+		if StartHasteTimer : HasteTimer = HasteTimer - Ts
 		
-		
+		# Redraw Window
 		win32gui.RedrawWindow(hWindow, None, None, win32con.RDW_INVALIDATE | win32con.RDW_ERASE)
 		
 		# Waits fixed time to update
-		time.sleep(0.1)
+		time.sleep(Ts)
 		
-		if StartTimer and HasteTimer < 0.1 :
-			HasteTimer = HasteDuration
-			StartTimer = False
+		# Resets timers when zero is reached
 		
+		# Item
+		if StartItemTimer and ItemTimer < Ts : 
+			ItemTimer = 0.0
+			StartItemTimer = False
+
+		# Attack Spells
+		if StartAttackSpellsTimer and AttackSpellsTimer < Ts : 
+			AttackSpellsTimer = 0.0
+			StartAttackSpellsTimer = False
+
+		# Healing Spells
+		if StartHealingSpellsTimer and HealingSpellsTimer < Ts : 
+			HealingSpellsTimer = 0.0
+			StartHealingSpellsTimer = False
+
+		# Support Spells
+		if StartSupportSpellsTimer and SupportSpellsTimer < Ts : 
+			SupportSpellsTimer = 0.0
+			StartSupportSpellsTimer = False
+
+		# Mana Shield
+		if StartManaShieldTimer and ManaShieldTimer < Ts : 
+			ManaShieldTimer = 0.0
+			StartManaShieldTimer = False
+
+		# Haste
+		if StartHasteTimer and HasteTimer < Ts : 
+			HasteTimer = 0.0
+			StartHasteTimer = False
 
 # Function for detecting keypress
 def handle_events(args):
 	global ItemKeyPressed, AttackSpellsKeyPressed, HealingSpellsKeyPressed, SupportSpellsKeyPressed, ManaShieldKeyPressed, HasteKeyPressed
+	global ItemKeys, AttackSpellsKeys, HealingSpellsKeys, SupportSpellsKeys, ManaShieldKeys, HasteKeys
+	
 	if isinstance(args, KeyboardEvent):
-		# print(args.pressed_key)
-		if '5' in args.pressed_key:
-			HasteKeyPressed = True
+		#print(args.pressed_key)
+		
+		# Item Key Pressed
+		if any(i in ItemKeys for i in args.pressed_key) : ItemKeyPressed = True
+		
+		# Attack Key Pressed		
+		if any(i in AttackSpellsKeys for i in args.pressed_key) : AttackSpellsKeyPressed = True
 
-def customKeylogger():
+		# Healing Key Pressed		
+		if any(i in HealingSpellsKeys for i in args.pressed_key) : HealingSpellsKeyPressed = True
+
+		# Support Key Pressed		
+		if any(i in SupportSpellsKeys for i in args.pressed_key) : SupportSpellsKeyPressed = True
+		
+		# ManaShield Key Pressed
+		if any(i in ManaShieldKeys for i in args.pressed_key) : ManaShieldKeyPressed = True		
+		
+		# Haste Key Pressed		
+		if any(i in HasteKeys for i in args.pressed_key) : HasteKeyPressed = True
+
+def keylogger():
 	hk = Hook()
 	hk.handler = handle_events 
 	hk.hook()  # hook into the events, and listen to the presses
@@ -292,14 +370,14 @@ def main():
 	hWindow = createWindow()
 	
 	# Thread that detects keypresses
-	tKeylogger = threading.Thread(target = customKeylogger)
+	tKeylogger = threading.Thread(target = keylogger)
 	tKeylogger.setDaemon(False)
 	tKeylogger.start()
 	
 	# Thread that updates values on window
-	tDraw = threading.Thread(target=customDraw, args=(hWindow,))
-	tDraw.setDaemon(False)
-	tDraw.start()
+	tTimers = threading.Thread(target=updateTimers, args=(hWindow,))
+	tTimers.setDaemon(False)
+	tTimers.start()
 
 	# Dispatch messages
 	win32gui.PumpMessages()
