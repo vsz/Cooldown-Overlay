@@ -118,7 +118,18 @@ def createWindow():
 	win32gui.UpdateWindow(hWindow)
 	
 	return hWindow
+
+
+def createLabel(hdc, text, pos, color=0x008c8c8c):
+	win32gui.SetTextColor(hdc, color)
+	win32gui.DrawText(hdc,text,-1,pos,win32con.DT_LEFT | win32con.DT_VCENTER)
+
+
+def createTimer(hdc, pos, initialValue=0.0, color=0x008c8c8c):
+	win32gui.SetTextColor(hdc, color)
+	win32gui.DrawText(hdc,'{0:.1f}'.format(initialValue),-1,pos,win32con.DT_RIGHT | win32con.DT_VCENTER)
 	
+
 def wndProc(hWnd, message, wParam, lParam):
 
 	if message == win32con.WM_PAINT:
@@ -150,7 +161,7 @@ def wndProc(hWnd, message, wParam, lParam):
 		dgreen = 0x0041961e
 		gray = 0x008c8c8c
 		
-			# Get relative dimensions
+		# Get relative dimensions
 		rect = win32gui.GetClientRect(hWnd)
 		w = rect[2]
 		h = rect[3]
@@ -169,57 +180,21 @@ def wndProc(hWnd, message, wParam, lParam):
 		pos5 = (pleft,ptop+5*spc,pright,pbottom)
 		pos6 = (pleft,ptop+6*spc,pright,pbottom)
 		
-		# # Base Text
-		# Item Text
-		win32gui.SetTextColor(hdc, pink)
-		win32gui.DrawText(hdc,ItemText,-1,pos1,win32con.DT_LEFT | win32con.DT_VCENTER)
-
-		# Attack Spell Text
-		win32gui.SetTextColor(hdc, red)
-		win32gui.DrawText(hdc,AttackSpellsText,-1,pos2,win32con.DT_LEFT | win32con.DT_VCENTER)
-
-		# Healing Spell Text
-		win32gui.SetTextColor(hdc, lblue)
-		win32gui.DrawText(hdc,HealingSpellsText,-1,pos3,win32con.DT_LEFT | win32con.DT_VCENTER)
-			
-		# Support Spell Text
-		win32gui.SetTextColor(hdc, dgreen)
-		win32gui.DrawText(hdc,SupportSpellsText,-1,pos4,win32con.DT_LEFT | win32con.DT_VCENTER)
-			
-		# Mana Shield Text
-		win32gui.SetTextColor(hdc, white)
-		win32gui.DrawText(hdc,ManaShieldText,-1,pos5,win32con.DT_LEFT | win32con.DT_VCENTER)
-		
-		# Haste Text
-		win32gui.SetTextColor(hdc, gray)
-		win32gui.DrawText(hdc,HasteText,-1,pos6,win32con.DT_LEFT | win32con.DT_VCENTER)
-
+		## Labels
+		createLabel(hdc, ItemText, pos1, pink)
+		createLabel(hdc, AttackSpellsText, pos2, red)
+		createLabel(hdc, HealingSpellsText, pos3, lblue)
+		createLabel(hdc, SupportSpellsText, pos4, dgreen)
+		createLabel(hdc, ManaShieldText, pos5, white)
+		createLabel(hdc, HasteText, pos6, gray)
 
 		## Timers
-		# Item Timer
-		win32gui.SetTextColor(hdc, pink)
-		win32gui.DrawText(hdc,'{0:.1f}'.format(ItemTimer),-1,pos1,win32con.DT_RIGHT | win32con.DT_VCENTER)
-
-		# Attack Timer
-		win32gui.SetTextColor(hdc, red)
-		win32gui.DrawText(hdc,'{0:.1f}'.format(AttackSpellsTimer),-1,pos2,win32con.DT_RIGHT | win32con.DT_VCENTER)
-
-		# Healing Spell Timer
-		win32gui.SetTextColor(hdc, lblue)
-		win32gui.DrawText(hdc,'{0:.1f}'.format(HealingSpellsTimer),-1,pos3,win32con.DT_RIGHT | win32con.DT_VCENTER)
-			
-		# Support Spell Timer
-		win32gui.SetTextColor(hdc, dgreen)
-		win32gui.DrawText(hdc,'{0:.1f}'.format(SupportSpellsTimer),-1,pos4,win32con.DT_RIGHT | win32con.DT_VCENTER)
-			
-		# Mana Shield Timer
-		win32gui.SetTextColor(hdc, white)
-		win32gui.DrawText(hdc,'{0:.1f}'.format(ManaShieldTimer),-1,pos5,win32con.DT_RIGHT | win32con.DT_VCENTER)
-		
-		# Haste Timer
-		win32gui.SetTextColor(hdc, gray)
-		win32gui.DrawText(hdc,'{0:.1f}'.format(HasteTimer),-1,pos6,win32con.DT_RIGHT | win32con.DT_VCENTER)
-
+		createTimer(hdc, pos1, ItemTimer, pink)
+		createTimer(hdc, pos2, AttackSpellsTimer, red)
+		createTimer(hdc, pos3, HealingSpellsTimer, lblue)
+		createTimer(hdc, pos4, SupportSpellsTimer, dgreen)
+		createTimer(hdc, pos5, ManaShieldTimer, white)
+		createTimer(hdc, pos6, HasteTimer, gray)
 
 		win32gui.EndPaint(hWnd, paintStruct)
 		return 0
