@@ -6,7 +6,7 @@ import time
 import threading
 from pyhooked import Hook, KeyboardEvent, MouseEvent
 
-## Base Text
+## Base Text - Can be edited
 ItemText = 'Potion'
 AttackSpellsText = 'Attack'
 HealingSpellsText = 'Healing'
@@ -15,7 +15,7 @@ ManaShieldText = 'Mana Shield'
 HasteText = 'Haste'
 LifeRingText = 'Life Ring'
 
-## Cooldown and base duration values
+## Cooldown and base duration values - Can be edited
 ItemCD = 1.0
 AttackSpellsCD = 2.0
 HealingSpellsCD = 1.0
@@ -24,7 +24,15 @@ ManaShieldDuration = 200.0
 HasteDuration = 22.0
 LifeRingDuration = 600.0
 
-## Timer values
+## Key bindings - Can be edited
+ItemKeys = ['1','Oem_5','Oem_1']
+AttackSpellsKeys = ['Oem_5','Oem_6','Oem_1']
+HealingSpellsKeys = ['2','3']
+SupportSpellsKeys = ['4','5']
+ManaShieldKeys = ['4']
+HasteKeys = ['5']
+
+## Timer initial values
 ItemTimer = 0.0
 AttackSpellsTimer = 0.0
 HealingSpellsTimer = 0.0
@@ -41,15 +49,6 @@ SupportSpellsKeyPressed = False
 ManaShieldKeyPressed = False
 HasteKeyPressed = False
 LifeRingKeyPressed = False
-
-## Key bindings
-ItemKeys = ['1','Oem_5','Oem_1']
-AttackSpellsKeys = ['Oem_5','Oem_6','Oem_1']
-HealingSpellsKeys = ['2','3']
-SupportSpellsKeys = ['4','5']
-ManaShieldKeys = ['4']
-HasteKeys = ['5']
-	
 
 def createWindow():
 	#get instance handle
@@ -334,7 +333,6 @@ def updateTimers(hWindow):
 			HasteTimer = 0.0
 			StartHasteTimer = False
 
-# Function for detecting keypress
 def handle_events(args):
 	global ItemKeyPressed, AttackSpellsKeyPressed, HealingSpellsKeyPressed, SupportSpellsKeyPressed, ManaShieldKeyPressed, HasteKeyPressed
 	global ItemKeys, AttackSpellsKeys, HealingSpellsKeys, SupportSpellsKeys, ManaShieldKeys, HasteKeys
