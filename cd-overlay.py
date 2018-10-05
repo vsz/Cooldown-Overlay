@@ -7,6 +7,17 @@ import threading
 from pyhooked import Hook, KeyboardEvent, MouseEvent
 from enum import Enum
 
+class TextColor(Enum):
+	# Colors
+	black = 0x00000000
+	blue = 0x00ff0000
+	red = 0x000000ff
+	green = 0x0000ff00
+	white = 0x00fefefe # ??
+	pink = 0x00c800c8
+	lblue = 0x00dcc800
+	dgreen = 0x0041961e
+	gray = 0x008c8c8c
 
 class ActionType(Enum):
 	CONSUMABLE = 1
@@ -47,6 +58,7 @@ class TrackedGroup:
 
 class TrackedAction:
 	labelText = str()
+	color = 0x00000000
 	cooldownGroups = []
 	actionType = ActionType
 	keys = []
@@ -56,8 +68,9 @@ class TrackedAction:
 	triggered = False
 	running = False
 	
-	def __init__(self,lt,cg,at,keys,t,iv):
+	def __init__(self,lt,color,cg,at,keys,t,iv):
 		self.labelText = lt
+		self.color = color
 		self.actionType = at
 		self.keys = keys
 		self.time = t
@@ -80,17 +93,30 @@ class TrackedAction:
 			self.countdown = 0.0
 			self.running = False
 			
+
+# can I create enum with this?
+black = 0x00000000
+blue = 0x00ff0000
+red = 0x000000ff
+green = 0x0000ff00
+white = 0x00fefefe # ??
+pink = 0x00c800c8
+lblue = 0x00dcc800
+dgreen = 0x0041961e
+gray = 0x008c8c8c
+
 #groupList = []
 #groupList.append(TrackedGroup('Attack',CooldownGroup.ATKSPELL))
 
 actionList = []
-actionList.append(TrackedAction('Potion',[CooldownGroup.OBJECT],ActionType.CONSUMABLE,['1','Oem_5','Oem_1'],1.0,0.0))
-actionList.append(TrackedAction('Attack',[CooldownGroup.OBJECT],ActionType.CONSUMABLE,['Oem_5','Oem_6','Oem_1'],2.0,0.0))
-actionList.append(TrackedAction('Healing',[CooldownGroup.OBJECT],ActionType.CONSUMABLE,['2','3'],1.0,0.0))
-actionList.append(TrackedAction('Support',[CooldownGroup.OBJECT],ActionType.CONSUMABLE,['4','5'],2.0,0.0))
-actionList.append(TrackedAction('Mana Shield',[CooldownGroup.OBJECT],ActionType.CONSUMABLE,['4'],200.0,0.0))
-actionList.append(TrackedAction('Haste',[CooldownGroup.OBJECT],ActionType.CONSUMABLE,['5'],22.0,0.0))
+actionList.append(TrackedAction('Potion',pink,[CooldownGroup.OBJECT],ActionType.CONSUMABLE,['1','Oem_5','Oem_1'],1.0,0.0))
+actionList.append(TrackedAction('Attack',red,[CooldownGroup.OBJECT],ActionType.CONSUMABLE,['Oem_5','Oem_6','Oem_1'],2.0,0.0))
+actionList.append(TrackedAction('Healing',lblue,[CooldownGroup.OBJECT],ActionType.CONSUMABLE,['2','3'],1.0,0.0))
+actionList.append(TrackedAction('Support',dgreen,[CooldownGroup.OBJECT],ActionType.CONSUMABLE,['4','5'],2.0,0.0))
+actionList.append(TrackedAction('Mana Shield',white,[CooldownGroup.OBJECT],ActionType.CONSUMABLE,['4'],200.0,0.0))
+actionList.append(TrackedAction('Haste',gray,[CooldownGroup.OBJECT],ActionType.CONSUMABLE,['5'],22.0,0.0))
 
+emptyLines = [5];
 
 def createWindow():
 	#get instance handle
@@ -192,17 +218,6 @@ def wndProc(hWnd, message, wParam, lParam):
 
 		win32gui.SelectObject(hdc, hf)
 
-		# Colors
-		black = 0x00000000
-		blue = 0x00ff0000
-		red = 0x000000ff
-		green = 0x0000ff00
-		white = 0x00fefefe # ??
-		pink = 0x00c800c8
-		lblue = 0x00dcc800
-		dgreen = 0x0041961e
-		gray = 0x008c8c8c
-
 		# Get relative dimensions
 		rect = win32gui.GetClientRect(hWnd)
 		w = rect[2]
@@ -214,10 +229,13 @@ def wndProc(hWnd, message, wParam, lParam):
 		pbottom = int(0.55*h)
 		spc = int(0.015*h)
 		
+		k = 0
 		for idx,action in enumerate(actionList):
-			pos = (pleft,ptop+idx*spc,pright,pbottom)
-			createTextLabel(hdc,pos,dgreen,action.labelText)
-			createTimerLabel(hdc,pos,dgreen,action.countdown)
+			if (idx+1) in emptyLines : k=k+1
+			
+			pos = (pleft,ptop+(idx+k)*spc,pright,pbottom)
+			createTextLabel(hdc,pos,action.color,action.labelText)
+			createTimerLabel(hdc,pos,action.color,action.countdown)
 
 		win32gui.EndPaint(hWnd, paintStruct)
 		return 0
