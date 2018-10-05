@@ -51,29 +51,38 @@ ManaShieldKeyPressed = False
 HasteKeyPressed = False
 LifeRingKeyPressed = False
 
-
-class CooldownGroup(Enum):
-	ATKSPELL = 1
-	HEALSPELL = 2
-	SUPSPELL = 3
-	SPCLSPELL = 4
-	CNJRSPELL = 5
-	OBJECT = 6
-	NOGROUP = 7 # Does not trigger any group cooldown (equip rings, amulets)
-
 class ActionType(Enum):
-	SPELLREGULAR = 1 # Spell CD = Group CD
-	SPELLCD = 2
-	SPELLEFFECT = 3
-	RUNETARGET = 4
-	RUNECROSSHAIR = 5
-	EQUIPMENT = 6
-	USABLE = 7
+	CONSUMABLE = 1
+	ATKREGULAR = 2
+	ATKSPECIAL = 3
+	ATKRUNE = 4
+	ATKCOOLDOWN = 5
+	ATKEFFECT = 6
+	HEALREGULAR = 7
+	HEALRUNE = 8
+	HEALCOOLDOWN = 9
+	HEALEFFECT = 10
+	SUPPORTREGULAR = 11
+	SUPPORTRUNE = 12
+	SUPPORTCOOLDOWN = 13
+	SUPPORTEFFECT = 14
+	CONJUREREGULAR = 15
+	EQUIPMENT = 16
+	
+class CooldownGroup(Enum):
+	OBJECT = 1
+	ATTACK = 2
+	HEAL = 3
+	SUPPORT = 4
+	SPECIAL = 5
+	CONJURE = 6
+	NONE = 7
 
 class TrackedGroup:
 	labelText = str()
 	cooldownGroup = CooldownGroup
 	time = 0.0
+	actionList = []
 	
 	def __init__(self,lt,cg):
 		self.labelText = lt
@@ -81,7 +90,7 @@ class TrackedGroup:
 
 class TrackedAction:
 	labelText = str()
-	cooldownGroup = CooldownGroup
+	cooldownGroups = []
 	actionType = ActionType
 	keys = []
 	time = 0.0 #can be cooldown or duration
@@ -90,20 +99,20 @@ class TrackedAction:
 	
 	def __init__(self,lt,cg,at,keys,t,iv):
 		self.labelText = lt
-		self.cooldownGroup = cg
 		self.actionType = at
 		self.keys = keys
 		self.time = t
 		self.initialValue = iv
-		
+
 	def pressKey(self):
 		self.keyPress = True
 
 actionList = []
-actionList.append(TrackedAction('Potion',CooldownGroup.OBJECT,ActionType.USABLE,['1'],1.0,0.0))
+
+#actionList.append(TrackedAction('Potion',CooldownGroup.OBJECT,ActionType.USABLE,['1'],1.0,0.0))
 
 groupList = []
-groupList.append(TrackedGroup('Attack',CooldownGroup.ATKSPELL))
+#groupList.append(TrackedGroup('Attack',CooldownGroup.ATKSPELL))
 
 def createWindow():
     #get instance handle
@@ -175,12 +184,12 @@ def createWindow():
     return hWindow
 
 
-def createLabel(hdc, text, pos, color=0x008c8c8c):
+def createTextLabel(hdc, text, pos, color=0x008c8c8c):
     win32gui.SetTextColor(hdc, color)
     win32gui.DrawText(hdc,text,-1,pos,win32con.DT_LEFT | win32con.DT_VCENTER)
 
 
-def createTimer(hdc, pos, initialValue=0.0, color=0x008c8c8c):
+def createTimerLabel(hdc, pos, initialValue=0.0, color=0x008c8c8c):
     win32gui.SetTextColor(hdc, color)
     win32gui.DrawText(hdc,'{0:.1f}'.format(initialValue),-1,pos,win32con.DT_RIGHT | win32con.DT_VCENTER)
 
@@ -236,20 +245,20 @@ def wndProc(hWnd, message, wParam, lParam):
         pos6 = (pleft,ptop+6*spc,pright,pbottom)
 
         ## Labels
-        createLabel(hdc, ItemText, pos1, pink)
-        createLabel(hdc, AttackSpellsText, pos2, red)
-        createLabel(hdc, HealingSpellsText, pos3, lblue)
-        createLabel(hdc, SupportSpellsText, pos4, dgreen)
-        createLabel(hdc, ManaShieldText, pos5, white)
-        createLabel(hdc, HasteText, pos6, gray)
+        createTextLabel(hdc, ItemText, pos1, pink)
+        createTextLabel(hdc, AttackSpellsText, pos2, red)
+        createTextLabel(hdc, HealingSpellsText, pos3, lblue)
+        createTextLabel(hdc, SupportSpellsText, pos4, dgreen)
+        createTextLabel(hdc, ManaShieldText, pos5, white)
+        createTextLabel(hdc, HasteText, pos6, gray)
 
         ## Timers
-        createTimer(hdc, pos1, ItemTimer, pink)
-        createTimer(hdc, pos2, AttackSpellsTimer, red)
-        createTimer(hdc, pos3, HealingSpellsTimer, lblue)
-        createTimer(hdc, pos4, SupportSpellsTimer, dgreen)
-        createTimer(hdc, pos5, ManaShieldTimer, white)
-        createTimer(hdc, pos6, HasteTimer, gray)
+        createTimerLabel(hdc, pos1, ItemTimer, pink)
+        createTimerLabel(hdc, pos2, AttackSpellsTimer, red)
+        createTimerLabel(hdc, pos3, HealingSpellsTimer, lblue)
+        createTimerLabel(hdc, pos4, SupportSpellsTimer, dgreen)
+        createTimerLabel(hdc, pos5, ManaShieldTimer, white)
+        createTimerLabel(hdc, pos6, HasteTimer, gray)
 
         win32gui.EndPaint(hWnd, paintStruct)
         return 0
