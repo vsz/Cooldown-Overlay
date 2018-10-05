@@ -51,41 +51,59 @@ ManaShieldKeyPressed = False
 HasteKeyPressed = False
 LifeRingKeyPressed = False
 
+
 class CooldownGroup(Enum):
 	ATKSPELL = 1
 	HEALSPELL = 2
 	SUPSPELL = 3
 	SPCLSPELL = 4
 	CNJRSPELL = 5
-	NOGROUP = 6 # Does not trigger any group cooldown (equip rings, amulets)
-	
-class ActionType(Enum):
-	OBJECT = 1
-	SPELLREGULAR = 2 # Spell CD = Group CD
-	SPELLCD = 3
-	SPELLEFFECT = 4
-	RUNETARGET = 5
-	RUNECROSSHAIR = 6
-	WEARABLE = 7		
+	OBJECT = 6
+	NOGROUP = 7 # Does not trigger any group cooldown (equip rings, amulets)
 
-class TrackedAction():
+class ActionType(Enum):
+	SPELLREGULAR = 1 # Spell CD = Group CD
+	SPELLCD = 2
+	SPELLEFFECT = 3
+	RUNETARGET = 4
+	RUNECROSSHAIR = 5
+	EQUIPMENT = 6
+	USABLE = 7
+
+class TrackedGroup:
+	labelText = str()
+	cooldownGroup = CooldownGroup
+	time = 0.0
+	
+	def __init__(self,lt,cg):
+		self.labelText = lt
+		self.cooldownGroup = cg
+
+class TrackedAction:
 	labelText = str()
 	cooldownGroup = CooldownGroup
 	actionType = ActionType
-	key = str()
+	keys = []
 	time = 0.0 #can be cooldown or duration
-	initial_value = 0.0
+	initialValue = 0.0
+	keyPress = False
 	
-	def __init__(self,lt,cg,at,key,t,iv):
+	def __init__(self,lt,cg,at,keys,t,iv):
 		self.labelText = lt
 		self.cooldownGroup = cg
 		self.actionType = at
-		self.key = key
+		self.keys = keys
 		self.time = t
-		self.initial_value = iv
+		self.initialValue = iv
+		
+	def pressKey(self):
+		self.keyPress = True
 
-aPotion = TrackedAction('Potion',CooldownGroup.NOGROUP,ActionType.OBJECT,'1',1.0,0.0)
-#aAtkSpell = TrackedAction('AtkSpell',CooldownGroup.ATKSPELL,ActionType.SPELLREGULAR,'Oem_6',2.0,0.0)
+actionList = []
+actionList.append(TrackedAction('Potion',CooldownGroup.OBJECT,ActionType.USABLE,['1'],1.0,0.0))
+
+groupList = []
+groupList.append(TrackedGroup('Attack',CooldownGroup.ATKSPELL))
 
 def createWindow():
     #get instance handle
@@ -245,6 +263,17 @@ def wndProc(hWnd, message, wParam, lParam):
         return win32gui.DefWindowProc(hWnd, message, wParam, lParam)
 
 
+def updateTrackedActions(hWindow):
+	global actionList
+	
+	# Window and Timer update period
+	Ts = 0.05
+	
+	for action in actionList :
+		pass
+		
+	
+
 def updateTimers(hWindow):
     # Global variables
     global ItemTimer, AttackSpellsTimer, HealingSpellsTimer, SupportSpellsTimer, ManaShieldTimer, HasteTimer
@@ -346,6 +375,14 @@ def updateTimers(hWindow):
             HasteTimer = 0.0
             StartHasteTimer = False
 
+def handle_events2(args):
+	global actionList
+	
+	if isinstance(args, KeyboardEvent):
+		print(args.pressed_key)
+		for action in actionList :
+			#print(action.keys)
+			if any(i in action.keys for i in args.pressed_key): action.pressKey()		
 
 def handle_events(args):
     global ItemKeyPressed, AttackSpellsKeyPressed, HealingSpellsKeyPressed, SupportSpellsKeyPressed, ManaShieldKeyPressed, HasteKeyPressed
@@ -373,9 +410,9 @@ def handle_events(args):
         if any(i in HasteKeys for i in args.pressed_key): HasteKeyPressed = True
 
 
-def keylogger():
+def keylogger(handler):
     hk = Hook()
-    hk.handler = handle_events
+    hk.handler = handler
     hk.hook()  # hook into the events, and listen to the presses
 
 
@@ -384,7 +421,7 @@ def main():
     hWindow = createWindow()
 
     # Thread that detects keypresses
-    tKeylogger = threading.Thread(target = keylogger)
+    tKeylogger = threading.Thread(target = keylogger, args=(handle_events,))
     tKeylogger.setDaemon(False)
     tKeylogger.start()
 
