@@ -50,6 +50,41 @@ ManaShieldKeyPressed = False
 HasteKeyPressed = False
 LifeRingKeyPressed = False
 
+class CooldownGroup(Enum):
+	ATKSPELL = 1
+	HEALSPELL = 2
+	SUPSPELL = 3
+	SPCLSPELL = 4
+	CNJRSPELL = 5
+	NOGROUP = 6 # Does not trigger any group cooldown (equip rings, amulets)
+	
+class ActionType(Enum):
+	OBJECT = 1
+	SPELLREGULAR = 2 # Spell CD = Group CD
+	SPELLCD = 3
+	SPELLEFFECT = 4
+	RUNETARGET = 5
+	RUNECROSSHAIR = 6
+	WEARABLE = 7		
+
+class TrackedAction():
+	labelText = str()
+	cooldownGroup = CooldownGroup
+	actionType = ActionType
+	key = str()
+	time = 0.0 #can be cooldown or duration
+	initial_value = 0.0
+	
+	def __init__(self,lt,cg,at,key,t,iv):
+		self.labelText = lt
+		self.cooldownGroup = cg
+		self.actionType = at
+		self.key = key
+		self.time = t
+		self.initial_value = iv
+
+	
+aPotion = TrackedAction('Potion',CooldownGroup.NOGROUP,ActionType.OBJECT,'1',1.0,0.0)
 
 def createWindow():
     #get instance handle
