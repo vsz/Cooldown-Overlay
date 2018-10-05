@@ -84,10 +84,8 @@ class TrackedAction():
 		self.time = t
 		self.initial_value = iv
 
-	
-#aPotion = TrackedAction('Potion',CooldownGroup.NOGROUP,ActionType.OBJECT,'1',1.0,0.0)
+aPotion = TrackedAction('Potion',CooldownGroup.NOGROUP,ActionType.OBJECT,'1',1.0,0.0)
 #aAtkSpell = TrackedAction('AtkSpell',CooldownGroup.ATKSPELL,ActionType.SPELLREGULAR,'Oem_6',2.0,0.0)
-
 
 def createWindow():
     #get instance handle
