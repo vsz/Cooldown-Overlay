@@ -48,13 +48,86 @@ class CooldownGroup(Enum):
 
 class TrackedGroup:
 	labelText = str()
+	color = 0x00000000
 	cooldownGroup = CooldownGroup
 	time = 0.0
+	countdown = 0.0
 	actionList = []
+	affectedActionList = []
+	triggered = False
+	running = False
+	visible = True
 	
-	def __init__(self,lt,cg):
+	def __init__(self,lt,color,cg,time=0.0,visible=True):
 		self.labelText = lt
 		self.cooldownGroup = cg
+		self.color = color
+		self.time = time
+		self.countdown = 0.0
+		self.visible = True
+
+	def setActionList(self,al):
+		self.actionList = [x for x in al if self.cooldownGroup in x.cooldownGroups]
+		#self.actionList = [x for x in al if 1 == 1]
+		for action in self.actionList:
+			action.setTime(self.time)
+		
+	def setAffectedActionList(self,al):
+		self.affectedActionList = al;
+
+	def resetTrigger(self):
+		self.triggered = False
+	
+	def run(self):
+		self.running = True
+		
+	def stop(self):
+		self.running = False
+	
+	def track(self,Ts):
+		for action in self.actionList:
+			if action.groupTriggered:
+				self.trigger()
+				action.resetGroupTrigger()
+				self.triggerGroup(self.time)
+				self.triggerAffectedGroup(self.time)
+
+		if self.triggered:
+			self.run()
+			self.setCountdown(self.time)
+			self.resetTrigger()
+		
+		if self.running : self.decrementCountdown(Ts)
+		
+		# stops timer if it runs out
+		if self.running and self.countdown < Ts :
+			self.countdown = 0.0
+			self.running = False
+			self.triggered = False
+		
+	def trigger(self):
+		self.triggered = True			
+				
+	def triggerGroup(self,cd):
+		for action in self.actionList:
+			action.setCountdown(cd)
+			action.groupTrigger()
+	
+	def decrementCountdown(self,Ts):
+		self.countdown = self.countdown - Ts
+		
+	def setCountdown(self,cd):
+		self.countdown = max(self.countdown,cd)
+
+	def resetCountdown(self):
+		self.countdown = 0.0
+
+	def triggerAffectedGroup(self,cd):
+		for action in self.affectedActionList:
+			action.setCountdown(cd)
+			action.groupTrigger()
+
+
 
 class TrackedAction:
 	labelText = str()
@@ -64,34 +137,62 @@ class TrackedAction:
 	keys = []
 	time = 0.0 #can be cooldown or duration
 	countdown = 0.0
-	keyPress = False
 	triggered = False
+	groupTriggered = False
 	running = False
 	
-	def __init__(self,lt,color,cg,at,keys,t,iv):
+	def __init__(self,lt,color,cg,at,keys,t=0.0,iv=0.0):
 		self.labelText = lt
 		self.color = color
 		self.actionType = at
 		self.keys = keys
 		self.time = t
-		self.countdown = iv
+		self.countdown = iv		
 
-	def pressKey(self):
-		self.keyPress = True
+	def setTime(self,time):
+		self.time = max(self.time,time)
+	
+	def resetGroupTrigger(self):
+		self.groupTriggered = False
+	
+	def resetTrigger(self):
+		self.triggered = False
+	
+	def run(self):
+		self.running = True
 		
-		
+	def stop(self):
+		self.running = False
+	
+	def trigger(self):
+		self.triggered = True
+		self.groupTriggered = True
+			
+	def groupTrigger(self):
+		self.triggered = True
+	
+	def decrementCountdown(self,Ts):
+		self.countdown = self.countdown - Ts
+	
+	def setCountdown(self,cd):
+		self.countdown = max(self.countdown,cd)
+	
+	def resetCountdown(self):
+		self.countdown = 0.0
+	
 	def track(self,Ts):
-		if self.keyPress :
-			self.running = True
-			self.countdown = self.time
-			self.keyPress = False
+		if self.triggered:
+			self.run()
+			self.setCountdown(self.time)
+			self.resetTrigger()
 		
-		if self.running : self.countdown = self.countdown - Ts
+		if self.running : self.decrementCountdown(Ts)
 		
 		# stops timer if it runs out
 		if self.running and self.countdown < Ts :
-			self.countdown = 0.0
-			self.running = False
+			self.resetCountdown()
+			self.stop()
+			#self.resetTrigger()
 			
 
 # can I create enum with this?
@@ -104,19 +205,28 @@ pink = 0x00c800c8
 lblue = 0x00dcc800
 dgreen = 0x0041961e
 gray = 0x008c8c8c
+orange = 0x000098ff
 
-#groupList = []
-#groupList.append(TrackedGroup('Attack',CooldownGroup.ATKSPELL))
 
+## ADD YOUR TRACKED ACTIONS HERE
 actionList = []
-actionList.append(TrackedAction('Potion',pink,[CooldownGroup.OBJECT],ActionType.CONSUMABLE,['1','Oem_5','Oem_1'],1.0,0.0))
-actionList.append(TrackedAction('Attack',red,[CooldownGroup.OBJECT],ActionType.CONSUMABLE,['Oem_5','Oem_6','Oem_1'],2.0,0.0))
+actionList.append(TrackedAction('Potion',pink,[CooldownGroup.OBJECT],ActionType.CONSUMABLE,['1']))
+actionList.append(TrackedAction('Strike',red,[CooldownGroup.ATTACK],ActionType.CONSUMABLE,['Oem_5'],2.0,0.0))
+actionList.append(TrackedAction('GFB',red,[CooldownGroup.OBJECT],ActionType.CONSUMABLE,['Oem_6'],2.0,0.0))
+actionList.append(TrackedAction('GFB',red,[CooldownGroup.OBJECT],ActionType.CONSUMABLE,['Oem_1'],2.0,0.0))
 actionList.append(TrackedAction('Healing',lblue,[CooldownGroup.OBJECT],ActionType.CONSUMABLE,['2','3'],1.0,0.0))
 actionList.append(TrackedAction('Support',dgreen,[CooldownGroup.OBJECT],ActionType.CONSUMABLE,['4','5'],2.0,0.0))
-actionList.append(TrackedAction('Mana Shield',white,[CooldownGroup.OBJECT],ActionType.CONSUMABLE,['4'],200.0,0.0))
+actionList.append(TrackedAction('Magic Shield',white,[CooldownGroup.OBJECT],ActionType.CONSUMABLE,['4'],200.0,0.0))
 actionList.append(TrackedAction('Haste',gray,[CooldownGroup.OBJECT],ActionType.CONSUMABLE,['5'],22.0,0.0))
 
-emptyLines = [5];
+groupList = []
+groupList.append(TrackedGroup('Potion',pink,CooldownGroup.OBJECT,1.0))
+groupList.append(TrackedGroup('Attack',red,CooldownGroup.ATTACK,2.0))
+groupList.append(TrackedGroup('Healing',lblue,CooldownGroup.HEAL,1.0))
+groupList.append(TrackedGroup('Support',dgreen,CooldownGroup.SUPPORT,2.0))
+groupList.append(TrackedGroup('Special',orange,CooldownGroup.SPECIAL,3.0))
+
+emptyLines = [];
 
 def createWindow():
 	#get instance handle
@@ -230,6 +340,15 @@ def wndProc(hWnd, message, wParam, lParam):
 		spc = int(0.015*h)
 		
 		k = 0
+		for idx,group in enumerate(groupList):
+			if (idx+1) in emptyLines : k=k+1
+			
+			pos = (pleft,ptop+(idx+k)*spc,pright,pbottom)
+			createTextLabel(hdc,pos,group.color,group.labelText)
+			createTimerLabel(hdc,pos,group.color,group.countdown)		
+		
+		k=idx+k+2
+		
 		for idx,action in enumerate(actionList):
 			if (idx+1) in emptyLines : k=k+1
 			
@@ -249,13 +368,22 @@ def wndProc(hWnd, message, wParam, lParam):
 		return win32gui.DefWindowProc(hWnd, message, wParam, lParam)
 
 def trackActions(hWindow):
-	global actionList
+	global actionList, groupList
 	
 	# Window and Timer update period
 	Ts = 0.05
 	
+	# Initialize
+	#for group in groupList:
+		#group.setActionList(actionList)
+		#print(group.actionList)
+	
 	while(True) :
 		win32gui.RedrawWindow(hWindow, None, None, win32con.RDW_INVALIDATE | win32con.RDW_ERASE)
+		
+		for group in groupList :
+			group.track(Ts)
+		
 		for action in actionList :
 			action.track(Ts)
 		time.sleep(Ts)
@@ -267,7 +395,7 @@ def handle_events(args):
 		print(args.pressed_key)
 		for action in actionList :
 			#print(action.keys)
-			if any(i in action.keys for i in args.pressed_key): action.pressKey()		
+			if any(i in action.keys for i in args.pressed_key): action.trigger()		
 
 def keylogger(handler):
 	hk = Hook()
