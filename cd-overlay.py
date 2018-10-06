@@ -46,6 +46,10 @@ class CooldownGroup(Enum):
 	CONJURE = 6
 	NONE = 7
 
+class Use(Enum):
+	TARGET = 1
+	CROSSHAIR = 2
+
 class TrackedGroup:
 
 	def __init__(self,lt,color,cg,time=0.0,visible=True):
@@ -66,9 +70,9 @@ class TrackedGroup:
 		for action in self.actionList:
 			action.setTime(self.time)
 		
-	def setAffectedActionList(self,al):
-		self.affectedActionList = al;
-
+		if self.cooldownGroup == CooldownGroup.SPECIAL: #HARDCODED
+			self.affectedActionList = [a for a in al if (CooldownGroup.ATTACK in a.cooldownGroups)]
+		
 	def resetTrigger(self):
 		self.triggered = False
 	
@@ -101,7 +105,7 @@ class TrackedGroup:
 
 	def track(self,Ts):
 		for action in self.actionList:
-			if action.keyTrigger:
+			if action.trigger:
 				self.trigger()
 				self.triggerGroup()
 
@@ -121,7 +125,7 @@ class TrackedGroup:
 
 class TrackedAction:
 	
-	def __init__(self,lt,color,cg,at,keys,t=0.0,iv=0.0):
+	def __init__(self,lt,color,cg,at,keys,t=0.0,iv=0.0,use=Use.TARGET):
 		self.labelText = lt
 		self.color = color
 		self.cooldownGroups = cg
@@ -130,9 +134,11 @@ class TrackedAction:
 		self.time = t
 		self.groupTime = 0.0
 		self.countdown = iv
-		self.keyTrigger = False
+		self.trigger = False
 		self.groupTrigger = False
-		self.running = False		
+		self.running = False
+		self.use = use	
+		self.armed = False
 		
 	def __str__(self):
 		return self.labelText
@@ -150,8 +156,17 @@ class TrackedAction:
 		self.groupTrigger = False
 		self.resetGroupTime()
 	
-	def resetKeyTrigger(self):
-		self.keyTrigger = False
+	def resetTrigger(self):
+		self.trigger = False
+	
+	def setTrigger(self):
+		self.trigger = True	
+	
+	def arm(self):
+		self.armed = True
+		
+	def unarm(self):
+		self.armed = False
 	
 	def run(self):
 		self.running = True
@@ -167,33 +182,46 @@ class TrackedAction:
 	
 	def resetCountdown(self):
 		self.countdown = 0.0
-		
+
 	def triggerByKey(self):
-		self.keyTrigger = True
+		if self.use == Use.TARGET : self.setTrigger()
+		if self.use == Use.CROSSHAIR : self.arm()
+
+	def triggerByLeftMouse(self):
+		if self.use == Use.CROSSHAIR:
+			if self.armed:
+				self.unarm()
+				self.trigger()
+				
+	def triggerByRightMouse(self):
+		if self.use == Use.CROSSHAIR:
+			if self.armed:
+				self.unarm()
+				
 
 	def triggerByGroup(self):
 		self.groupTrigger = True
 	
 	def track(self,Ts):
 		
-		if self.keyTrigger and not self.groupTrigger:
+		if self.trigger and not self.groupTrigger:
 			self.run()
 			self.setCountdown(self.time)
-			self.resetKeyTrigger()
-			print(self.labelText+" Trigger by Key")
+			self.resetTrigger()
+			print(self.labelText+" Trigger by Action")
 			
-		if self.groupTrigger and not self.keyTrigger:
+		if self.groupTrigger and not self.trigger:
 			self.run()
 			self.setCountdown(self.groupTime)
 			self.resetGroupTrigger()
 			print(self.labelText+" Trigger by Group")
 		
-		if self.keyTrigger and self.groupTrigger:
+		if self.trigger and self.groupTrigger:
 			self.run()
 			self.setCountdown(max(self.groupTime,self.time))
-			self.resetKeyTrigger()
+			self.resetTrigger()
 			self.resetGroupTrigger()
-			print(self.labelText+" Triggered the group")
+			print(self.labelText+" Action triggered the group")
 		
 		if self.running : self.decrementCountdown(Ts)
 		
@@ -219,8 +247,8 @@ orange = 0x000098ff
 ## ADD YOUR TRACKED ACTIONS HERE
 actionList = []
 actionList.append(TrackedAction('Potion',pink,[CooldownGroup.OBJECT],ActionType.CONSUMABLE,['1']))
-actionList.append(TrackedAction('Strike',red,[CooldownGroup.ATTACK],ActionType.ATKREGULAR,['2'],2.0,0.0))
-actionList.append(TrackedAction('GFB',red,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['3'],2.0,0.0))
+actionList.append(TrackedAction('Strike',red,[CooldownGroup.ATTACK],ActionType.ATKREGULAR,['2']))
+actionList.append(TrackedAction('GFB',red,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['3']))
 actionList.append(TrackedAction('Exura',lblue,[CooldownGroup.HEAL],ActionType.HEALREGULAR,['F1']))
 actionList.append(TrackedAction('Exura Gran',lblue,[CooldownGroup.HEAL],ActionType.HEALREGULAR,['F2']))
 actionList.append(TrackedAction('Magic Shield',white,[CooldownGroup.SUPPORT],ActionType.SUPPORTEFFECT,['4'],8.0,0.0))
@@ -229,7 +257,7 @@ actionList.append(TrackedAction('UE',orange,[CooldownGroup.ATTACK,CooldownGroup.
 
 
 groupList = []
-groupList.append(TrackedGroup('Potion',pink,CooldownGroup.OBJECT,1.0))
+groupList.append(TrackedGroup('Item',pink,CooldownGroup.OBJECT,1.0))
 groupList.append(TrackedGroup('Attack',red,CooldownGroup.ATTACK,2.0))
 groupList.append(TrackedGroup('Healing',lblue,CooldownGroup.HEAL,1.0))
 groupList.append(TrackedGroup('Support',dgreen,CooldownGroup.SUPPORT,2.0))
@@ -404,7 +432,11 @@ def handle_events(args):
 		print(args.pressed_key)
 		for action in actionList :
 			#print(action.keys)
-			if any(i in action.keys for i in args.pressed_key): action.triggerByKey()		
+			if any(i in action.keys for i in args.pressed_key): action.triggerByKey()
+			
+	if isinstance(args, MouseEvent):
+		print(args.mouse_x)	
+		
 
 def keylogger(handler):
 	hk = Hook()
