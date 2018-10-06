@@ -47,28 +47,22 @@ class CooldownGroup(Enum):
 	NONE = 7
 
 class TrackedGroup:
-	labelText = str()
-	color = 0x00000000
-	cooldownGroup = CooldownGroup
-	time = 0.0
-	countdown = 0.0
-	actionList = []
-	affectedActionList = []
-	triggered = False
-	running = False
-	visible = True
-	
+
 	def __init__(self,lt,color,cg,time=0.0,visible=True):
 		self.labelText = lt
-		self.cooldownGroup = cg
 		self.color = color
+		self.cooldownGroup = cg
 		self.time = time
 		self.countdown = 0.0
+		self.actionList = []
+		self.affectedActionList = []
+		self.triggered = False
+		self.running = False
 		self.visible = True
 
 	def setActionList(self,al):
-		self.actionList = [x for x in al if self.cooldownGroup in x.cooldownGroups]
-		#self.actionList = [x for x in al if 1 == 1]
+		self.actionList = [a for a in al if (self.cooldownGroup in a.cooldownGroups)]
+					
 		for action in self.actionList:
 			action.setTime(self.time)
 		
@@ -83,14 +77,33 @@ class TrackedGroup:
 		
 	def stop(self):
 		self.running = False
-	
+
+	def decrementCountdown(self,Ts):
+		self.countdown = self.countdown - Ts
+		
+	def setCountdown(self,cd):
+		self.countdown = max(self.countdown,cd)
+
+	def resetCountdown(self):
+		self.countdown = 0.0
+			
+	def trigger(self):
+		self.triggered = True			
+				
+	def triggerGroup(self):
+		for action in self.actionList:
+			action.triggerByGroup()
+			action.setGroupTime(self.time)
+			
+		for action in self.affectedActionList:
+			action.triggerByGroup()
+			action.setGroupTime(self.time)
+
 	def track(self,Ts):
 		for action in self.actionList:
-			if action.groupTriggered:
+			if action.keyTrigger:
 				self.trigger()
-				action.resetGroupTrigger()
-				self.triggerGroup(self.time)
-				self.triggerAffectedGroup(self.time)
+				self.triggerGroup()
 
 		if self.triggered:
 			self.run()
@@ -103,74 +116,49 @@ class TrackedGroup:
 		if self.running and self.countdown < Ts :
 			self.countdown = 0.0
 			self.running = False
-			self.triggered = False
 		
-	def trigger(self):
-		self.triggered = True			
-				
-	def triggerGroup(self,cd):
-		for action in self.actionList:
-			action.setCountdown(cd)
-			action.groupTrigger()
-	
-	def decrementCountdown(self,Ts):
-		self.countdown = self.countdown - Ts
-		
-	def setCountdown(self,cd):
-		self.countdown = max(self.countdown,cd)
-
-	def resetCountdown(self):
-		self.countdown = 0.0
-
-	def triggerAffectedGroup(self,cd):
-		for action in self.affectedActionList:
-			action.setCountdown(cd)
-			action.groupTrigger()
-
 
 
 class TrackedAction:
-	labelText = str()
-	color = 0x00000000
-	cooldownGroups = []
-	actionType = ActionType
-	keys = []
-	time = 0.0 #can be cooldown or duration
-	countdown = 0.0
-	triggered = False
-	groupTriggered = False
-	running = False
 	
 	def __init__(self,lt,color,cg,at,keys,t=0.0,iv=0.0):
 		self.labelText = lt
 		self.color = color
+		self.cooldownGroups = cg
 		self.actionType = at
 		self.keys = keys
 		self.time = t
-		self.countdown = iv		
+		self.groupTime = 0.0
+		self.countdown = iv
+		self.keyTrigger = False
+		self.groupTrigger = False
+		self.running = False		
+		
+	def __str__(self):
+		return self.labelText
 
 	def setTime(self,time):
 		self.time = max(self.time,time)
 	
-	def resetGroupTrigger(self):
-		self.groupTriggered = False
+	def setGroupTime(self,gtime):
+		self.groupTime = max(self.groupTime,gtime)
 	
-	def resetTrigger(self):
-		self.triggered = False
+	def resetGroupTime(self):
+		self.groupTime = 0.0
+	
+	def resetGroupTrigger(self):
+		self.groupTrigger = False
+		self.resetGroupTime()
+	
+	def resetKeyTrigger(self):
+		self.keyTrigger = False
 	
 	def run(self):
 		self.running = True
 		
 	def stop(self):
 		self.running = False
-	
-	def trigger(self):
-		self.triggered = True
-		self.groupTriggered = True
-			
-	def groupTrigger(self):
-		self.triggered = True
-	
+
 	def decrementCountdown(self,Ts):
 		self.countdown = self.countdown - Ts
 	
@@ -179,12 +167,33 @@ class TrackedAction:
 	
 	def resetCountdown(self):
 		self.countdown = 0.0
+		
+	def triggerByKey(self):
+		self.keyTrigger = True
+
+	def triggerByGroup(self):
+		self.groupTrigger = True
 	
 	def track(self,Ts):
-		if self.triggered:
+		
+		if self.keyTrigger and not self.groupTrigger:
 			self.run()
 			self.setCountdown(self.time)
-			self.resetTrigger()
+			self.resetKeyTrigger()
+			print(self.labelText+" Trigger by Key")
+			
+		if self.groupTrigger and not self.keyTrigger:
+			self.run()
+			self.setCountdown(self.groupTime)
+			self.resetGroupTrigger()
+			print(self.labelText+" Trigger by Group")
+		
+		if self.keyTrigger and self.groupTrigger:
+			self.run()
+			self.setCountdown(max(self.groupTime,self.time))
+			self.resetKeyTrigger()
+			self.resetGroupTrigger()
+			print(self.labelText+" Triggered the group")
 		
 		if self.running : self.decrementCountdown(Ts)
 		
@@ -192,7 +201,6 @@ class TrackedAction:
 		if self.running and self.countdown < Ts :
 			self.resetCountdown()
 			self.stop()
-			#self.resetTrigger()
 			
 
 # can I create enum with this?
@@ -211,13 +219,14 @@ orange = 0x000098ff
 ## ADD YOUR TRACKED ACTIONS HERE
 actionList = []
 actionList.append(TrackedAction('Potion',pink,[CooldownGroup.OBJECT],ActionType.CONSUMABLE,['1']))
-actionList.append(TrackedAction('Strike',red,[CooldownGroup.ATTACK],ActionType.CONSUMABLE,['Oem_5'],2.0,0.0))
-actionList.append(TrackedAction('GFB',red,[CooldownGroup.OBJECT],ActionType.CONSUMABLE,['Oem_6'],2.0,0.0))
-actionList.append(TrackedAction('GFB',red,[CooldownGroup.OBJECT],ActionType.CONSUMABLE,['Oem_1'],2.0,0.0))
-actionList.append(TrackedAction('Healing',lblue,[CooldownGroup.OBJECT],ActionType.CONSUMABLE,['2','3'],1.0,0.0))
-actionList.append(TrackedAction('Support',dgreen,[CooldownGroup.OBJECT],ActionType.CONSUMABLE,['4','5'],2.0,0.0))
-actionList.append(TrackedAction('Magic Shield',white,[CooldownGroup.OBJECT],ActionType.CONSUMABLE,['4'],200.0,0.0))
-actionList.append(TrackedAction('Haste',gray,[CooldownGroup.OBJECT],ActionType.CONSUMABLE,['5'],22.0,0.0))
+actionList.append(TrackedAction('Strike',red,[CooldownGroup.ATTACK],ActionType.ATKREGULAR,['2'],2.0,0.0))
+actionList.append(TrackedAction('GFB',red,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['3'],2.0,0.0))
+actionList.append(TrackedAction('Exura',lblue,[CooldownGroup.HEAL],ActionType.HEALREGULAR,['F1']))
+actionList.append(TrackedAction('Exura Gran',lblue,[CooldownGroup.HEAL],ActionType.HEALREGULAR,['F2']))
+actionList.append(TrackedAction('Magic Shield',white,[CooldownGroup.SUPPORT],ActionType.SUPPORTEFFECT,['4'],8.0,0.0))
+actionList.append(TrackedAction('Haste',gray,[CooldownGroup.SUPPORT],ActionType.SUPPORTEFFECT,['5'],5.0,0.0))
+actionList.append(TrackedAction('UE',orange,[CooldownGroup.ATTACK,CooldownGroup.SPECIAL],ActionType.SUPPORTEFFECT,['F12'],20.0,0.0))
+
 
 groupList = []
 groupList.append(TrackedGroup('Potion',pink,CooldownGroup.OBJECT,1.0))
@@ -374,9 +383,8 @@ def trackActions(hWindow):
 	Ts = 0.05
 	
 	# Initialize
-	#for group in groupList:
-		#group.setActionList(actionList)
-		#print(group.actionList)
+	for group in groupList:
+		group.setActionList(actionList)
 	
 	while(True) :
 		win32gui.RedrawWindow(hWindow, None, None, win32con.RDW_INVALIDATE | win32con.RDW_ERASE)
@@ -386,6 +394,7 @@ def trackActions(hWindow):
 		
 		for action in actionList :
 			action.track(Ts)
+			
 		time.sleep(Ts)
 
 def handle_events(args):
@@ -395,7 +404,7 @@ def handle_events(args):
 		print(args.pressed_key)
 		for action in actionList :
 			#print(action.keys)
-			if any(i in action.keys for i in args.pressed_key): action.trigger()		
+			if any(i in action.keys for i in args.pressed_key): action.triggerByKey()		
 
 def keylogger(handler):
 	hk = Hook()
