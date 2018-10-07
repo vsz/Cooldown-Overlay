@@ -254,13 +254,17 @@ orange = 0x000098ff
 ## ADD YOUR TRACKED ACTIONS HERE
 actionList = []
 actionList.append(TrackedAction('Potion',pink,[CooldownGroup.OBJECT],ActionType.CONSUMABLE,['1']))
-actionList.append(TrackedAction('Strike',red,[CooldownGroup.ATTACK],ActionType.ATKREGULAR,['2']))
-actionList.append(TrackedAction('GFB',red,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['3'],ut=UseType.CROSSHAIR))
-actionList.append(TrackedAction('Exura',lblue,[CooldownGroup.HEAL],ActionType.HEALREGULAR,['F1']))
-actionList.append(TrackedAction('Exura Gran',lblue,[CooldownGroup.HEAL],ActionType.HEALREGULAR,['F2']))
-actionList.append(TrackedAction('Magic Shield',white,[CooldownGroup.SUPPORT],ActionType.SUPPORTEFFECT,['4'],8.0,0.0))
-actionList.append(TrackedAction('Haste',gray,[CooldownGroup.SUPPORT],ActionType.SUPPORTEFFECT,['5'],5.0,0.0))
-actionList.append(TrackedAction('UE',orange,[CooldownGroup.ATTACK,CooldownGroup.SPECIAL],ActionType.SUPPORTEFFECT,['F12'],20.0,0.0))
+actionList.append(TrackedAction('Strike',red,[CooldownGroup.ATTACK],ActionType.ATKREGULAR,['Oem_6']))
+actionList.append(TrackedAction('Strong',red,[CooldownGroup.ATTACK],ActionType.ATKREGULAR,['F9']))
+actionList.append(TrackedAction('Ultim',red,[CooldownGroup.ATTACK,CooldownGroup.SPECIAL],ActionType.ATKCOOLDOWN,['F10']))
+
+actionList.append(TrackedAction('AoE',red,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['Oem_5'],ut=UseType.CROSSHAIR))
+actionList.append(TrackedAction('SD',red,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['Oem_1'],ut=UseType.CROSSHAIR))
+actionList.append(TrackedAction('Exura',lblue,[CooldownGroup.HEAL],ActionType.HEALREGULAR,['3']))
+actionList.append(TrackedAction('Exura Gran',lblue,[CooldownGroup.HEAL],ActionType.HEALREGULAR,['2']))
+actionList.append(TrackedAction('Magic Shield',white,[CooldownGroup.SUPPORT],ActionType.SUPPORTEFFECT,['4'],200.0))
+actionList.append(TrackedAction('Haste',gray,[CooldownGroup.SUPPORT],ActionType.SUPPORTEFFECT,['5'],22.0))
+actionList.append(TrackedAction('UE',orange,[CooldownGroup.ATTACK,CooldownGroup.SPECIAL],ActionType.ATKCOOLDOWN,['F12'],40.0))
 
 
 groupList = []
@@ -268,7 +272,7 @@ groupList.append(TrackedGroup('Item',pink,CooldownGroup.OBJECT,1.0))
 groupList.append(TrackedGroup('Attack',red,CooldownGroup.ATTACK,2.0))
 groupList.append(TrackedGroup('Healing',lblue,CooldownGroup.HEAL,1.0))
 groupList.append(TrackedGroup('Support',dgreen,CooldownGroup.SUPPORT,2.0))
-groupList.append(TrackedGroup('Special',orange,CooldownGroup.SPECIAL,3.0))
+groupList.append(TrackedGroup('Special',orange,CooldownGroup.SPECIAL,4.0))
 
 emptyLines = [];
 
@@ -436,7 +440,7 @@ def handle_events(args):
 	global actionList
 	
 	if isinstance(args, KeyboardEvent):
-		print(args.pressed_key)
+		#print(args.pressed_key)
 		for action in actionList :
 			if any(i in action.keys for i in args.pressed_key): 
 				action.triggerByKey()
