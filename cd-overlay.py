@@ -4,6 +4,7 @@ import win32gui
 import win32ui
 import time
 import threading
+import datetime
 from pyhooked import Hook, KeyboardEvent, MouseEvent
 from enum import Enum
 
@@ -278,7 +279,6 @@ actionList.append(TrackedAction('Magic Shield',white,[CooldownGroup.SUPPORT],Act
 actionList.append(TrackedAction('Haste',gray,[CooldownGroup.SUPPORT],ActionType.SUPPORTEFFECT,['5'],22.0))
 
 
-
 groupList = []
 groupList.append(TrackedGroup('Potion',pink,CooldownGroup.OBJECT,1.0))
 groupList.append(TrackedGroup('Attack',red,CooldownGroup.ATTACK,2.0))
@@ -438,15 +438,24 @@ def trackActions(hWindow):
 	# Initialize
 	for group in groupList:
 		group.setActionList(actionList)
+		
 	
+	ctime1 = datetime.datetime.now()
 	while(True) :
 		win32gui.RedrawWindow(hWindow, None, None, win32con.RDW_INVALIDATE | win32con.RDW_ERASE)
 		
+		# Tracks ellapsed time
+		ctime2 = datetime.datetime.now()
+		delta = ctime2-ctime1
+		ctime1=ctime2
+		et = delta.seconds+0.000001*delta.microseconds
+		
+		#print(et)
 		for group in groupList :
-			group.track(Ts)
+			group.track(et)
 		
 		for action in actionList :
-			action.track(Ts)
+			action.track(et)
 			
 		time.sleep(Ts)
 
