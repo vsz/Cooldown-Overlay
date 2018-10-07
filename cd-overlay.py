@@ -62,7 +62,7 @@ class TrackedGroup:
 		self.affectedActionList = []
 		self.triggered = False
 		self.running = False
-		self.visible = True
+		self.visible = visible
 
 	def setActionList(self,al):
 		self.actionList = [a for a in al if (self.cooldownGroup in a.cooldownGroups)]
@@ -125,7 +125,7 @@ class TrackedGroup:
 
 class TrackedAction:
 	
-	def __init__(self,lt,color,cg,at,keys,t=0.0,iv=0.0,ut=UseType.TARGET):
+	def __init__(self,lt,color,cg,at,keys,t=0.0,iv=0.0,ut=UseType.TARGET,visible=True):
 		self.labelText = lt
 		self.color = color
 		self.cooldownGroups = cg
@@ -139,6 +139,7 @@ class TrackedAction:
 		self.running = False
 		self.useType = ut
 		self.armed = False
+		self.visible = visible
 		print(self.labelText + " " + str(self.useType))
 		
 	def __str__(self):
@@ -253,28 +254,39 @@ orange = 0x000098ff
 
 ## ADD YOUR TRACKED ACTIONS HERE
 actionList = []
-actionList.append(TrackedAction('Potion',pink,[CooldownGroup.OBJECT],ActionType.CONSUMABLE,['1']))
-actionList.append(TrackedAction('Strike',red,[CooldownGroup.ATTACK],ActionType.ATKREGULAR,['Oem_6']))
-actionList.append(TrackedAction('Strong',red,[CooldownGroup.ATTACK],ActionType.ATKREGULAR,['F9']))
-actionList.append(TrackedAction('Ultim',red,[CooldownGroup.ATTACK,CooldownGroup.SPECIAL],ActionType.ATKCOOLDOWN,['F10']))
 
-actionList.append(TrackedAction('AoE',red,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['Oem_5'],ut=UseType.CROSSHAIR))
-actionList.append(TrackedAction('SD',red,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['Oem_1'],ut=UseType.CROSSHAIR))
-actionList.append(TrackedAction('Exura',lblue,[CooldownGroup.HEAL],ActionType.HEALREGULAR,['3']))
-actionList.append(TrackedAction('Exura Gran',lblue,[CooldownGroup.HEAL],ActionType.HEALREGULAR,['2']))
+# Objects
+actionList.append(TrackedAction('Potion',pink,[CooldownGroup.OBJECT],ActionType.CONSUMABLE,['1'],visible=False))
+
+# Attack Spells
+actionList.append(TrackedAction('Strike',red,[CooldownGroup.ATTACK],ActionType.ATKREGULAR,['Oem_6'],visible=False))
+actionList.append(TrackedAction('StrongWave',red,[CooldownGroup.ATTACK],ActionType.ATKCOOLDOWN,['F11'],8.0))
+actionList.append(TrackedAction('StrongStrike',red,[CooldownGroup.ATTACK],ActionType.ATKCOOLDOWN,['F9'],8.0))
+actionList.append(TrackedAction('UltimateStrike',red,[CooldownGroup.ATTACK,CooldownGroup.SPECIAL],ActionType.ATKCOOLDOWN,['F10'],30.0))
+actionList.append(TrackedAction('UE',orange,[CooldownGroup.ATTACK,CooldownGroup.SPECIAL],ActionType.ATKCOOLDOWN,['F12'],40.0))
+
+# Attack Runes
+actionList.append(TrackedAction('AoE',red,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['Oem_5'],ut=UseType.CROSSHAIR,visible=False))
+actionList.append(TrackedAction('SD',red,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['Oem_1'],ut=UseType.CROSSHAIR,visible=False))
+
+# Heal
+actionList.append(TrackedAction('Exura',lblue,[CooldownGroup.HEAL],ActionType.HEALREGULAR,['3'],visible=False))
+actionList.append(TrackedAction('Exura Gran',lblue,[CooldownGroup.HEAL],ActionType.HEALREGULAR,['2'],visible=False))
+
+# Support
 actionList.append(TrackedAction('Magic Shield',white,[CooldownGroup.SUPPORT],ActionType.SUPPORTEFFECT,['4'],200.0))
 actionList.append(TrackedAction('Haste',gray,[CooldownGroup.SUPPORT],ActionType.SUPPORTEFFECT,['5'],22.0))
-actionList.append(TrackedAction('UE',orange,[CooldownGroup.ATTACK,CooldownGroup.SPECIAL],ActionType.ATKCOOLDOWN,['F12'],40.0))
+
 
 
 groupList = []
-groupList.append(TrackedGroup('Item',pink,CooldownGroup.OBJECT,1.0))
+groupList.append(TrackedGroup('Potion',pink,CooldownGroup.OBJECT,1.0))
 groupList.append(TrackedGroup('Attack',red,CooldownGroup.ATTACK,2.0))
 groupList.append(TrackedGroup('Healing',lblue,CooldownGroup.HEAL,1.0))
-groupList.append(TrackedGroup('Support',dgreen,CooldownGroup.SUPPORT,2.0))
+groupList.append(TrackedGroup('Support',dgreen,CooldownGroup.SUPPORT,2.0,visible=False))
 groupList.append(TrackedGroup('Special',orange,CooldownGroup.SPECIAL,4.0))
 
-emptyLines = [];
+emptyLines = [5];
 
 def createWindow():
 	#get instance handle
@@ -387,17 +399,19 @@ def wndProc(hWnd, message, wParam, lParam):
 		pbottom = int(0.55*h)
 		spc = int(0.015*h)
 		
-		k = 0
-		for idx,group in enumerate(groupList):
-			if (idx+1) in emptyLines : k=k+1
-			
-			pos = (pleft,ptop+(idx+k)*spc,pright,pbottom)
+		# Filter what do draw
+		groupsToDraw = [g for g in groupList if g.visible]
+		actionsToDraw = [a for a in actionList if a.visible]
+		
+		
+		
+		for idx,group in enumerate(groupsToDraw):
+			pos = (pleft,ptop+idx*spc,pright,pbottom)
 			createTextLabel(hdc,pos,group.color,group.labelText)
 			createTimerLabel(hdc,pos,group.color,group.countdown)		
 		
-		k=idx+k+2
-		
-		for idx,action in enumerate(actionList):
+		k=idx+2
+		for idx,action in enumerate(actionsToDraw):
 			if (idx+1) in emptyLines : k=k+1
 			
 			pos = (pleft,ptop+(idx+k)*spc,pright,pbottom)
