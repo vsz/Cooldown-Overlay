@@ -46,7 +46,7 @@ class CooldownGroup(Enum):
 	CONJURE = 6
 	NONE = 7
 
-class Use(Enum):
+class UseType(Enum):
 	TARGET = 1
 	CROSSHAIR = 2
 
@@ -125,7 +125,7 @@ class TrackedGroup:
 
 class TrackedAction:
 	
-	def __init__(self,lt,color,cg,at,keys,t=0.0,iv=0.0,use=Use.TARGET):
+	def __init__(self,lt,color,cg,at,keys,t=0.0,iv=0.0,ut=UseType.TARGET):
 		self.labelText = lt
 		self.color = color
 		self.cooldownGroups = cg
@@ -137,8 +137,9 @@ class TrackedAction:
 		self.trigger = False
 		self.groupTrigger = False
 		self.running = False
-		self.use = use	
+		self.useType = ut
 		self.armed = False
+		print(self.labelText + " " + str(self.useType))
 		
 	def __str__(self):
 		return self.labelText
@@ -164,9 +165,10 @@ class TrackedAction:
 	
 	def arm(self):
 		self.armed = True
+		print(self.labelText + " Armed!")
 		
 	def unarm(self):
-		self.armed = False
+		self.armed = False	
 	
 	def run(self):
 		self.running = True
@@ -184,17 +186,22 @@ class TrackedAction:
 		self.countdown = 0.0
 
 	def triggerByKey(self):
-		if self.use == Use.TARGET : self.setTrigger()
-		if self.use == Use.CROSSHAIR : self.arm()
+		print(self.labelText + " Triggered by Key!!")
 
-	def triggerByLeftMouse(self):
-		if self.use == Use.CROSSHAIR:
+		if self.useType == UseType.TARGET:
+			self.setTrigger()
+			
+		if self.useType == UseType.CROSSHAIR: 
+			self.arm()
+
+	def triggerByLeftMouse(self):		
+		if self.useType == UseType.CROSSHAIR:
 			if self.armed:
 				self.unarm()
-				self.trigger()
-				
+				self.setTrigger()
+
 	def triggerByRightMouse(self):
-		if self.use == Use.CROSSHAIR:
+		if self.useType == UseType.CROSSHAIR:
 			if self.armed:
 				self.unarm()
 				
@@ -248,7 +255,7 @@ orange = 0x000098ff
 actionList = []
 actionList.append(TrackedAction('Potion',pink,[CooldownGroup.OBJECT],ActionType.CONSUMABLE,['1']))
 actionList.append(TrackedAction('Strike',red,[CooldownGroup.ATTACK],ActionType.ATKREGULAR,['2']))
-actionList.append(TrackedAction('GFB',red,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['3']))
+actionList.append(TrackedAction('GFB',red,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['3'],ut=UseType.CROSSHAIR))
 actionList.append(TrackedAction('Exura',lblue,[CooldownGroup.HEAL],ActionType.HEALREGULAR,['F1']))
 actionList.append(TrackedAction('Exura Gran',lblue,[CooldownGroup.HEAL],ActionType.HEALREGULAR,['F2']))
 actionList.append(TrackedAction('Magic Shield',white,[CooldownGroup.SUPPORT],ActionType.SUPPORTEFFECT,['4'],8.0,0.0))
@@ -431,17 +438,22 @@ def handle_events(args):
 	if isinstance(args, KeyboardEvent):
 		print(args.pressed_key)
 		for action in actionList :
-			#print(action.keys)
-			if any(i in action.keys for i in args.pressed_key): action.triggerByKey()
+			if any(i in action.keys for i in args.pressed_key): 
+				action.triggerByKey()
 			
 	if isinstance(args, MouseEvent):
-		print(args.mouse_x)	
 		
-
+		for action in actionList:
+			if action.useType == UseType.CROSSHAIR:
+				if 'LButton' == args.current_key and 'key down' == args.event_type:
+					action.triggerByLeftMouse()
+				elif 'RButton' == args.current_key and 'key down' == args.event_type:
+					action.triggerByRightMouse()
+				
 def keylogger(handler):
 	hk = Hook()
 	hk.handler = handler
-	hk.hook()  # hook into the events, and listen to the presses
+	hk.hook(True,True)  # hook into the events, and listen to the presses
 
 
 def main():
