@@ -6,285 +6,40 @@ import time
 import threading
 import datetime
 from pyhooked import Hook, KeyboardEvent, MouseEvent
-from enum import Enum
-
-class TextColor(Enum):
-	# Colors
-	black = 0x00000000
-	blue = 0x00ff0000
-	red = 0x000000ff
-	green = 0x0000ff00
-	white = 0x00fefefe # ??
-	pink = 0x00c800c8
-	lblue = 0x00dcc800
-	dgreen = 0x0041961e
-	gray = 0x008c8c8c
-
-class ActionType(Enum):
-	CONSUMABLE = 1
-	ATKREGULAR = 2
-	ATKSPECIAL = 3
-	ATKRUNE = 4
-	ATKCOOLDOWN = 5
-	ATKEFFECT = 6
-	HEALREGULAR = 7
-	HEALRUNE = 8
-	HEALCOOLDOWN = 9
-	HEALEFFECT = 10
-	SUPPORTREGULAR = 11
-	SUPPORTRUNE = 12
-	SUPPORTCOOLDOWN = 13
-	SUPPORTEFFECT = 14
-	CONJUREREGULAR = 15
-	EQUIPMENT = 16
-	
-class CooldownGroup(Enum):
-	OBJECT = 1
-	ATTACK = 2
-	HEAL = 3
-	SUPPORT = 4
-	SPECIAL = 5
-	CONJURE = 6
-	NONE = 7
-
-class UseType(Enum):
-	TARGET = 1
-	CROSSHAIR = 2
-
-class TrackedGroup:
-
-	def __init__(self,lt,color,cg,time=0.0,visible=True):
-		self.labelText = lt
-		self.color = color
-		self.cooldownGroup = cg
-		self.time = time
-		self.countdown = 0.0
-		self.actionList = []
-		self.affectedActionList = []
-		self.triggered = False
-		self.running = False
-		self.visible = visible
-
-	def setActionList(self,al):
-		self.actionList = [a for a in al if (self.cooldownGroup in a.cooldownGroups)]
-					
-		for action in self.actionList:
-			action.setTime(self.time)
-		
-		if self.cooldownGroup == CooldownGroup.SPECIAL: #HARDCODED
-			self.affectedActionList = [a for a in al if (CooldownGroup.ATTACK in a.cooldownGroups)]
-		
-	def resetTrigger(self):
-		self.triggered = False
-	
-	def run(self):
-		self.running = True
-		
-	def stop(self):
-		self.running = False
-
-	def decrementCountdown(self,Ts):
-		self.countdown = self.countdown - Ts
-		
-	def setCountdown(self,cd):
-		self.countdown = max(self.countdown,cd)
-
-	def resetCountdown(self):
-		self.countdown = 0.0
-			
-	def trigger(self):
-		self.triggered = True			
-				
-	def triggerGroup(self):
-		for action in self.actionList:
-			action.triggerByGroup()
-			action.setGroupTime(self.time)
-			
-		for action in self.affectedActionList:
-			action.triggerByGroup()
-			action.setGroupTime(self.time)
-
-	def track(self,Ts):
-		for action in self.actionList:
-			if action.trigger:
-				self.trigger()
-				self.triggerGroup()
-
-		if self.triggered:
-			self.run()
-			self.setCountdown(self.time)
-			self.resetTrigger()
-		
-		if self.running : self.decrementCountdown(Ts)
-		
-		# stops timer if it runs out
-		if self.running and self.countdown < Ts :
-			self.countdown = 0.0
-			self.running = False
-		
-
-
-class TrackedAction:
-	
-	def __init__(self,lt,color,cg,at,keys,t=0.0,iv=0.0,ut=UseType.TARGET,visible=True):
-		self.labelText = lt
-		self.color = color
-		self.cooldownGroups = cg
-		self.actionType = at
-		self.keys = keys
-		self.time = t
-		self.groupTime = 0.0
-		self.countdown = iv
-		self.trigger = False
-		self.groupTrigger = False
-		self.running = False
-		self.useType = ut
-		self.armed = False
-		self.visible = visible
-		print(self.labelText + " " + str(self.useType))
-		
-	def __str__(self):
-		return self.labelText
-
-	def setTime(self,time):
-		self.time = max(self.time,time)
-	
-	def setGroupTime(self,gtime):
-		self.groupTime = max(self.groupTime,gtime)
-	
-	def resetGroupTime(self):
-		self.groupTime = 0.0
-	
-	def resetGroupTrigger(self):
-		self.groupTrigger = False
-		self.resetGroupTime()
-	
-	def resetTrigger(self):
-		self.trigger = False
-	
-	def setTrigger(self):
-		self.trigger = True	
-	
-	def arm(self):
-		self.armed = True
-		print(self.labelText + " Armed!")
-		
-	def unarm(self):
-		self.armed = False	
-	
-	def run(self):
-		self.running = True
-		
-	def stop(self):
-		self.running = False
-
-	def decrementCountdown(self,Ts):
-		self.countdown = self.countdown - Ts
-	
-	def setCountdown(self,cd):
-		self.countdown = max(self.countdown,cd)
-	
-	def resetCountdown(self):
-		self.countdown = 0.0
-
-	def triggerByKey(self):
-		print(self.labelText + " Triggered by Key!!")
-
-		if self.useType == UseType.TARGET:
-			self.setTrigger()
-			
-		if self.useType == UseType.CROSSHAIR: 
-			self.arm()
-
-	def triggerByLeftMouse(self):		
-		if self.useType == UseType.CROSSHAIR:
-			if self.armed:
-				self.unarm()
-				self.setTrigger()
-
-	def triggerByRightMouse(self):
-		if self.useType == UseType.CROSSHAIR:
-			if self.armed:
-				self.unarm()
-				
-
-	def triggerByGroup(self):
-		self.groupTrigger = True
-	
-	def track(self,Ts):
-		
-		if self.trigger and not self.groupTrigger:
-			self.run()
-			self.setCountdown(self.time)
-			self.resetTrigger()
-			print(self.labelText+" Trigger by Action")
-			
-		if self.groupTrigger and not self.trigger:
-			self.run()
-			self.setCountdown(self.groupTime)
-			self.resetGroupTrigger()
-			print(self.labelText+" Trigger by Group")
-		
-		if self.trigger and self.groupTrigger:
-			self.run()
-			self.setCountdown(max(self.groupTime,self.time))
-			self.resetTrigger()
-			self.resetGroupTrigger()
-			print(self.labelText+" Action triggered the group")
-		
-		if self.running : self.decrementCountdown(Ts)
-		
-		# stops timer if it runs out
-		if self.running and self.countdown < Ts :
-			self.resetCountdown()
-			self.stop()
-			
-
-# can I create enum with this?
-black = 0x00000000
-blue = 0x00ff0000
-red = 0x000000ff
-green = 0x0000ff00
-white = 0x00fefefe # ??
-pink = 0x00c800c8
-lblue = 0x00dcc800
-dgreen = 0x0041961e
-gray = 0x008c8c8c
-orange = 0x000098ff
-
+from classes import *
 
 ## ADD YOUR TRACKED ACTIONS HERE
 actionList = []
 
 # Objects
-actionList.append(TrackedAction('Potion',pink,[CooldownGroup.OBJECT],ActionType.CONSUMABLE,['1'],visible=False))
+actionList.append(TrackedAction('Potion',TextColor.BLACK,[CooldownGroup.OBJECT],ActionType.CONSUMABLE,['1'],visible=False))
 
 # Attack Spells
-actionList.append(TrackedAction('Strike',red,[CooldownGroup.ATTACK],ActionType.ATKREGULAR,['Oem_6'],visible=False))
-actionList.append(TrackedAction('StrongWave',red,[CooldownGroup.ATTACK],ActionType.ATKCOOLDOWN,['F11'],8.0))
-actionList.append(TrackedAction('StrongStrike',red,[CooldownGroup.ATTACK],ActionType.ATKCOOLDOWN,['F9'],8.0))
-actionList.append(TrackedAction('UltimateStrike',red,[CooldownGroup.ATTACK,CooldownGroup.SPECIAL],ActionType.ATKCOOLDOWN,['F10'],30.0))
-actionList.append(TrackedAction('UE',orange,[CooldownGroup.ATTACK,CooldownGroup.SPECIAL],ActionType.ATKCOOLDOWN,['F12'],40.0))
+actionList.append(TrackedAction('Strike',TextColor.RED,[CooldownGroup.ATTACK],ActionType.ATKREGULAR,['Oem_6'],visible=False))
+actionList.append(TrackedAction('StrongWave',TextColor.RED,[CooldownGroup.ATTACK],ActionType.ATKCOOLDOWN,['F11'],8.0))
+actionList.append(TrackedAction('StrongStrike',TextColor.RED,[CooldownGroup.ATTACK],ActionType.ATKCOOLDOWN,['F9'],8.0))
+actionList.append(TrackedAction('UltimateStrike',TextColor.RED,[CooldownGroup.ATTACK,CooldownGroup.SPECIAL],ActionType.ATKCOOLDOWN,['F10'],30.0))
+actionList.append(TrackedAction('UE',TextColor.ORANGE,[CooldownGroup.ATTACK,CooldownGroup.SPECIAL],ActionType.ATKCOOLDOWN,['F12'],40.0))
 
 # Attack Runes
-actionList.append(TrackedAction('AoE',red,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['Oem_5'],ut=UseType.CROSSHAIR,visible=False))
-actionList.append(TrackedAction('SD',red,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['Oem_1'],ut=UseType.CROSSHAIR,visible=False))
+actionList.append(TrackedAction('AoE',TextColor.RED,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['Oem_5'],ut=UseType.CROSSHAIR,visible=False))
+actionList.append(TrackedAction('SD',TextColor.RED,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['Oem_1'],ut=UseType.CROSSHAIR,visible=False))
 
 # Heal
-actionList.append(TrackedAction('Exura',lblue,[CooldownGroup.HEAL],ActionType.HEALREGULAR,['3'],visible=False))
-actionList.append(TrackedAction('Exura Gran',lblue,[CooldownGroup.HEAL],ActionType.HEALREGULAR,['2'],visible=False))
+actionList.append(TrackedAction('Exura',TextColor.LBLUE,[CooldownGroup.HEAL],ActionType.HEALREGULAR,['3'],visible=False))
+actionList.append(TrackedAction('Exura Gran',TextColor.LBLUE,[CooldownGroup.HEAL],ActionType.HEALREGULAR,['2'],visible=False))
 
 # Support
-actionList.append(TrackedAction('Magic Shield',white,[CooldownGroup.SUPPORT],ActionType.SUPPORTEFFECT,['4'],200.0))
-actionList.append(TrackedAction('Haste',gray,[CooldownGroup.SUPPORT],ActionType.SUPPORTEFFECT,['5'],22.0))
+actionList.append(TrackedAction('Magic Shield',TextColor.WHITE,[CooldownGroup.SUPPORT],ActionType.SUPPORTEFFECT,['4'],200.0))
+actionList.append(TrackedAction('Haste',TextColor.GRAY,[CooldownGroup.SUPPORT],ActionType.SUPPORTEFFECT,['5'],22.0))
 
-
+# DO NOT DELETE GROUPS. IF YOU DONT WANT TO SEE IT, JUST SET 'visible=False' IN ARGUMENTS
 groupList = []
-groupList.append(TrackedGroup('Potion',pink,CooldownGroup.OBJECT,1.0))
-groupList.append(TrackedGroup('Attack',red,CooldownGroup.ATTACK,2.0))
-groupList.append(TrackedGroup('Healing',lblue,CooldownGroup.HEAL,1.0))
-groupList.append(TrackedGroup('Support',dgreen,CooldownGroup.SUPPORT,2.0,visible=False))
-groupList.append(TrackedGroup('Special',orange,CooldownGroup.SPECIAL,4.0))
+groupList.append(TrackedGroup('Potion',TextColor.BLUE,CooldownGroup.OBJECT,1.0))
+groupList.append(TrackedGroup('Attack',TextColor.RED,CooldownGroup.ATTACK,2.0))
+groupList.append(TrackedGroup('Healing',TextColor.LBLUE,CooldownGroup.HEAL,1.0))
+groupList.append(TrackedGroup('Support',TextColor.DGREEN,CooldownGroup.SUPPORT,2.0,visible=False))
+groupList.append(TrackedGroup('Special',TextColor.ORANGE,CooldownGroup.SPECIAL,4.0))
 
 emptyLines = [5];
 
@@ -357,16 +112,13 @@ def createWindow():
 
 	return hWindow
 
-
 def createTextLabel(hdc, pos, color=0x008c8c8c,text=''):
 	win32gui.SetTextColor(hdc, color)
 	win32gui.DrawText(hdc,text,-1,pos,win32con.DT_LEFT | win32con.DT_VCENTER)
 
-
 def createTimerLabel(hdc, pos, color=0x008c8c8c,initialValue=0.0):
 	win32gui.SetTextColor(hdc, color)
 	win32gui.DrawText(hdc,'{0:.1f}'.format(initialValue),-1,pos,win32con.DT_RIGHT | win32con.DT_VCENTER)
-
 
 def wndProc(hWnd, message, wParam, lParam):
 
@@ -482,7 +234,6 @@ def keylogger(handler):
 	hk.handler = handler
 	hk.hook(True,True)  # hook into the events, and listen to the presses
 
-
 def main():
 	# Create transparent window
 	hWindow = createWindow()
@@ -499,7 +250,6 @@ def main():
 
 	# Dispatch messages
 	win32gui.PumpMessages()
-
 
 if __name__ == '__main__':
 	main()
