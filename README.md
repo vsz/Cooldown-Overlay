@@ -35,7 +35,7 @@ actionList.append(TrackedAction(text,color,cooldownGroups,actionType,keys,time,i
 	Expected format - example : List of string - ['1','F1']
 	
 * time : 
-	Time for the action. Can be cooldown or effect duration. If it is a simple object or attack, does not need to be configured.
+	Time for the action. Can be cooldown or effect duration. If it is a simple object or attack, does not need to be configured for regular spells, just for actions with larger cooldowns (like special spells) and for spells you want to track duration.
 	Expected format - example : float - 3.0
 	
 * initialValue
@@ -59,6 +59,7 @@ actionList.append(TrackedAction('Potion',TextColor.PINK,[CooldownGroup.OBJECT],A
 * Timer is reset to 1.0 and has initial value of 0.5 on first use. 
 * It is used on target and is displayed on screen.
 
+*
 
 actionList.append(TrackedAction('StrongWave',TextColor.RED,[CooldownGroup.ATTACK],ActionType.ATKCOOLDOWN,['F1'],8.0,modifiers=['Lshift']))
 * Text is StrongWave, displayed in red.
@@ -66,6 +67,7 @@ actionList.append(TrackedAction('StrongWave',TextColor.RED,[CooldownGroup.ATTACK
 * Timer is reset to 8.0, no initial value specified.
 * By default, visible is set to True and UseType is set to TARGET, so the action is displayed on screen and is used on target.
 
+*
 
 actionList.append(TrackedAction('AoE Rune',TextColor.DGREEN,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['3'],ut=UseType.CROSSHAIR,visible=False))
 * Text is AoE Rune, displayed in dark green.
@@ -81,11 +83,11 @@ groupList.append(TrackedGroup('Healing',TextColor.LBLUE,CooldownGroup.HEAL,1.0))
 groupList.append(TrackedGroup('Support',TextColor.DGREEN,CooldownGroup.SUPPORT,2.0,visible=False))
 
 # Running the script
-1) Download the latest release zip file. Unzip it to a local folder.
-2) To run the script, you'll need to have python3 installed, as well as two libraries: pywin32 and pyhooked.
-	2.1) It is recommended that you install python3 and pip to manage your libraries. If you have pip installed, you can open the command line, navigate to the script folder and type 'pip install -r requirements.txt' to get the correct versions of the libraries used to run the script.
-3) After installing python3 and the required libraries, open the command prompt and navigate to the script folder and type 'python cd-overlay.py'
-4) Enjoy!
+* 1) Download the latest release zip file. Unzip it to a local folder.
+* 2) To run the script, you'll need to have python3 installed, as well as two libraries: pywin32 and pyhooked.
+	* 2.1) It is recommended that you install python3 and pip to manage your libraries. If you have pip installed, you can open the command line, navigate to the script folder and type 'pip install -r requirements.txt' to get the correct versions of the libraries used to run the script.
+* 3) After installing python3 and the required libraries, open the command prompt and navigate to the script folder and type 'python cd-overlay.py'
+* 4) Enjoy!
 
 
 
@@ -97,4 +99,5 @@ groupList.append(TrackedGroup('Support',TextColor.DGREEN,CooldownGroup.SUPPORT,2
 * Persistent timers
 * Timers for bosses
 
-# For suggestions and questions, send a PM to /u/bunkbedlover on Reddit.
+# Contact
+For suggestions and questions, send a PM to /u/bunkbedlover on Reddit.
