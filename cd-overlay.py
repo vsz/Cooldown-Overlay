@@ -8,6 +8,9 @@ import datetime
 from pyhooked import Hook, KeyboardEvent, MouseEvent
 from classes import *
 
+# Use debug = True to see keys you are pressing (good to configure hotkeys!)
+debug = False
+
 ## ADD YOUR TRACKED ACTIONS HERE
 actionList = []
 
@@ -16,9 +19,9 @@ actionList.append(TrackedAction('Potion',TextColor.BLACK,[CooldownGroup.OBJECT],
 
 # Attack Spells
 actionList.append(TrackedAction('Strike',TextColor.RED,[CooldownGroup.ATTACK],ActionType.ATKREGULAR,['Oem_6'],visible=False))
-actionList.append(TrackedAction('StrongWave',TextColor.RED,[CooldownGroup.ATTACK],ActionType.ATKCOOLDOWN,['F11'],8.0))
-actionList.append(TrackedAction('StrongStrike',TextColor.RED,[CooldownGroup.ATTACK],ActionType.ATKCOOLDOWN,['F9'],8.0))
-actionList.append(TrackedAction('UltimateStrike',TextColor.RED,[CooldownGroup.ATTACK,CooldownGroup.SPECIAL],ActionType.ATKCOOLDOWN,['F10'],30.0))
+actionList.append(TrackedAction('StrongWave',TextColor.RED,[CooldownGroup.ATTACK],ActionType.ATKCOOLDOWN,['Oem_5'],8.0,modifiers=['Lshift']))
+actionList.append(TrackedAction('StrongStrike',TextColor.RED,[CooldownGroup.ATTACK],ActionType.ATKCOOLDOWN,['Oem_6'],8.0,modifiers=['Lshift']))
+actionList.append(TrackedAction('UltimateStrike',TextColor.RED,[CooldownGroup.ATTACK,CooldownGroup.SPECIAL],ActionType.ATKCOOLDOWN,['F11'],30.0))
 actionList.append(TrackedAction('UE',TextColor.ORANGE,[CooldownGroup.ATTACK,CooldownGroup.SPECIAL],ActionType.ATKCOOLDOWN,['F12'],40.0))
 
 # Attack Runes
@@ -31,16 +34,18 @@ actionList.append(TrackedAction('Exura Gran',TextColor.LBLUE,[CooldownGroup.HEAL
 
 # Support
 actionList.append(TrackedAction('Magic Shield',TextColor.WHITE,[CooldownGroup.SUPPORT],ActionType.SUPPORTEFFECT,['4'],200.0))
-actionList.append(TrackedAction('Haste',TextColor.GRAY,[CooldownGroup.SUPPORT],ActionType.SUPPORTEFFECT,['5'],22.0))
+actionList.append(TrackedAction('Haste',TextColor.GRAY,[CooldownGroup.SUPPORT],ActionType.SUPPORTEFFECT,['5','F5'],22.0))
 
 # DO NOT DELETE GROUPS. IF YOU DONT WANT TO SEE IT, JUST SET 'visible=False' IN ARGUMENTS
 groupList = []
-groupList.append(TrackedGroup('Potion',TextColor.BLUE,CooldownGroup.OBJECT,1.0))
+groupList.append(TrackedGroup('Potion',TextColor.PINK,CooldownGroup.OBJECT,1.0))
 groupList.append(TrackedGroup('Attack',TextColor.RED,CooldownGroup.ATTACK,2.0))
 groupList.append(TrackedGroup('Healing',TextColor.LBLUE,CooldownGroup.HEAL,1.0))
 groupList.append(TrackedGroup('Support',TextColor.DGREEN,CooldownGroup.SUPPORT,2.0,visible=False))
+groupList.append(TrackedGroup('Conjure',TextColor.BLACK,CooldownGroup.CONJURE,2.0,visible=False))
 groupList.append(TrackedGroup('Special',TextColor.ORANGE,CooldownGroup.SPECIAL,4.0))
 
+# Separators for the traked actions
 emptyLines = [5];
 
 def createWindow():
@@ -112,11 +117,11 @@ def createWindow():
 
 	return hWindow
 
-def createTextLabel(hdc, pos, color=0x008c8c8c,text=''):
+def createTextLabel(hdc, pos, color=TextColor.BLACK,text=''):
 	win32gui.SetTextColor(hdc, color)
 	win32gui.DrawText(hdc,text,-1,pos,win32con.DT_LEFT | win32con.DT_VCENTER)
 
-def createTimerLabel(hdc, pos, color=0x008c8c8c,initialValue=0.0):
+def createTimerLabel(hdc, pos, color=TextColor.BLACK,initialValue=0.0):
 	win32gui.SetTextColor(hdc, color)
 	win32gui.DrawText(hdc,'{0:.1f}'.format(initialValue),-1,pos,win32con.DT_RIGHT | win32con.DT_VCENTER)
 
@@ -215,13 +220,19 @@ def handle_events(args):
 	global actionList
 	
 	if isinstance(args, KeyboardEvent):
-		#print(args.pressed_key)
+		if debug : print("Keyboard: " + str(args.pressed_key))
 		for action in actionList :
-			if any(i in action.keys for i in args.pressed_key): 
-				action.triggerByKey()
+			if any(k in action.keys for k in args.pressed_key): 
+				if not action.modifiers: 
+					if not any(m in allModifiers for m in args.pressed_key):
+						action.triggerByKey()
+						
+				else: #action has modifiers
+					print(action.modifiers)
+					if any(m in action.modifiers for m in args.pressed_key):
+						action.triggerByKey()
 			
 	if isinstance(args, MouseEvent):
-		
 		for action in actionList:
 			if action.useType == UseType.CROSSHAIR:
 				if 'LButton' == args.current_key and 'key down' == args.event_type:

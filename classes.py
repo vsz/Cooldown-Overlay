@@ -1,5 +1,7 @@
 from enum import Enum
 
+allModifiers = ['Lcontrol','Lmenu','Lshift']
+
 class TextColor:		
 	# Colors
 	BLACK = 0x00000000
@@ -13,7 +15,7 @@ class TextColor:
 	GRAY = 0x008c8c8c
 	ORANGE = 0x000098ff
 	
-	def rgb_to_hex(rgb):
+	def rgb2hex(rgb):
 		# uses bgr in hex
 		bgr = (rgb[2], rgb[1], rgb[0])
 		strValue = '%02x%02x%02x' % bgr
@@ -125,12 +127,13 @@ class TrackedGroup:
 	
 class TrackedAction:
 	
-	def __init__(self,lt,color,cg,at,keys,t=0.0,iv=0.0,ut=UseType.TARGET,visible=True):
+	def __init__(self,lt,color,cg,at,keys,t=0.0,iv=0.0,modifiers=[],ut=UseType.TARGET,visible=True):
 		self.labelText = lt
 		self.color = color
 		self.cooldownGroups = cg
 		self.actionType = at
 		self.keys = keys
+		self.modifiers = modifiers
 		self.time = t
 		self.groupTime = 0.0
 		self.countdown = iv
@@ -166,7 +169,7 @@ class TrackedAction:
 	
 	def arm(self):
 		self.armed = True
-		print(self.labelText + " Armed!")
+		#print(self.labelText + " Armed!")
 		
 	def unarm(self):
 		self.armed = False	
@@ -187,7 +190,7 @@ class TrackedAction:
 		self.countdown = 0.0
 
 	def triggerByKey(self):
-		print(self.labelText + " Triggered by Key!!")
+		#print(self.labelText + " Triggered by Key!!")
 
 		if self.useType == UseType.TARGET:
 			self.setTrigger()
@@ -216,20 +219,20 @@ class TrackedAction:
 			self.run()
 			self.setCountdown(self.time)
 			self.resetTrigger()
-			print(self.labelText+" Trigger by Action")
+			#print(self.labelText+" Trigger by Action")
 			
 		if self.groupTrigger and not self.trigger:
 			self.run()
 			self.setCountdown(self.groupTime)
 			self.resetGroupTrigger()
-			print(self.labelText+" Trigger by Group")
+			#print(self.labelText+" Trigger by Group")
 		
 		if self.trigger and self.groupTrigger:
 			self.run()
 			self.setCountdown(max(self.groupTime,self.time))
 			self.resetTrigger()
 			self.resetGroupTrigger()
-			print(self.labelText+" Action triggered the group")
+			#print(self.labelText+" Action triggered the group")
 		
 		if self.running : self.decrementCountdown(Ts)
 		
