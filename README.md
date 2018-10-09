@@ -18,22 +18,43 @@ actionList.append(TrackedAction(text,color,cooldownGroups,actionType,keys,time,i
 * **text** 
 	* The text to be displayed left of the timer. 
 	* Expected format - example : string - 'ActionName'
+	* Can be pretty much anything inside ''
 	
 * **color** 
 	* The color of the text and timer. 
 	* Expected format - example : Class TextColor.COLOR - TextColor.BLACK
+	* Possible options:
+		* TextColor.BLACK
+		* TextColor.BLUE
+		* TextColor.RED
+		* TextColor.GREEN
+		* TextColor.WHITE
+		* TextColor.PINK
+		* TextColor.DGREENGRAY
+		* TextColor.ORANGE
+		* You can add your own by using TextColor.rgb2hex(R,G,B), where R,G,B range between 0 and 255.		
 	
 * **cooldownGroups** 
-	* Groups activated by hotkey. 
+	* Groups activated by hotkey.
 	* Expected format - example : List of Class CooldownGroup.GROUP - [CooldownGroup.OBJECT,CooldownGroup.ATTACK]
-	
+	* Possible options:
+		* CooldownGroup.OBJECT
+		* CooldownGroup.ATTACK
+		* CooldownGroup.HEAL
+		* CooldownGroup.SUPPORT
+		* CooldownGroup.SPECIAL
+		* CooldownGroup.CONJURE
+		* CooldownGroup.NONE
+			
 * **actionType**
 	* Type of action. Currently Not supported
 	* Expected format - example : Class ActionType - ActionType.CONSUMABLE
+	* I will expand on this when I implement it. If you are curious you can check the class ActionType in classes.py
 	
 * **keys** 
 	* Hotkeys configured for action.
 	* Expected format - example : List of string - ['1','F1']
+	* You can set the variable debug = True on the first lins of the code to have your keypresses be printed on the command prompt. It is useful to configure your hotkeys on the overlay.
 	
 * **time**
 	* Time for the action. Can be cooldown or effect duration. If it is a simple object or attack, does not need to be configured for regular spells, just for actions with larger cooldowns (like special spells) and for spells you want to track duration.
@@ -46,6 +67,9 @@ actionList.append(TrackedAction(text,color,cooldownGroups,actionType,keys,time,i
 * **useType**
 	* Type of use, can be either 'on target' or 'with crosshair'. By default is set to use 'on target'
 	* Expected format - example : Class UseType - UseType.CROSSHAIR
+	* Possible options:
+			* UseType.TARGET
+			* UseType.CROSSHAIR
 	
 * **visibility**
 	* Determines if the action is displayed on screen or not. Can be set to True or False. By default, visibility is set to True.
@@ -76,14 +100,14 @@ Some examples:
 ## Group configuration
 Groups are always tracked, and can be set to be visible or not using the 'visible' input argument.
 Examples of visible and not visible group:  
-*groupList.append(TrackedGroup('Healing',TextColor.LBLUE,CooldownGroup.HEAL,1.0))*  
-*groupList.append(TrackedGroup('Support',TextColor.DGREEN,CooldownGroup.SUPPORT,2.0,visible=False))*
+**groupList.append(TrackedGroup('Healing',TextColor.LBLUE,CooldownGroup.HEAL,1.0))**  
+**groupList.append(TrackedGroup('Support',TextColor.DGREEN,CooldownGroup.SUPPORT,2.0,visible=False))**
 
 # Running the script
 1. Download the latest release zip file. Unzip it to a local folder.
 1. To run the script, you'll need to have python3 installed, as well as two libraries: pywin32 and pyhooked.
-	1. It is recommended that you install python3 and pip to manage your libraries. If you have pip installed, you can open the command line, navigate to the script folder and type 'pip install -r requirements.txt' to get the correct versions of the libraries used to run the script.
-1. After installing python3 and the required libraries, open the command prompt and navigate to the script folder and type 'python cd-overlay.py'
+	1. It is recommended that you install pip to manage your libraries. If you have pip installed, you can open the command line, navigate to the script folder and type 'pip install -r requirements.txt' to get the correct versions of the libraries used to run the script.
+1. After installing python3 and the required libraries, open the command prompt, navigate to the script folder and type 'python cd-overlay.py'
 1. Enjoy!
 
 
