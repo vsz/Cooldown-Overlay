@@ -25,7 +25,7 @@ actionList.append(TrackedAction('UltimateStrike',TextColor.RED,[CooldownGroup.AT
 actionList.append(TrackedAction('UE',TextColor.ORANGE,[CooldownGroup.ATTACK,CooldownGroup.SPECIAL],ActionType.ATKCOOLDOWN,['F12'],40.0))
 
 # Attack Runes
-actionList.append(TrackedAction('AoE',TextColor.RED,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['Oem_5'],ut=UseType.CROSSHAIR,visible=False))
+actionList.append(TrackedAction('AoE Rune',TextColor.RED,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['Oem_5'],ut=UseType.CROSSHAIR,visible=False))
 actionList.append(TrackedAction('SD',TextColor.RED,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['Oem_1'],ut=UseType.CROSSHAIR,visible=False))
 
 # Heal
@@ -45,7 +45,7 @@ groupList.append(TrackedGroup('Support',TextColor.DGREEN,CooldownGroup.SUPPORT,2
 groupList.append(TrackedGroup('Conjure',TextColor.BLACK,CooldownGroup.CONJURE,2.0,visible=False))
 groupList.append(TrackedGroup('Special',TextColor.ORANGE,CooldownGroup.SPECIAL,4.0))
 
-# Separators for the traked actions
+# Separators for the tracked actions section
 emptyLines = [5];
 
 def createWindow():
@@ -160,8 +160,6 @@ def wndProc(hWnd, message, wParam, lParam):
 		groupsToDraw = [g for g in groupList if g.visible]
 		actionsToDraw = [a for a in actionList if a.visible]
 		
-		
-		
 		for idx,group in enumerate(groupsToDraw):
 			pos = (pleft,ptop+idx*spc,pright,pbottom)
 			createTextLabel(hdc,pos,group.color,group.labelText)
@@ -179,7 +177,7 @@ def wndProc(hWnd, message, wParam, lParam):
 		return 0
 
 	elif message == win32con.WM_DESTROY:
-		print('Being destroyed')
+		print("Overlay stopped")
 		win32gui.PostQuitMessage(0)
 		return 0
 
@@ -204,7 +202,7 @@ def trackActions(hWindow):
 		# Tracks ellapsed time
 		ctime2 = datetime.datetime.now()
 		delta = ctime2-ctime1
-		ctime1=ctime2
+		ctime1 = ctime2
 		et = delta.seconds+0.000001*delta.microseconds
 		
 		#print(et)
@@ -228,7 +226,6 @@ def handle_events(args):
 						action.triggerByKey()
 						
 				else: #action has modifiers
-					print(action.modifiers)
 					if any(m in action.modifiers for m in args.pressed_key):
 						action.triggerByKey()
 			
@@ -239,28 +236,37 @@ def handle_events(args):
 					action.triggerByLeftMouse()
 				elif 'RButton' == args.current_key and 'key down' == args.event_type:
 					action.triggerByRightMouse()
-				
+	
 def keylogger(handler):
 	hk = Hook()
 	hk.handler = handler
 	hk.hook(True,True)  # hook into the events, and listen to the presses
 
 def main():
-	# Create transparent window
-	hWindow = createWindow()
 
-	# Thread that detects keypresses
-	tKeylogger = threading.Thread(target = keylogger, args=(handle_events,))
-	tKeylogger.setDaemon(False)
-	tKeylogger.start()
+	try:
+		# Create transparent window
+		hWindow = createWindow()
+		
+		# Create threads
+		# Thread that detects keypresses
+		tKeylogger = threading.Thread(target = keylogger, args=(handle_events,))
+		tKeylogger.setDaemon(False)
+		tKeylogger.start()
 
-	# Thread that updates values on window
-	tTimers = threading.Thread(target=trackActions, args=(hWindow,))
-	tTimers.setDaemon(False)
-	tTimers.start()
-
-	# Dispatch messages
-	win32gui.PumpMessages()
+		# Thread that updates values on window
+		tTimers = threading.Thread(target=trackActions, args=(hWindow,))
+		tTimers.setDaemon(False)
+		tTimers.start()
+		
+		# Dispatch messages
+		win32gui.PumpMessages()
+		
+	except KeyboardInterrupt:
+		tKeylogger.join()
+		tTimers.join()
+		print("Overlay interrupted")
+		win32gui.PostMessage(hWindow,win32con.WM_DESTROY, 0,0)
 
 if __name__ == '__main__':
 	main()
