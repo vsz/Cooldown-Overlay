@@ -15,27 +15,27 @@ To use the script, some basic Python and programming is desirable, but not neces
 Actions are added to tracked list using:
 
 actionList.append(TrackedAction(text,color,cooldownGroups,actionType,keys,time,initialValue,useType,visibility))
-* **text :** 
+* **text** 
 	* The text to be displayed left of the timer. 
 	* Expected format - example : string - 'ActionName'
 	
-* **color :** 
+* **color** 
 	* The color of the text and timer. 
 	* Expected format - example : Class TextColor.COLOR - TextColor.BLACK
 	
-* **cooldownGroups :** 
+* **cooldownGroups** 
 	* Groups activated by hotkey. 
 	* Expected format - example : List of Class CooldownGroup.GROUP - [CooldownGroup.OBJECT,CooldownGroup.ATTACK]
 	
-* **actionType :**
+* **actionType**
 	* Type of action. Currently Not supported
 	* Expected format - example : Class ActionType - ActionType.CONSUMABLE
 	
-* **keys :** 
+* **keys** 
 	* Hotkeys configured for action.
 	* Expected format - example : List of string - ['1','F1']
 	
-* **time : **
+* **time**
 	* Time for the action. Can be cooldown or effect duration. If it is a simple object or attack, does not need to be configured for regular spells, just for actions with larger cooldowns (like special spells) and for spells you want to track duration.
 	* Expected format - example : float - 3.0
 	
@@ -75,9 +75,9 @@ Some examples:
 
 ## Group configuration
 Groups are always tracked, and can be set to be visible or not using the 'visible' input argument.
-Examples of visible and not visible group:
-groupList.append(TrackedGroup('Healing',TextColor.LBLUE,CooldownGroup.HEAL,1.0))
-groupList.append(TrackedGroup('Support',TextColor.DGREEN,CooldownGroup.SUPPORT,2.0,visible=False))
+Examples of visible and not visible group:  
+*groupList.append(TrackedGroup('Healing',TextColor.LBLUE,CooldownGroup.HEAL,1.0))*  
+*groupList.append(TrackedGroup('Support',TextColor.DGREEN,CooldownGroup.SUPPORT,2.0,visible=False))*
 
 # Running the script
 1. Download the latest release zip file. Unzip it to a local folder.
