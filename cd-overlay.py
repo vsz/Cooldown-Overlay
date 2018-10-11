@@ -1,3 +1,5 @@
+import keyboard
+import mouse
 from pyhooked import Hook, KeyboardEvent, MouseEvent
 from classes import *
 
@@ -204,6 +206,9 @@ def keylogger(handler):
 	hk.handler = handler
 	hk.hook(True,True)  # hook into the events, and listen to the presses
 
+def 
+
+
 def main():
 	# Create transparent window
 	hWindow = createWindow()
@@ -236,9 +241,7 @@ def main():
 
 		win32gui.DestroyWindow(hWindow)
 		print("Overlay window destroyed")
-		print("Closing...")
-		
-		
+		print("Closing...")	
 
 if __name__ == '__main__':
 	main()
