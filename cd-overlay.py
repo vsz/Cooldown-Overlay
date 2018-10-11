@@ -170,7 +170,6 @@ def wndProc(hWnd, message, wParam, lParam):
 		return 0
 
 	elif message == win32con.WM_DESTROY:
-		print("Overlay stopped")
 		win32gui.PostQuitMessage(0)
 		return 0
 
@@ -225,20 +224,20 @@ def main():
 			time.sleep(0.05)
 		
 	except KeyboardInterrupt:
-		print("Keyboard interrupt")
-		
-		win32gui.PostMessage(hWindow,win32con.WM_DESTROY,0,0)
-		win32gui.PumpWaitingMessages()
-		print("Destroying overlay window")
-		
+		print("\nScript interrupted")
+				
 		tTracker.abort = True
 		tTracker.join()
 		print("Timer Thread Stopped")
-		
+			
 		tKeylogger.join(0.1)
 		print("Keylogger Thread Stopped")
+
+		win32gui.PostMessage(hWindow,win32con.WM_DESTROY,0,0)
+		win32gui.PumpWaitingMessages()
+		print("Destroying overlay window")
 		print("Closing...")
-		return 0
+		
 		
 
 if __name__ == '__main__':
