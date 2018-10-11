@@ -62,8 +62,7 @@ class UseType(Enum):
 	CROSSHAIR = 2
 
 class ActionTracker(threading.Thread):
-	def __init__(self,hWindow,actionList,groupList):
-		self.hWindow = hWindow
+	def __init__(self,actionList,groupList):
 		self.actionList = actionList
 		self.groupList = groupList
 		self.abort = False
@@ -80,8 +79,6 @@ class ActionTracker(threading.Thread):
 		ctime1 = datetime.datetime.now()
 		
 		while(not self.abort) :
-			win32gui.RedrawWindow(self.hWindow, None, None, win32con.RDW_INVALIDATE | win32con.RDW_ERASE)
-			
 			# Tracks ellapsed time
 			ctime2 = datetime.datetime.now()
 			delta = ctime2-ctime1

@@ -105,7 +105,7 @@ def createWindow():
 
 
 	# Show & update the window
-	# win32gui.ShowWindow(hWindow, win32con.SW_SHOWNORMAL)
+	win32gui.ShowWindow(hWindow, win32con.SW_SHOWNORMAL)
 	win32gui.UpdateWindow(hWindow)
 
 	return hWindow
@@ -215,11 +215,12 @@ def main():
 	tKeylogger.start()
 
 	# Thread that updates values on window
-	tTracker = ActionTracker(hWindow,actionList,groupList)
+	tTracker = ActionTracker(actionList,groupList)
 	tTracker.start()
 	
 	try:
 		while(True):
+			win32gui.RedrawWindow(hWindow, None, None, win32con.RDW_INVALIDATE | win32con.RDW_ERASE)
 			win32gui.PumpWaitingMessages()
 			time.sleep(0.05)
 		
@@ -233,9 +234,8 @@ def main():
 		tKeylogger.join(0.1)
 		print("Keylogger Thread Stopped")
 
-		win32gui.PostMessage(hWindow,win32con.WM_DESTROY,0,0)
-		win32gui.PumpWaitingMessages()
-		print("Destroying overlay window")
+		win32gui.DestroyWindow(hWindow)
+		print("Overlay window destroyed")
 		print("Closing...")
 		
 		
