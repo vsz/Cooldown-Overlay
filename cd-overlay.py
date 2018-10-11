@@ -19,9 +19,9 @@ actionList.append(TrackedAction('Potion',TextColor.BLACK,[CooldownGroup.OBJECT],
 
 # Attack Spells
 actionList.append(TrackedAction('Strike',TextColor.RED,[CooldownGroup.ATTACK],ActionType.ATKREGULAR,['Oem_6'],visible=False))
-actionList.append(TrackedAction('StrongWave',TextColor.RED,[CooldownGroup.ATTACK],ActionType.ATKCOOLDOWN,['Oem_5'],8.0,modifiers=['Lshift']))
-actionList.append(TrackedAction('StrongStrike',TextColor.RED,[CooldownGroup.ATTACK],ActionType.ATKCOOLDOWN,['Oem_6'],8.0,modifiers=['Lshift']))
-actionList.append(TrackedAction('UltimateStrike',TextColor.RED,[CooldownGroup.ATTACK,CooldownGroup.SPECIAL],ActionType.ATKCOOLDOWN,['F11'],30.0))
+actionList.append(TrackedAction('Wave',TextColor.GREEN,[CooldownGroup.ATTACK],ActionType.ATKCOOLDOWN,['Oem_5'],4.0,modifiers=['Lshift']))
+actionList.append(TrackedAction('StrongStrike',TextColor.DGREEN,[CooldownGroup.ATTACK],ActionType.ATKCOOLDOWN,['Oem_6'],8.0,modifiers=['Lshift']))
+actionList.append(TrackedAction('UltimateStrike',TextColor.rgb2hex((0,137,255)),[CooldownGroup.ATTACK,CooldownGroup.SPECIAL],ActionType.ATKCOOLDOWN,['F11'],30.0))
 actionList.append(TrackedAction('UE',TextColor.ORANGE,[CooldownGroup.ATTACK,CooldownGroup.SPECIAL],ActionType.ATKCOOLDOWN,['F12'],40.0))
 
 # Attack Runes
@@ -57,13 +57,13 @@ def createWindow():
 
 	# create and initialize window class
 	wndClass				= win32gui.WNDCLASS()
-	wndClass.style		  = win32con.CS_HREDRAW | win32con.CS_VREDRAW
+	wndClass.style			= win32con.CS_HREDRAW | win32con.CS_VREDRAW
 	wndClass.lpfnWndProc	= wndProc
-	wndClass.hInstance	  = hInstance
-	wndClass.hIcon		  = win32gui.LoadIcon(0, win32con.IDI_APPLICATION)
+	wndClass.hInstance		= hInstance
+	wndClass.hIcon			= win32gui.LoadIcon(0, win32con.IDI_APPLICATION)
 	wndClass.hCursor		= win32gui.LoadCursor(None, win32con.IDC_ARROW)
-	wndClass.hbrBackground  = win32gui.GetStockObject(win32con.WHITE_BRUSH)
-	wndClass.lpszClassName  = className
+	wndClass.hbrBackground	= win32gui.GetStockObject(win32con.WHITE_BRUSH)
+	wndClass.lpszClassName	= className
 
 	# register window class
 	wndClassAtom = None
@@ -263,10 +263,12 @@ def main():
 		win32gui.PumpMessages()
 		
 	except KeyboardInterrupt:
+		print("kb interrupt")
+		win32gui.PostMessage(hWindow,win32con.WM_DESTROY,0,0)
 		tKeylogger.join()
 		tTimers.join()
 		print("Overlay interrupted")
-		win32gui.PostMessage(hWindow,win32con.WM_DESTROY, 0,0)
+		
 
 if __name__ == '__main__':
 	main()

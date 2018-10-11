@@ -68,8 +68,8 @@ actionList.append(TrackedAction(text,color,cooldownGroups,actionType,keys,time,i
 	* Type of use, can be either 'on target' or 'with crosshair'. By default is set to use 'on target'
 	* Expected format - example : Class UseType - UseType.CROSSHAIR
 	* Possible options:
-			* UseType.TARGET
-			* UseType.CROSSHAIR
+		* UseType.TARGET
+		* UseType.CROSSHAIR
 	
 * **visibility**
 	* Determines if the action is displayed on screen or not. Can be set to True or False. By default, visibility is set to True.
