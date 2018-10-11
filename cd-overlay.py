@@ -1,10 +1,3 @@
-import win32api
-import win32con
-import win32gui
-import win32ui
-import time
-import threading
-import datetime
 from pyhooked import Hook, KeyboardEvent, MouseEvent
 from classes import *
 
@@ -184,36 +177,6 @@ def wndProc(hWnd, message, wParam, lParam):
 	else:
 		return win32gui.DefWindowProc(hWnd, message, wParam, lParam)
 
-def trackActions(hWindow):
-	global actionList, groupList
-	
-	# Window and Timer update period
-	Ts = 0.05
-	
-	# Initialize
-	for group in groupList:
-		group.setActionList(actionList)
-		
-	
-	ctime1 = datetime.datetime.now()
-	while(True) :
-		win32gui.RedrawWindow(hWindow, None, None, win32con.RDW_INVALIDATE | win32con.RDW_ERASE)
-		
-		# Tracks ellapsed time
-		ctime2 = datetime.datetime.now()
-		delta = ctime2-ctime1
-		ctime1 = ctime2
-		et = delta.seconds+0.000001*delta.microseconds
-		
-		#print(et)
-		for group in groupList :
-			group.track(et)
-		
-		for action in actionList :
-			action.track(et)
-			
-		time.sleep(Ts)
-
 def handle_events(args):
 	global actionList
 	
@@ -243,31 +206,39 @@ def keylogger(handler):
 	hk.hook(True,True)  # hook into the events, and listen to the presses
 
 def main():
+	# Create transparent window
+	hWindow = createWindow()
+	
+	# Create threads
+	# Thread that detects keypresses
+	tKeylogger = threading.Thread(target = keylogger, args=(handle_events,))
+	tKeylogger.setDaemon(True)
+	tKeylogger.start()
 
+	# Thread that updates values on window
+	tTracker = ActionTracker(hWindow,actionList,groupList)
+	tTracker.start()
+	
 	try:
-		# Create transparent window
-		hWindow = createWindow()
-		
-		# Create threads
-		# Thread that detects keypresses
-		tKeylogger = threading.Thread(target = keylogger, args=(handle_events,))
-		tKeylogger.setDaemon(False)
-		tKeylogger.start()
-
-		# Thread that updates values on window
-		tTimers = threading.Thread(target=trackActions, args=(hWindow,))
-		tTimers.setDaemon(False)
-		tTimers.start()
-		
-		# Dispatch messages
-		win32gui.PumpMessages()
+		while(True):
+			win32gui.PumpWaitingMessages()
+			time.sleep(0.05)
 		
 	except KeyboardInterrupt:
-		print("kb interrupt")
+		print("Keyboard interrupt")
+		
 		win32gui.PostMessage(hWindow,win32con.WM_DESTROY,0,0)
-		tKeylogger.join()
-		tTimers.join()
-		print("Overlay interrupted")
+		win32gui.PumpWaitingMessages()
+		print("Destroying overlay window")
+		
+		tTracker.abort = True
+		tTracker.join()
+		print("Timer Thread Stopped")
+		
+		tKeylogger.join(0.1)
+		print("Keylogger Thread Stopped")
+		print("Closing...")
+		return 0
 		
 
 if __name__ == '__main__':

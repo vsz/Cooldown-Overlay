@@ -1,4 +1,11 @@
 from enum import Enum
+import threading
+import time
+import datetime
+import win32api
+import win32con
+import win32gui
+import win32ui
 
 allModifiers = ['Lcontrol','Lmenu','Lshift']
 
@@ -53,6 +60,42 @@ class CooldownGroup(Enum):
 class UseType(Enum):
 	TARGET = 1
 	CROSSHAIR = 2
+
+class ActionTracker(threading.Thread):
+	def __init__(self,hWindow,actionList,groupList):
+		self.hWindow = hWindow
+		self.actionList = actionList
+		self.groupList = groupList
+		self.abort = False
+		threading.Thread.__init__(self)
+		
+	def run(self):
+		# Window and Timer update period
+		Ts = 0.05
+		
+		# Initialize
+		for group in self.groupList:
+			group.setActionList(self.actionList)
+			
+		ctime1 = datetime.datetime.now()
+		
+		while(not self.abort) :
+			win32gui.RedrawWindow(self.hWindow, None, None, win32con.RDW_INVALIDATE | win32con.RDW_ERASE)
+			
+			# Tracks ellapsed time
+			ctime2 = datetime.datetime.now()
+			delta = ctime2-ctime1
+			ctime1 = ctime2
+			et = delta.seconds+0.000001*delta.microseconds
+			
+			#print(et)
+			for group in self.groupList :
+				group.track(et)
+			
+			for action in self.actionList :
+				action.track(et)
+				
+			time.sleep(Ts)
 
 class TrackedGroup:
 
