@@ -1,2 +1,4 @@
-pyhooked==0.8.1
-pywin32==224
+keyboard==0.13.2
+mouse==0.7.0
+pywin32==223
+pywinpty==0.5.4

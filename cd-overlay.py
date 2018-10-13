@@ -1,6 +1,3 @@
-import keyboard
-import mouse
-from pyhooked import Hook, KeyboardEvent, MouseEvent
 from classes import *
 
 # Use debug = True to see keys you are pressing (good to configure hotkeys!)
@@ -10,26 +7,27 @@ debug = False
 actionList = []
 
 # Objects
-actionList.append(TrackedAction('Potion',TextColor.BLACK,[CooldownGroup.OBJECT],ActionType.CONSUMABLE,['1'],visible=False))
+actionList.append(TrackedAction('Potion',TextColor.BLACK,[CooldownGroup.OBJECT],ActionType.CONSUMABLE,'F1',visible=False))
 
 # Attack Spells
-actionList.append(TrackedAction('Strike',TextColor.RED,[CooldownGroup.ATTACK],ActionType.ATKREGULAR,['Oem_6'],visible=False))
-actionList.append(TrackedAction('Wave',TextColor.GREEN,[CooldownGroup.ATTACK],ActionType.ATKCOOLDOWN,['Oem_5'],4.0,modifiers=['Lshift']))
-actionList.append(TrackedAction('StrongStrike',TextColor.DGREEN,[CooldownGroup.ATTACK],ActionType.ATKCOOLDOWN,['Oem_6'],8.0,modifiers=['Lshift']))
-actionList.append(TrackedAction('UltimateStrike',TextColor.rgb2hex((0,137,255)),[CooldownGroup.ATTACK,CooldownGroup.SPECIAL],ActionType.ATKCOOLDOWN,['F11'],30.0))
-actionList.append(TrackedAction('UE',TextColor.ORANGE,[CooldownGroup.ATTACK,CooldownGroup.SPECIAL],ActionType.ATKCOOLDOWN,['F12'],40.0))
+#actionList.append(TrackedAction('Strike',TextColor.RED,[CooldownGroup.ATTACK],ActionType.ATKREGULAR,['Oem_6'],visible=False))
+#actionList.append(TrackedAction('Wave',TextColor.GREEN,[CooldownGroup.ATTACK],ActionType.ATKCOOLDOWN,['Oem_5'],4.0,modifiers=['Lshift']))
+#actionList.append(TrackedAction('StrongStrike',TextColor.DGREEN,[CooldownGroup.ATTACK],ActionType.ATKCOOLDOWN,['Oem_6'],8.0,modifiers=['Lshift']))
+
+#actionList.append(TrackedAction('UltimateStrike',TextColor.rgb2hex((0,137,255)),[CooldownGroup.ATTACK,CooldownGroup.SPECIAL],ActionType.ATKCOOLDOWN,'F11',30.0))
+#actionList.append(TrackedAction('UE',TextColor.ORANGE,[CooldownGroup.ATTACK,CooldownGroup.SPECIAL],ActionType.ATKCOOLDOWN,'F12',40.0))
 
 # Attack Runes
-actionList.append(TrackedAction('AoE Rune',TextColor.RED,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['Oem_5'],ut=UseType.CROSSHAIR,visible=False))
-actionList.append(TrackedAction('SD',TextColor.RED,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['Oem_1'],ut=UseType.CROSSHAIR,visible=False))
+#actionList.append(TrackedAction('AoE Rune',TextColor.RED,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['Oem_5'],ut=UseType.CROSSHAIR,visible=False))
+#actionList.append(TrackedAction('SD',TextColor.RED,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['Oem_1'],ut=UseType.CROSSHAIR,visible=False))
 
 # Heal
-actionList.append(TrackedAction('Exura',TextColor.LBLUE,[CooldownGroup.HEAL],ActionType.HEALREGULAR,['3'],visible=False))
-actionList.append(TrackedAction('Exura Gran',TextColor.LBLUE,[CooldownGroup.HEAL],ActionType.HEALREGULAR,['2'],visible=False))
+#actionList.append(TrackedAction('Exura',TextColor.LBLUE,[CooldownGroup.HEAL],ActionType.HEALREGULAR,'3',visible=False))
+#actionList.append(TrackedAction('Exura Gran',TextColor.LBLUE,[CooldownGroup.HEAL],ActionType.HEALREGULAR,'2',visible=False))
 
 # Support
-actionList.append(TrackedAction('Magic Shield',TextColor.WHITE,[CooldownGroup.SUPPORT],ActionType.SUPPORTEFFECT,['4'],200.0))
-actionList.append(TrackedAction('Haste',TextColor.GRAY,[CooldownGroup.SUPPORT],ActionType.SUPPORTEFFECT,['5','F5'],22.0))
+#actionList.append(TrackedAction('Magic Shield',TextColor.WHITE,[CooldownGroup.SUPPORT],ActionType.SUPPORTEFFECT,'4',200.0))
+#actionList.append(TrackedAction('Haste',TextColor.GRAY,[CooldownGroup.SUPPORT],ActionType.SUPPORTEFFECT,'5, F5',22.0))
 
 # DO NOT DELETE GROUPS. IF YOU DONT WANT TO SEE IT, JUST SET 'visible=False' IN ARGUMENTS
 groupList = []
@@ -178,51 +176,22 @@ def wndProc(hWnd, message, wParam, lParam):
 	else:
 		return win32gui.DefWindowProc(hWnd, message, wParam, lParam)
 
-def handle_events(args):
-	global actionList
-	
-	if isinstance(args, KeyboardEvent):
-		if debug : print("Keyboard: " + str(args.pressed_key))
-		for action in actionList :
-			if any(k in action.keys for k in args.pressed_key): 
-				if not action.modifiers: 
-					if not any(m in allModifiers for m in args.pressed_key):
-						action.triggerByKey()
-						
-				else: #action has modifiers
-					if any(m in action.modifiers for m in args.pressed_key):
-						action.triggerByKey()
-			
-	if isinstance(args, MouseEvent):
-		for action in actionList:
-			if action.useType == UseType.CROSSHAIR:
-				if 'LButton' == args.current_key and 'key down' == args.event_type:
-					action.triggerByLeftMouse()
-				elif 'RButton' == args.current_key and 'key down' == args.event_type:
-					action.triggerByRightMouse()
-	
-def keylogger(handler):
-	hk = Hook()
-	hk.handler = handler
-	hk.hook(True,True)  # hook into the events, and listen to the presses
-
-def 
 
 
 def main():
 	# Create transparent window
 	hWindow = createWindow()
-	
+
 	# Create threads
 	# Thread that detects keypresses
-	tKeylogger = threading.Thread(target = keylogger, args=(handle_events,))
-	tKeylogger.setDaemon(True)
-	tKeylogger.start()
-
-	# Thread that updates values on window
-	tTracker = ActionTracker(actionList,groupList)
-	tTracker.start()
+	tHotkeyTracker = HotkeyTracker(actionList)
+	tHotkeyTracker.start()
 	
+	
+	# Thread that updates values on window
+	tActionTracker = ActionTracker(actionList,groupList)
+	tActionTracker.start()
+
 	try:
 		while(True):
 			win32gui.RedrawWindow(hWindow, None, None, win32con.RDW_INVALIDATE | win32con.RDW_ERASE)
@@ -232,12 +201,12 @@ def main():
 	except KeyboardInterrupt:
 		print("\nScript interrupted")
 				
-		tTracker.abort = True
-		tTracker.join()
-		print("Timer Thread Stopped")
-			
-		tKeylogger.join(0.1)
-		print("Keylogger Thread Stopped")
+		tActionTracker.abort = True
+		tActionTracker.join()
+		print("Action Tracker Stopped")
+		
+		tHotkeyTracker.join()	
+		print("Hotkey Tracker Stopped")
 
 		win32gui.DestroyWindow(hWindow)
 		print("Overlay window destroyed")

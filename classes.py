@@ -1,4 +1,6 @@
 from enum import Enum
+import keyboard
+import mouse
 import threading
 import time
 import datetime
@@ -93,6 +95,25 @@ class ActionTracker(threading.Thread):
 				action.track(et)
 				
 			time.sleep(Ts)
+
+class HotkeyTracker(threading.Thread):
+	def __init__(self,actionList):
+		self.actionList = actionList
+		self.abort = False
+		threading.Thread.__init__(self)
+		
+	def run(self):
+		'''
+		for action in self.actionList:
+			keyboard.add_hotkey('F1',print,args=('poc'))
+		'''
+		for action in self.actionList:
+			keyboard.add_hotkey(action.keys,lambda: action.triggerByKey())
+			
+		keyboard.wait('ctrl+c')
+		
+	
+
 
 class TrackedGroup:
 
