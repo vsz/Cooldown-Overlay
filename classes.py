@@ -9,8 +9,6 @@ import win32con
 import win32gui
 import win32ui
 
-allModifiers = ['Lcontrol','Lmenu','Lshift']
-
 class TextColor:		
 	# Colors
 	BLACK = 0x00000000
@@ -99,22 +97,33 @@ class ActionTracker(threading.Thread):
 class HotkeyTracker(threading.Thread):
 	def __init__(self,actionList):
 		self.actionList = actionList
-		self.abort = False
 		threading.Thread.__init__(self)
 		
 	def run(self):
-		'''
 		for action in self.actionList:
-			keyboard.add_hotkey('F1',print,args=('poc'))
-		'''
-		for action in self.actionList:
-			keyboard.add_hotkey(action.keys,lambda: action.triggerByKey())
-			
-		keyboard.wait('ctrl+c')
+			for key in action.keys:
+				print(key)
+				keyboard.add_hotkey(key,action.triggerByKey,args=())
+
+class MouseTracker(threading.Thread):
+	def __init__(self,actionList):
+		self.actionList = actionList
+		threading.Thread.__init__(self)
 		
-	
+	def run(self):
+		mouse.on_right_click(lambda: self.rightClick())
+		mouse.on_click(lambda: self.leftClick())
 
+	def rightClick(self):	
+		for action in self.actionList:
+			if action.useType == UseType.CROSSHAIR:
+				action.triggerByRightMouse()
 
+	def leftClick(self):
+		for action in self.actionList:
+			if action.useType == UseType.CROSSHAIR:
+				action.triggerByLeftMouse()
+				
 class TrackedGroup:
 
 	def __init__(self,lt,color,cg,time=0.0,visible=True):
@@ -251,7 +260,7 @@ class TrackedAction:
 		self.countdown = 0.0
 
 	def triggerByKey(self):
-		#print(self.labelText + " Triggered by Key!!")
+		#print(self.labelText + " triggered by Key")
 
 		if self.useType == UseType.TARGET:
 			self.setTrigger()
