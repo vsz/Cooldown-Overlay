@@ -11,8 +11,8 @@ actionList.append(TrackedAction('Potion',TextColor.BLACK,[CooldownGroup.OBJECT],
 
 # Attack Spells
 actionList.append(TrackedAction('Strike',TextColor.RED,[CooldownGroup.ATTACK],ActionType.ATKREGULAR,['['],visible=False))
-actionList.append(TrackedAction('Wave',TextColor.GREEN,[CooldownGroup.ATTACK],ActionType.ATKCOOLDOWN,['shift+!'],4.0))
-actionList.append(TrackedAction('StrongStrike',TextColor.DGREEN,[CooldownGroup.ATTACK],ActionType.ATKCOOLDOWN,['shift+@'],8.0))
+actionList.append(TrackedAction('Wave',TextColor.GREEN,[CooldownGroup.ATTACK],ActionType.ATKCOOLDOWN,['shift+}'],4.0))
+actionList.append(TrackedAction('StrongStrike',TextColor.DGREEN,[CooldownGroup.ATTACK],ActionType.ATKCOOLDOWN,['shift+{'],8.0))
 
 actionList.append(TrackedAction('UltimateStrike',TextColor.rgb2hex((0,137,255)),[CooldownGroup.ATTACK,CooldownGroup.SPECIAL],ActionType.ATKCOOLDOWN,['F11'],30.0))
 actionList.append(TrackedAction('UE',TextColor.ORANGE,[CooldownGroup.ATTACK,CooldownGroup.SPECIAL],ActionType.ATKCOOLDOWN,['F12'],40.0))
@@ -208,7 +208,7 @@ def main():
 		tActionTracker.join()
 		print("Action Tracker Stopped")
 		
-		#tMouseTracker.join()
+		tMouseTracker.join()
 		print("Mouse Tracker Stopped")
 		
 		tHotkeyTracker.join()	

@@ -102,7 +102,6 @@ class HotkeyTracker(threading.Thread):
 	def run(self):
 		for action in self.actionList:
 			for key in action.keys:
-				print(key)
 				keyboard.add_hotkey(key,action.triggerByKey,args=())
 
 class MouseTracker(threading.Thread):
