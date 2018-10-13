@@ -9,17 +9,16 @@ actionList = []
 # Objects
 actionList.append(TrackedAction('Potion',TextColor.BLACK,[CooldownGroup.OBJECT],ActionType.CONSUMABLE,['1'],visible=False))
 
+# Attack Runes
+actionList.append(TrackedAction('Rune',TextColor.rgb2hex((0,162,232)),[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,[']'],ut=UseType.CROSSHAIR,visible=True))
+actionList.append(TrackedAction('SD',TextColor.RED,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['ç'],ut=UseType.CROSSHAIR,visible=False))
+
 # Attack Spells
 actionList.append(TrackedAction('Strike',TextColor.RED,[CooldownGroup.ATTACK],ActionType.ATKREGULAR,['['],visible=False))
 actionList.append(TrackedAction('Wave',TextColor.GREEN,[CooldownGroup.ATTACK],ActionType.ATKCOOLDOWN,['shift+}'],4.0))
 actionList.append(TrackedAction('StrongStrike',TextColor.DGREEN,[CooldownGroup.ATTACK],ActionType.ATKCOOLDOWN,['shift+{'],8.0))
-
 actionList.append(TrackedAction('UltimateStrike',TextColor.rgb2hex((0,137,255)),[CooldownGroup.ATTACK,CooldownGroup.SPECIAL],ActionType.ATKCOOLDOWN,['F11'],30.0))
 actionList.append(TrackedAction('UE',TextColor.ORANGE,[CooldownGroup.ATTACK,CooldownGroup.SPECIAL],ActionType.ATKCOOLDOWN,['F12'],40.0))
-
-# Attack Runes
-actionList.append(TrackedAction('AoE Rune',TextColor.RED,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,[']'],ut=UseType.CROSSHAIR,visible=True))
-actionList.append(TrackedAction('SD',TextColor.RED,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['ç'],ut=UseType.CROSSHAIR,visible=False))
 
 # Heal
 actionList.append(TrackedAction('Exura',TextColor.LBLUE,[CooldownGroup.HEAL],ActionType.HEALREGULAR,['3'],visible=False))
@@ -39,7 +38,7 @@ groupList.append(TrackedGroup('Conjure',TextColor.BLACK,CooldownGroup.CONJURE,2.
 groupList.append(TrackedGroup('Special',TextColor.ORANGE,CooldownGroup.SPECIAL,4.0))
 
 # Separators for the tracked actions section
-emptyLines = [5];
+emptyLines = [2,6];
 
 def createWindow():
 	#get instance handle
@@ -184,7 +183,7 @@ def main():
 
 	# Create threads
 	# Thread that detects keyboard hotkeys
-	tHotkeyTracker = HotkeyTracker(actionList)
+	tHotkeyTracker = HotkeyTracker(actionList,groupList)
 	tHotkeyTracker.start()
 
 	# Thread that detects mouse buttons

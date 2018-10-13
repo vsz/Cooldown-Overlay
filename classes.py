@@ -95,14 +95,25 @@ class ActionTracker(threading.Thread):
 			time.sleep(Ts)
 
 class HotkeyTracker(threading.Thread):
-	def __init__(self,actionList):
+	def __init__(self,actionList,groupList,resetKey='-'):
 		self.actionList = actionList
+		self.groupList = groupList
+		self.resetKey = resetKey
 		threading.Thread.__init__(self)
 		
 	def run(self):
+		keyboard.add_hotkey(self.resetKey,self.resetAllCountdowns,args=())
+		
 		for action in self.actionList:
 			for key in action.keys:
 				keyboard.add_hotkey(key,action.triggerByKey,args=())
+				
+	def resetAllCountdowns(self):
+		for action in self.actionList:
+			action.resetCountdown()
+			
+		for group in self.groupList:
+			group.resetCountdown()
 
 class MouseTracker(threading.Thread):
 	def __init__(self,actionList):
