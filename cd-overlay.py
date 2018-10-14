@@ -175,9 +175,16 @@ def wndProc(hWnd, message, wParam, lParam):
 	else:
 		return win32gui.DefWindowProc(hWnd, message, wParam, lParam)
 
-
+def debugMode():
+	while(True):
+		s = keyboard.read_hotkey(suppress=False)
+		print(s)
 
 def main():
+	# Goes in debug mode
+	if debug:
+		debugMode()
+	
 	# Create transparent window
 	hWindow = createWindow()
 
