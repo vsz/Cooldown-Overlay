@@ -1,11 +1,16 @@
 from classes import *
 
+# Initialize
+actionList = []
+groupList = []
+
 # Use debug = True to see keys you are pressing (good to configure hotkeys!)
 debug = False
 
-## ADD YOUR TRACKED ACTIONS HERE
-actionList = []
+# Key to reset all countdowns
+resetKey = '-'
 
+## Add your tracked actions here
 # Objects
 actionList.append(TrackedAction('Potion',TextColor.BLACK,[CooldownGroup.OBJECT],ActionType.CONSUMABLE,['1'],visible=False))
 
@@ -29,7 +34,6 @@ actionList.append(TrackedAction('Magic Shield',TextColor.WHITE,[CooldownGroup.SU
 actionList.append(TrackedAction('Haste',TextColor.GRAY,[CooldownGroup.SUPPORT],ActionType.SUPPORTEFFECT,['5','F5'],22.0))
 
 # DO NOT DELETE GROUPS. IF YOU DONT WANT TO SEE IT, JUST SET 'visible=False' IN ARGUMENTS
-groupList = []
 groupList.append(TrackedGroup('Potion',TextColor.PINK,CooldownGroup.OBJECT,1.0))
 groupList.append(TrackedGroup('Attack',TextColor.RED,CooldownGroup.ATTACK,2.0))
 groupList.append(TrackedGroup('Healing',TextColor.LBLUE,CooldownGroup.HEAL,1.0))
@@ -176,6 +180,7 @@ def wndProc(hWnd, message, wParam, lParam):
 		return win32gui.DefWindowProc(hWnd, message, wParam, lParam)
 
 def debugMode():
+	print('Debug Mode: press hotkeys to see how to add them in the script')
 	while(True):
 		s = keyboard.read_hotkey(suppress=False)
 		print(s)
@@ -190,7 +195,7 @@ def main():
 
 	# Create threads
 	# Thread that detects keyboard hotkeys
-	tHotkeyTracker = HotkeyTracker(actionList,groupList)
+	tHotkeyTracker = HotkeyTracker(actionList,groupList,resetKey)
 	tHotkeyTracker.start()
 
 	# Thread that detects mouse buttons

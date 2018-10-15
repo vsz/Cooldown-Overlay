@@ -108,7 +108,7 @@ class HotkeyTracker(threading.Thread):
 			for key in action.keys:
 				keyboard.add_hotkey(key,action.triggerByKey,args=())
 				
-				# adds hotkeys for when walking with WSAD
+				# adds hotkeys for when walking with WSAD or arrow keys
 				keyboard.add_hotkey(key+'+w',action.triggerByKey,args=())
 				keyboard.add_hotkey(key+'+s',action.triggerByKey,args=())
 				keyboard.add_hotkey(key+'+a',action.triggerByKey,args=())
@@ -117,6 +117,10 @@ class HotkeyTracker(threading.Thread):
 				keyboard.add_hotkey(key+'+S',action.triggerByKey,args=())
 				keyboard.add_hotkey(key+'+A',action.triggerByKey,args=())
 				keyboard.add_hotkey(key+'+D',action.triggerByKey,args=())
+				keyboard.add_hotkey(key+'+up',action.triggerByKey,args=())
+				keyboard.add_hotkey(key+'+down',action.triggerByKey,args=())
+				keyboard.add_hotkey(key+'+left',action.triggerByKey,args=())
+				keyboard.add_hotkey(key+'+right',action.triggerByKey,args=())
 				
 	def resetAllCountdowns(self):
 		for action in self.actionList:
