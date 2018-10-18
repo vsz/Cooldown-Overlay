@@ -3,6 +3,8 @@ from classes import *
 # Initialize
 actionList = []
 groupList = []
+equipmentList = []
+equipmentSlotList = []
 
 # Use debug = True to see keys you are pressing (good to configure hotkeys!)
 debug = False
@@ -40,6 +42,13 @@ groupList.append(TrackedGroup('Healing',TextColor.LBLUE,CooldownGroup.HEAL,1.0))
 groupList.append(TrackedGroup('Support',TextColor.DGREEN,CooldownGroup.SUPPORT,2.0,visible=False))
 groupList.append(TrackedGroup('Conjure',TextColor.BLACK,CooldownGroup.CONJURE,2.0,visible=False))
 groupList.append(TrackedGroup('Special',TextColor.ORANGE,CooldownGroup.SPECIAL,4.0))
+
+# Equipment to be tracked
+equipmentList.append(TrackedEquipment('LifeRing', TextColor.DGREEN,[CooldownGroup.NONE],ActionType.EQUIPMENT,['7'],1200.0,iv=5.0,et=EquipmentType.RING))
+equipmentList.append(TrackedEquipment('EnergyRing', TextColor.LBLUE,[CooldownGroup.NONE],ActionType.EQUIPMENT,['8'],600.0,et=EquipmentType.RING))
+
+# Item Slots to be tracked
+equipmentSlotList.append(TrackedEquipmentSlot(EquipmentType.RING))
 
 # Separators for the tracked actions section
 emptyLines = [2,6];
@@ -155,6 +164,7 @@ def wndProc(hWnd, message, wParam, lParam):
 		# Filter what do draw
 		groupsToDraw = [g for g in groupList if g.visible]
 		actionsToDraw = [a for a in actionList if a.visible]
+		equipmentToDraw = [e for e in equipmentList if e.visible]
 		
 		for idx,group in enumerate(groupsToDraw):
 			pos = (pleft,ptop+idx*spc,pright,pbottom)
@@ -168,6 +178,15 @@ def wndProc(hWnd, message, wParam, lParam):
 			pos = (pleft,ptop+(idx+k)*spc,pright,pbottom)
 			createTextLabel(hdc,pos,action.color,action.labelText)
 			createTimerLabel(hdc,pos,action.color,action.countdown)
+
+		k=k+idx+2
+		for idx,equip in enumerate(equipmentToDraw):
+			#if (idx+1) in emptyLines : k=k+1
+
+			pos = (pleft,ptop+(idx+k)*spc,pright,pbottom)
+			createTextLabel(hdc,pos,equip.color,equip.labelText)
+			createTimerLabel(hdc,pos,equip.color,equip.countdown)
+			
 
 		win32gui.EndPaint(hWnd, paintStruct)
 		return 0
@@ -195,15 +214,15 @@ def main():
 
 	# Create threads
 	# Thread that detects keyboard hotkeys
-	tHotkeyTracker = HotkeyTracker(actionList,groupList,resetKey)
+	tHotkeyTracker = HotkeyTracker(actionList,equipmentList,groupList,resetKey)
 	tHotkeyTracker.start()
 
 	# Thread that detects mouse buttons
 	tMouseTracker = MouseTracker(actionList)
 	tMouseTracker.start()
 	
-	# Thread that updates values on window
-	tActionTracker = ActionTracker(actionList,groupList)
+	# Thread that tracks actions
+	tActionTracker = ActionTracker(actionList,equipmentList,groupList,equipmentSlotList)
 	tActionTracker.start()
 
 	try:

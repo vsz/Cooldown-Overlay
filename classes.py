@@ -57,14 +57,27 @@ class CooldownGroup(Enum):
 	CONJURE = 6
 	NONE = 7
 
+class EquipmentType(Enum):
+	RING = 1
+	AMULET = 2
+	WEAPON = 3
+	SHIELD = 4
+	ARMOR = 5
+	LEGS = 6
+	HELMET = 7
+	BOOTS = 8
+	NONE = 9
+
 class UseType(Enum):
 	TARGET = 1
 	CROSSHAIR = 2
 
 class ActionTracker(threading.Thread):
-	def __init__(self,actionList,groupList):
+	def __init__(self,actionList,equipmentList,groupList,equipmentSlotList):
 		self.actionList = actionList
+		self.equipmentList = equipmentList
 		self.groupList = groupList
+		self.equipmentSlotList = equipmentSlotList
 		self.abort = False
 		threading.Thread.__init__(self)
 		
@@ -76,6 +89,9 @@ class ActionTracker(threading.Thread):
 		for group in self.groupList:
 			group.setActionList(self.actionList)
 			
+		for slot in self.equipmentSlotList:
+			slot.setEquipmentList(self.equipmentList)
+			
 		ctime1 = datetime.datetime.now()
 		
 		while(not self.abort) :
@@ -86,23 +102,34 @@ class ActionTracker(threading.Thread):
 			et = delta.seconds+0.000001*delta.microseconds
 			
 			#print(et)
-			for group in self.groupList :
+			for equipSlot in self.equipmentSlotList:
+				equipSlot.track(et)
+			
+			for equip in self.equipmentList:
+				equip.track(et)
+							
+			for group in self.groupList:
 				group.track(et)
 			
-			for action in self.actionList :
+			for action in self.actionList:
 				action.track(et)
 				
 			time.sleep(Ts)
 
 class HotkeyTracker(threading.Thread):
-	def __init__(self,actionList,groupList,resetKey='-'):
+	def __init__(self,actionList,equipmentList,groupList,resetKey='-'):
 		self.actionList = actionList
+		self.equipmentList = equipmentList
 		self.groupList = groupList
 		self.resetKey = resetKey
 		threading.Thread.__init__(self)
 		
 	def run(self):
 		keyboard.add_hotkey(self.resetKey,self.resetAllCountdowns,args=())
+		
+		for equip in self.equipmentList:
+			for key in equip.keys:
+				keyboard.add_hotkey(key,equip.triggerByKey,args=())
 		
 		for action in self.actionList:
 			for key in action.keys:
@@ -113,10 +140,18 @@ class HotkeyTracker(threading.Thread):
 				keyboard.add_hotkey(key+'+s',action.triggerByKey,args=())
 				keyboard.add_hotkey(key+'+a',action.triggerByKey,args=())
 				keyboard.add_hotkey(key+'+d',action.triggerByKey,args=())
+				keyboard.add_hotkey(key+'+q',action.triggerByKey,args=())
+				keyboard.add_hotkey(key+'+e',action.triggerByKey,args=())
+				keyboard.add_hotkey(key+'+z',action.triggerByKey,args=())
+				keyboard.add_hotkey(key+'+c',action.triggerByKey,args=())
 				keyboard.add_hotkey(key+'+W',action.triggerByKey,args=())
 				keyboard.add_hotkey(key+'+S',action.triggerByKey,args=())
 				keyboard.add_hotkey(key+'+A',action.triggerByKey,args=())
 				keyboard.add_hotkey(key+'+D',action.triggerByKey,args=())
+				keyboard.add_hotkey(key+'+Q',action.triggerByKey,args=())
+				keyboard.add_hotkey(key+'+E',action.triggerByKey,args=())
+				keyboard.add_hotkey(key+'+Z',action.triggerByKey,args=())
+				keyboard.add_hotkey(key+'+C',action.triggerByKey,args=())
 				keyboard.add_hotkey(key+'+up',action.triggerByKey,args=())
 				keyboard.add_hotkey(key+'+down',action.triggerByKey,args=())
 				keyboard.add_hotkey(key+'+left',action.triggerByKey,args=())
@@ -219,15 +254,121 @@ class TrackedGroup:
 			self.countdown = 0.0
 			self.running = False
 	
-class TrackedAction:
+class TrackedEquipmentSlot:
+	def __init__(self,et):
+		self.equipmentType = et
+		self.equipmentList = []
+		self.equipped = False
+		self.activeEquipment = None
+
+	def setEquipmentList(self,el):
+		self.equipmentList = [e for e in el if (self.equipmentType == e.equipmentType)]
 	
-	def __init__(self,lt,color,cg,at,keys,t=0.0,iv=0.0,modifiers=[],ut=UseType.TARGET,visible=True):
+	def unequipAllBut(self,equip):
+		for e in self.equipmentList:
+			if e is not equip:
+				e.stop()
+	
+	def track(self,Ts):
+		for equip in self.equipmentList:
+			if equip.trigger:
+				if equip.running:
+					self.activeEquipment = None
+				else:
+					if self.activeEquipment is not None:
+						self.activeEquipment.stop()
+					self.activeEquipment = equip
+					
+				
+			
+			
+		
+class TrackedEquipment:
+	def __init__(self,lt,color,cg,at,keys,t=0.0,iv=0.0,et=EquipmentType.NONE,ut=UseType.TARGET,visible=True):
 		self.labelText = lt
 		self.color = color
 		self.cooldownGroups = cg
 		self.actionType = at
 		self.keys = keys
-		self.modifiers = modifiers
+		self.time = t
+		self.trigger = False
+		self.running = False
+		self.useType = ut
+		self.visible = visible
+		self.equipmentType = et
+		self.expired = False
+		if iv == 0.0: 
+			self.countdown = self.time
+		else: 
+			self.countdown = iv
+		
+		print(self.labelText + " " + str(self.useType))
+		
+	def __str__(self):
+		return self.labelText
+
+	def setTime(self,time):
+		self.time = max(self.time,time)
+		
+	def resetTrigger(self):
+		self.trigger = False
+	
+	def setTrigger(self):
+		self.trigger = True	
+	
+	def run(self):
+		self.running = True
+		
+	def stop(self):
+		self.running = False
+
+	def decrementCountdown(self,Ts):
+		self.countdown = self.countdown - Ts
+	
+	def setCountdown(self,cd):
+		self.countdown = max(self.countdown,cd)
+	
+	def resetCountdown(self):
+		self.countdown = 0.0
+
+	def setExpired(self):
+		self.expired = True
+		
+	def resetExpired(self):
+		self.expired = False
+	
+	def triggerByKey(self):
+		#print(self.labelText + " triggered by Key")
+		self.setTrigger()
+
+	def track(self,Ts):
+		
+		if self.trigger:
+			if self.running:
+				self.stop()
+				#print(self.labelText+" has been unequipped")
+
+			elif not self.running:
+				self.run()
+				#print(self.labelText+" has been equipped")
+			self.resetTrigger()
+			
+		if self.running : self.decrementCountdown(Ts)
+		
+		# stops timer if it runs out
+		if self.running and self.countdown < Ts :
+			self.setCountdown(self.time)
+			self.stop()
+			self.setExpired()
+
+class TrackedAction:
+	
+	def __init__(self,lt,color,cg,at,keys,t=0.0,iv=0.0,et=EquipmentType.NONE,ut=UseType.TARGET,visible=True):
+		self.labelText = lt
+		self.color = color
+		self.cooldownGroups = cg
+		self.actionType = at
+		self.keys = keys
 		self.time = t
 		self.groupTime = 0.0
 		self.countdown = iv
@@ -237,6 +378,7 @@ class TrackedAction:
 		self.useType = ut
 		self.armed = False
 		self.visible = visible
+		self.equipmentType = et
 		print(self.labelText + " " + str(self.useType))
 		
 	def __str__(self):
