@@ -279,6 +279,7 @@ class TrackedEquipmentSlot:
 				else:
 					if self.activeEquipment is not None:
 						self.activeEquipment.unequip()
+					self.activeEquipment = equip
 	
 class TrackedEquipment:
 
