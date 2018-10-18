@@ -153,6 +153,7 @@ class HotkeyTracker(threading.Thread):
 				keyboard.add_hotkey(key+'+E',action.triggerByKey,args=())
 				keyboard.add_hotkey(key+'+Z',action.triggerByKey,args=())
 				keyboard.add_hotkey(key+'+C',action.triggerByKey,args=())
+
 				#keyboard.add_hotkey(key+'+up',action.triggerByKey,args=())
 				#keyboard.add_hotkey(key+'+down',action.triggerByKey,args=())
 				#keyboard.add_hotkey(key+'+left',action.triggerByKey,args=())
@@ -259,6 +260,7 @@ class TrackedEquipmentSlot:
 	def __init__(self,et):
 		self.equipmentType = et
 		self.equipmentList = []
+		self.equipped = False
 		self.activeEquipment = None
 
 	def setEquipmentList(self,el):
@@ -277,13 +279,9 @@ class TrackedEquipmentSlot:
 				else:
 					if self.activeEquipment is not None:
 						self.activeEquipment.unequip()
-					self.activeEquipment = equip
-					
-				
-			
-			
-		
+	
 class TrackedEquipment:
+
 	def __init__(self,lt,color,cg,at,keys,t=0.0,iv=0.0,et=EquipmentType.NONE,ut=UseType.TARGET,expires=True,visible=True):
 		self.labelText = lt
 		self.color = color
@@ -306,6 +304,7 @@ class TrackedEquipment:
 				self.countdown = iv
 		else:
 			self.countdown = 0.0
+
 		
 		print(self.labelText + " " + str(self.useType))
 		
@@ -320,7 +319,7 @@ class TrackedEquipment:
 	
 	def setTrigger(self):
 		self.trigger = True	
-	
+
 	def equip(self):
 		self.equipped = True
 		

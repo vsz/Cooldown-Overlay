@@ -48,7 +48,6 @@ equipmentList.append(TrackedEquipment('LifeRing', TextColor.DGREEN,[CooldownGrou
 equipmentList.append(TrackedEquipment('EnergyRing', TextColor.LBLUE,[CooldownGroup.NONE],ActionType.EQUIPMENT,['8'],600.0,et=EquipmentType.RING))
 equipmentList.append(TrackedEquipment('GoldRing', TextColor.ORANGE,[CooldownGroup.NONE],ActionType.EQUIPMENT,['9'],et=EquipmentType.RING,expires=False,visible=False))
 
-
 # Item Slots to be tracked
 equipmentSlotList.append(TrackedEquipmentSlot(EquipmentType.RING))
 
