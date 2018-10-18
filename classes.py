@@ -129,13 +129,14 @@ class HotkeyTracker(threading.Thread):
 		
 		for equip in self.equipmentList:
 			for key in equip.keys:
+				# cannot be equipped while walking
 				keyboard.add_hotkey(key,equip.triggerByKey,args=())
 		
 		for action in self.actionList:
 			for key in action.keys:
 				keyboard.add_hotkey(key,action.triggerByKey,args=())
 				
-				# adds hotkeys for when walking with WSAD or arrow keys
+				# actions can be executed while walking
 				keyboard.add_hotkey(key+'+w',action.triggerByKey,args=())
 				keyboard.add_hotkey(key+'+s',action.triggerByKey,args=())
 				keyboard.add_hotkey(key+'+a',action.triggerByKey,args=())
@@ -152,10 +153,10 @@ class HotkeyTracker(threading.Thread):
 				keyboard.add_hotkey(key+'+E',action.triggerByKey,args=())
 				keyboard.add_hotkey(key+'+Z',action.triggerByKey,args=())
 				keyboard.add_hotkey(key+'+C',action.triggerByKey,args=())
-				keyboard.add_hotkey(key+'+up',action.triggerByKey,args=())
-				keyboard.add_hotkey(key+'+down',action.triggerByKey,args=())
-				keyboard.add_hotkey(key+'+left',action.triggerByKey,args=())
-				keyboard.add_hotkey(key+'+right',action.triggerByKey,args=())
+				#keyboard.add_hotkey(key+'+up',action.triggerByKey,args=())
+				#keyboard.add_hotkey(key+'+down',action.triggerByKey,args=())
+				#keyboard.add_hotkey(key+'+left',action.triggerByKey,args=())
+				#keyboard.add_hotkey(key+'+right',action.triggerByKey,args=())
 				
 	def resetAllCountdowns(self):
 		for action in self.actionList:
