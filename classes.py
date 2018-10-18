@@ -259,7 +259,6 @@ class TrackedEquipmentSlot:
 	def __init__(self,et):
 		self.equipmentType = et
 		self.equipmentList = []
-		self.equipped = False
 		self.activeEquipment = None
 
 	def setEquipmentList(self,el):
@@ -273,11 +272,11 @@ class TrackedEquipmentSlot:
 	def track(self,Ts):
 		for equip in self.equipmentList:
 			if equip.trigger:
-				if equip.running:
+				if equip.equipped:
 					self.activeEquipment = None
 				else:
 					if self.activeEquipment is not None:
-						self.activeEquipment.stop()
+						self.activeEquipment.unequip()
 					self.activeEquipment = equip
 					
 				
@@ -285,7 +284,7 @@ class TrackedEquipmentSlot:
 			
 		
 class TrackedEquipment:
-	def __init__(self,lt,color,cg,at,keys,t=0.0,iv=0.0,et=EquipmentType.NONE,ut=UseType.TARGET,visible=True):
+	def __init__(self,lt,color,cg,at,keys,t=0.0,iv=0.0,et=EquipmentType.NONE,ut=UseType.TARGET,expires=True,visible=True):
 		self.labelText = lt
 		self.color = color
 		self.cooldownGroups = cg
@@ -293,15 +292,20 @@ class TrackedEquipment:
 		self.keys = keys
 		self.time = t
 		self.trigger = False
-		self.running = False
+		self.equipped = False
 		self.useType = ut
 		self.visible = visible
 		self.equipmentType = et
+		self.expires = expires
 		self.expired = False
-		if iv == 0.0: 
-			self.countdown = self.time
-		else: 
-			self.countdown = iv
+		
+		if self.expires:
+			if iv == 0.0: 
+				self.countdown = self.time
+			else: 
+				self.countdown = iv
+		else:
+			self.countdown = 0.0
 		
 		print(self.labelText + " " + str(self.useType))
 		
@@ -317,11 +321,11 @@ class TrackedEquipment:
 	def setTrigger(self):
 		self.trigger = True	
 	
-	def run(self):
-		self.running = True
+	def equip(self):
+		self.equipped = True
 		
-	def stop(self):
-		self.running = False
+	def unequip(self):
+		self.equipped = False
 
 	def decrementCountdown(self,Ts):
 		self.countdown = self.countdown - Ts
@@ -345,21 +349,21 @@ class TrackedEquipment:
 	def track(self,Ts):
 		
 		if self.trigger:
-			if self.running:
-				self.stop()
+			if self.equipped:
+				self.unequip()
 				#print(self.labelText+" has been unequipped")
 
-			elif not self.running:
-				self.run()
+			elif not self.equipped:
+				self.equip()
 				#print(self.labelText+" has been equipped")
 			self.resetTrigger()
 			
-		if self.running : self.decrementCountdown(Ts)
+		if self.equipped and self.expires : self.decrementCountdown(Ts)
 		
 		# stops timer if it runs out
-		if self.running and self.countdown < Ts :
+		if self.equipped and self.expires and self.countdown < Ts :
 			self.setCountdown(self.time)
-			self.stop()
+			self.unequip()
 			self.setExpired()
 
 class TrackedAction:
