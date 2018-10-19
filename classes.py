@@ -55,7 +55,8 @@ class CooldownGroup(Enum):
 	SUPPORT = 4
 	SPECIAL = 5
 	CONJURE = 6
-	NONE = 7
+	STRONGSTRIKE = 7
+	NONE = 8
 
 class EquipmentType(Enum):
 	RING = 1

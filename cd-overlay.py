@@ -6,10 +6,10 @@ groupList = []
 equipmentList = []
 equipmentSlotList = []
 
-# Use debug = True to see keys you are pressing (good to configure hotkeys!)
+## Use debug = True to see keys you are pressing (good to configure hotkeys!)
 debug = False
 
-# Key to reset all countdowns
+## Key to reset all countdowns
 resetKey = '-'
 
 ## Add your tracked actions here
@@ -17,42 +17,61 @@ resetKey = '-'
 actionList.append(TrackedAction('Potion',TextColor.BLACK,[CooldownGroup.OBJECT],ActionType.CONSUMABLE,['1'],visible=False))
 
 # Attack Runes
-actionList.append(TrackedAction('Rune',TextColor.rgb2hex((0,162,232)),[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,[']'],ut=UseType.CROSSHAIR,visible=True))
-actionList.append(TrackedAction('SD',TextColor.RED,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['ç'],ut=UseType.CROSSHAIR,visible=False))
+actionList.append(TrackedAction('Rune',TextColor.rgb2hex((255,100,0)),[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,[']'],ut=UseType.CROSSHAIR,visible=True))
+actionList.append(TrackedAction('SD',TextColor.RED,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['/'],visible=False))
+actionList.append(TrackedAction('FireWall',TextColor.RED,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['shift+!'],ut=UseType.CROSSHAIR,visible=False))
+actionList.append(TrackedAction('FireBomb',TextColor.RED,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['shift+@'],ut=UseType.CROSSHAIR,visible=False))
 
 # Attack Spells
 actionList.append(TrackedAction('Strike',TextColor.RED,[CooldownGroup.ATTACK],ActionType.ATKREGULAR,['['],visible=False))
-actionList.append(TrackedAction('Wave',TextColor.GREEN,[CooldownGroup.ATTACK],ActionType.ATKCOOLDOWN,['shift+}'],4.0))
-actionList.append(TrackedAction('StrongStrike',TextColor.DGREEN,[CooldownGroup.ATTACK],ActionType.ATKCOOLDOWN,['shift+{'],8.0))
-actionList.append(TrackedAction('UltimateStrike',TextColor.rgb2hex((0,137,255)),[CooldownGroup.ATTACK,CooldownGroup.SPECIAL],ActionType.ATKCOOLDOWN,['F11'],30.0))
-actionList.append(TrackedAction('UE',TextColor.ORANGE,[CooldownGroup.ATTACK,CooldownGroup.SPECIAL],ActionType.ATKCOOLDOWN,['F12'],40.0))
+
+actionList.append(TrackedAction('StrongIce',TextColor.rgb2hex((0,150,255)),[CooldownGroup.ATTACK,CooldownGroup.STRONGSTRIKE],ActionType.ATKCOOLDOWN,['shift+{'],8.0,visible=True))
+actionList.append(TrackedAction('StrongTerra',TextColor.rgb2hex((0,255,137)),[CooldownGroup.ATTACK,CooldownGroup.STRONGSTRIKE],ActionType.ATKCOOLDOWN,['F9'],8.0,visible=True))
+
+actionList.append(TrackedAction('IceWave',TextColor.rgb2hex((0,150,255)),[CooldownGroup.ATTACK],ActionType.ATKCOOLDOWN,['shift+}'],8.0,visible=True))
+actionList.append(TrackedAction('TerraWave',TextColor.rgb2hex((0,255,137)),[CooldownGroup.ATTACK],ActionType.ATKCOOLDOWN,['F10'],4.0,visible=True))
+
+actionList.append(TrackedAction('UltimateIce',TextColor.rgb2hex((0,150,255)),[CooldownGroup.ATTACK,CooldownGroup.SPECIAL],ActionType.ATKCOOLDOWN,['F11'],30.0))
+#actionList.append(TrackedAction('UltimateTerra',TextColor.rgb2hex((0,137,255)),[CooldownGroup.ATTACK,CooldownGroup.SPECIAL],ActionType.ATKCOOLDOWN,['F11'],30.0))
+
+actionList.append(TrackedAction('Ice UE',TextColor.ORANGE,[CooldownGroup.ATTACK,CooldownGroup.SPECIAL],ActionType.ATKCOOLDOWN,['F12'],40.0))
+#actionList.append(TrackedAction('Terra UE',TextColor.ORANGE,[CooldownGroup.ATTACK,CooldownGroup.SPECIAL],ActionType.ATKCOOLDOWN,['F12'],40.0))
 
 # Heal
 actionList.append(TrackedAction('Exura',TextColor.LBLUE,[CooldownGroup.HEAL],ActionType.HEALREGULAR,['3'],visible=False))
 actionList.append(TrackedAction('Exura Gran',TextColor.LBLUE,[CooldownGroup.HEAL],ActionType.HEALREGULAR,['2'],visible=False))
 
 # Support
-actionList.append(TrackedAction('Magic Shield',TextColor.WHITE,[CooldownGroup.SUPPORT],ActionType.SUPPORTEFFECT,['4'],200.0))
+#actionList.append(TrackedAction('Magic Shield',TextColor.WHITE,[CooldownGroup.SUPPORT],ActionType.SUPPORTEFFECT,['4'],200.0))
 actionList.append(TrackedAction('Haste',TextColor.GRAY,[CooldownGroup.SUPPORT],ActionType.SUPPORTEFFECT,['5','F5'],22.0))
+actionList.append(TrackedAction('MWall',TextColor.RED,[CooldownGroup.SUPPORT,CooldownGroup.OBJECT],ActionType.ATKRUNE,['shift+#'],ut=UseType.CROSSHAIR,visible=False))
 
-# DO NOT DELETE GROUPS. IF YOU DONT WANT TO SEE IT, JUST SET 'visible=False' IN ARGUMENTS
+## Equipment to be tracked
+# Rings
+equipmentList.append(TrackedEquipment('LifeRing', TextColor.DGREEN,[CooldownGroup.NONE],ActionType.EQUIPMENT,['F1'],1200.0,et=EquipmentType.RING))
+equipmentList.append(TrackedEquipment('EnergyRing', TextColor.LBLUE,[CooldownGroup.NONE],ActionType.EQUIPMENT,['4'],600.0,iv=355.0,et=EquipmentType.RING))
+equipmentList.append(TrackedEquipment('OtherRing', TextColor.ORANGE,[CooldownGroup.NONE],ActionType.EQUIPMENT,['F3','F4'],et=EquipmentType.RING,expires=False,visible=False))
+
+## DO NOT DELETE GROUPS. IF YOU DONT WANT TO SEE IT, JUST SET 'visible=False' IN ARGUMENTS
 groupList.append(TrackedGroup('Potion',TextColor.PINK,CooldownGroup.OBJECT,1.0))
 groupList.append(TrackedGroup('Attack',TextColor.RED,CooldownGroup.ATTACK,2.0))
 groupList.append(TrackedGroup('Healing',TextColor.LBLUE,CooldownGroup.HEAL,1.0))
 groupList.append(TrackedGroup('Support',TextColor.DGREEN,CooldownGroup.SUPPORT,2.0,visible=False))
 groupList.append(TrackedGroup('Conjure',TextColor.BLACK,CooldownGroup.CONJURE,2.0,visible=False))
 groupList.append(TrackedGroup('Special',TextColor.ORANGE,CooldownGroup.SPECIAL,4.0))
+groupList.append(TrackedGroup('StrongStrike',TextColor.ORANGE,CooldownGroup.STRONGSTRIKE,8.0,visible=False))
 
-# Equipment to be tracked
-equipmentList.append(TrackedEquipment('LifeRing', TextColor.DGREEN,[CooldownGroup.NONE],ActionType.EQUIPMENT,['7'],1200.0,iv=5.0,et=EquipmentType.RING))
-equipmentList.append(TrackedEquipment('EnergyRing', TextColor.LBLUE,[CooldownGroup.NONE],ActionType.EQUIPMENT,['8'],600.0,et=EquipmentType.RING))
-equipmentList.append(TrackedEquipment('GoldRing', TextColor.ORANGE,[CooldownGroup.NONE],ActionType.EQUIPMENT,['9'],et=EquipmentType.RING,expires=False,visible=True))
-
-# Item Slots to be tracked
+## DO NOT DELETE EQUIPMENT SLOTS
 equipmentSlotList.append(TrackedEquipmentSlot(EquipmentType.RING))
+equipmentSlotList.append(TrackedEquipmentSlot(EquipmentType.BOOTS))
+equipmentSlotList.append(TrackedEquipmentSlot(EquipmentType.WEAPON))
+equipmentSlotList.append(TrackedEquipmentSlot(EquipmentType.HELMET))
+equipmentSlotList.append(TrackedEquipmentSlot(EquipmentType.SHIELD))
+equipmentSlotList.append(TrackedEquipmentSlot(EquipmentType.ARMOR))
+equipmentSlotList.append(TrackedEquipmentSlot(EquipmentType.LEGS))
 
 # Separators for the tracked actions section
-emptyLines = [2,6];
+emptyLines = [2,4,6,8];
 
 def createWindow():
 	#get instance handle
