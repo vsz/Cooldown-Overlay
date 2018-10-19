@@ -92,7 +92,15 @@ class ActionTracker(threading.Thread):
 			
 		for slot in self.equipmentSlotList:
 			slot.setEquipmentList(self.equipmentList)
-			
+		
+		print("Tracked Actions")
+		for action in self.actionList:
+			print(action)
+		
+		print("\nTracked Equipment")
+		for equip in self.equipmentList:
+			print(equip)
+		
 		ctime1 = datetime.datetime.now()
 		
 		while(not self.abort) :
@@ -306,12 +314,12 @@ class TrackedEquipment:
 				self.countdown = iv
 		else:
 			self.countdown = 0.0
-
-		
-		print(self.labelText + " " + str(self.useType))
 		
 	def __str__(self):
-		return self.labelText
+		stringKey = ""
+		for key in self.keys:
+			stringKey = stringKey + key + " "
+		return (self.labelText + " tracked on hotkey(s) " + stringKey)
 
 	def setTime(self,time):
 		self.time = max(self.time,time)
@@ -385,10 +393,12 @@ class TrackedAction:
 		self.armed = False
 		self.visible = visible
 		self.equipmentType = et
-		print(self.labelText + " " + str(self.useType))
 		
 	def __str__(self):
-		return self.labelText
+		stringKey = ""
+		for key in self.keys:
+			stringKey = stringKey + key + " "
+		return (self.labelText + " tracked on hotkey(s) " + stringKey)
 
 	def setTime(self,time):
 		self.time = max(self.time,time)
