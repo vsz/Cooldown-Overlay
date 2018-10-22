@@ -18,7 +18,7 @@ actionList.append(TrackedAction('Potion',TextColor.BLACK,[CooldownGroup.OBJECT],
 
 # Attack Runes
 actionList.append(TrackedAction('Rune',TextColor.rgb2hex((255,100,0)),[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,[']'],ut=UseType.CROSSHAIR,visible=True))
-actionList.append(TrackedAction('SD',TextColor.RED,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['/'],visible=False))
+actionList.append(TrackedAction('SD',TextColor.RED,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,[';'],visible=False))
 actionList.append(TrackedAction('FireWall',TextColor.RED,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['shift+!'],ut=UseType.CROSSHAIR,visible=False))
 actionList.append(TrackedAction('FireBomb',TextColor.RED,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['shift+@'],ut=UseType.CROSSHAIR,visible=False))
 
@@ -43,14 +43,15 @@ actionList.append(TrackedAction('Exura Gran',TextColor.LBLUE,[CooldownGroup.HEAL
 
 # Support
 #actionList.append(TrackedAction('Magic Shield',TextColor.WHITE,[CooldownGroup.SUPPORT],ActionType.SUPPORTEFFECT,['4'],200.0))
-actionList.append(TrackedAction('Haste',TextColor.GRAY,[CooldownGroup.SUPPORT],ActionType.SUPPORTEFFECT,['5','F5'],22.0))
+actionList.append(TrackedAction('Haste',TextColor.GRAY,[CooldownGroup.SUPPORT],ActionType.SUPPORTEFFECT,['5'],22.0))
 actionList.append(TrackedAction('MWall',TextColor.RED,[CooldownGroup.SUPPORT,CooldownGroup.OBJECT],ActionType.ATKRUNE,['shift+#'],ut=UseType.CROSSHAIR,visible=False))
 
 ## Equipment to be tracked
 # Rings
-equipmentList.append(TrackedEquipment('LifeRing', TextColor.DGREEN,[CooldownGroup.NONE],ActionType.EQUIPMENT,['F1'],1200.0,et=EquipmentType.RING))
+equipmentList.append(TrackedEquipment('LifeRing', TextColor.DGREEN,[CooldownGroup.NONE],ActionType.EQUIPMENT,['F2'],1200.0,et=EquipmentType.RING))
+equipmentList.append(TrackedEquipment('RingHealing', TextColor.rgb2hex((227,115,32)),[CooldownGroup.NONE],ActionType.EQUIPMENT,['F3'],450.0,et=EquipmentType.RING))
 equipmentList.append(TrackedEquipment('EnergyRing', TextColor.LBLUE,[CooldownGroup.NONE],ActionType.EQUIPMENT,['4'],600.0,iv=355.0,et=EquipmentType.RING))
-equipmentList.append(TrackedEquipment('OtherRing', TextColor.ORANGE,[CooldownGroup.NONE],ActionType.EQUIPMENT,['F3','F4'],et=EquipmentType.RING,expires=False,visible=False))
+equipmentList.append(TrackedEquipment('OtherRing', TextColor.ORANGE,[CooldownGroup.NONE],ActionType.EQUIPMENT,['F4','F5','F6'],et=EquipmentType.RING,expires=False,visible=False))
 
 ## DO NOT DELETE GROUPS. IF YOU DONT WANT TO SEE IT, JUST SET 'visible=False' IN ARGUMENTS
 groupList.append(TrackedGroup('Potion',TextColor.PINK,CooldownGroup.OBJECT,1.0))
