@@ -364,6 +364,8 @@ class TrackedEquipment:
 
 			elif not self.equipped:
 				self.equip()
+				if self.time != self.countdown:
+					self.countdown = self.countdown - 6.0 # re-equipping an item that is not brand-new reduces its duration by 6 seconds
 				#print(self.labelText+" has been equipped")
 			self.resetTrigger()
 			

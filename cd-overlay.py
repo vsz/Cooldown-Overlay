@@ -51,7 +51,7 @@ actionList.append(TrackedAction('MWall',TextColor.RED,[CooldownGroup.SUPPORT,Coo
 equipmentList.append(TrackedEquipment('LifeRing', TextColor.DGREEN,[CooldownGroup.NONE],ActionType.EQUIPMENT,['F2'],1200.0,et=EquipmentType.RING))
 equipmentList.append(TrackedEquipment('RingHealing', TextColor.rgb2hex((227,115,32)),[CooldownGroup.NONE],ActionType.EQUIPMENT,['F3'],450.0,et=EquipmentType.RING))
 equipmentList.append(TrackedEquipment('EnergyRing', TextColor.LBLUE,[CooldownGroup.NONE],ActionType.EQUIPMENT,['4'],600.0,iv=355.0,et=EquipmentType.RING))
-equipmentList.append(TrackedEquipment('OtherRing', TextColor.ORANGE,[CooldownGroup.NONE],ActionType.EQUIPMENT,['F4','F5','F6'],et=EquipmentType.RING,expires=False,visible=False))
+equipmentList.append(TrackedEquipment('OtherRing', TextColor.ORANGE,[CooldownGroup.NONE],ActionType.EQUIPMENT,['F4','F5','F6','F7'],et=EquipmentType.RING,expires=False,visible=False))
 
 ## DO NOT DELETE GROUPS. IF YOU DONT WANT TO SEE IT, JUST SET 'visible=False' IN ARGUMENTS
 groupList.append(TrackedGroup('Potion',TextColor.PINK,CooldownGroup.OBJECT,1.0))
