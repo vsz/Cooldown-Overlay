@@ -13,6 +13,9 @@ debug = False
 resetKey = '-'
 
 ## Add your tracked actions here
+
+actionList.append(TrackedAction('Strike',ColorCode.RED,[CooldownGroup.ATTACK],ActionType.ATKREGULAR,['['],visible=False,ap=ArcPlacement.RIGHT))
+
 # Objects
 actionList.append(TrackedAction('Potion',ColorCode.PINK,[CooldownGroup.OBJECT],ActionType.CONSUMABLE,['1'],visible=False,ap=ArcPlacement.RIGHT))
 
@@ -23,8 +26,6 @@ actionList.append(TrackedAction('FireWall',ColorCode.RED,[CooldownGroup.ATTACK,C
 actionList.append(TrackedAction('FireBomb',ColorCode.RED,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['shift+@'],ut=UseType.CROSSHAIR,visible=False))
 
 # Attack Spells
-actionList.append(TrackedAction('Strike',ColorCode.RED,[CooldownGroup.ATTACK],ActionType.ATKREGULAR,['['],visible=False,ap=ArcPlacement.RIGHT))
-
 actionList.append(TrackedAction('StrongIce',ColorCode.rgb2hex((0,150,255)),[CooldownGroup.ATTACK,CooldownGroup.STRONGSTRIKE],ActionType.ATKCOOLDOWN,['shift+{'],8.0,visible=True))
 actionList.append(TrackedAction('StrongTerra',ColorCode.rgb2hex((0,255,137)),[CooldownGroup.ATTACK,CooldownGroup.STRONGSTRIKE],ActionType.ATKCOOLDOWN,['F9'],8.0,visible=True))
 
@@ -71,6 +72,20 @@ equipmentSlotList.append(TrackedEquipmentSlot(EquipmentType.SHIELD))
 equipmentSlotList.append(TrackedEquipmentSlot(EquipmentType.ARMOR))
 equipmentSlotList.append(TrackedEquipmentSlot(EquipmentType.LEGS))
 
+## Display configuration
+# Text position (Left, Top, Right, Bottom, Spacing)
+tleft = 1443
+ttop = 108
+tright = 1567
+tbottom = 594
+tspc = 16
+
+# Arc Position (Xcenter, Ycenter, Radius, Width)
+axc = 944
+ayc = 428
+aradius = 171
+awidth = 6
+
 # Separators for the tracked actions section
 emptyLines = [2,4,6,8];
 
@@ -100,7 +115,9 @@ def main():
 
 	# Create transparent window
 	windowHandler = WindowHandler(actionList,groupList,equipmentList,emptyLines)
-
+	windowHandler.setTextPosition((tleft,ttop,tright,tbottom),tspc)
+	windowHandler.setArcPosition((axc,ayc),aradius,awidth)
+	
 	try:
 		while(True):
 			win32gui.RedrawWindow(windowHandler.hWindow, None, None, win32con.RDW_INVALIDATE | win32con.RDW_ERASE)

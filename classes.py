@@ -85,8 +85,36 @@ class WindowHandler:
 		self.groupList = groupList
 		self.equipmentList = equipmentList
 		self.emptyLines = emptyLines
+
+		self.tleft=0
+		self.ttop=0
+		self.tright=0
+		self.tbottom=0
+		self.tspc=0
+		
+		self.axc=0
+		self.ayc=0
+		self.aradius=0
+		self.awidth=0
+		self.aangle=0
+		
 		self.hWindow = self.createWindow()
 
+
+	def setTextPosition(self,ltrb,spc):
+		self.tleft = ltrb[0]
+		self.ttop = ltrb[1]
+		self.tright = ltrb[2]
+		self.tbottom = ltrb[3]
+		self.tspc = spc
+		
+	def setArcPosition(self,center,radius,width,angle=90):
+		self.axc = center[0]
+		self.ayc = center[1]
+		self.aradius = radius
+		self.awidth = width
+		self.aangle = angle
+	
 	def createWindow(self):
 		#get instance handle
 		hInstance = win32api.GetModuleHandle()
@@ -290,19 +318,34 @@ class WindowHandler:
 
 			# Bars
 			# Positions the bars
+			'''
 			xc = int(w/2.033)
 			yc = int(h/2.522)
 			r = 171
 			dr = 6
 			alpha = 90
-			
+			'''
+			xc = self.axc
+			yc = self.ayc
+			r = self.aradius
+			dr = self.awidth
+			alpha = self.aangle
+
 			## Text
+			'''
 			# Positions the text
 			pleft = int(0.752*w)
 			ptop = int(0.1*h)
 			pright = int(0.8165*w)
 			pbottom = int(0.55*h)
 			spc = int(0.015*h)
+			'''
+			pleft = self.tleft
+			ptop = self.ttop
+			pright = self.tright
+			pbottom = self.tbottom
+			spc = self.tspc
+			
 			
 			# Filter what do draw
 			groupsToDraw = [g for g in self.groupList if g.visible]
@@ -353,7 +396,6 @@ class WindowHandler:
 		else:
 			return win32gui.DefWindowProc(hWnd, message, wParam, lParam)
 	
-
 class ActionTracker(threading.Thread):
 	def __init__(self,actionList,equipmentList,groupList,equipmentSlotList):
 		self.actionList = actionList
