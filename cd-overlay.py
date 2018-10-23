@@ -1,5 +1,4 @@
 from classes import *
-import math
 
 # Initialize
 actionList = []
