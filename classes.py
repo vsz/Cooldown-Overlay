@@ -103,6 +103,11 @@ class WindowHandler:
 		self.awidth=0
 		self.aangle=0
 		
+		self.axcm=0
+		self.aycm=0
+		
+		self.mounted = False
+		
 		self.hWindow = self.createWindow()
 
 	def setTextPosition(self,ltrb,spc):
@@ -112,12 +117,25 @@ class WindowHandler:
 		self.tbottom = ltrb[3]
 		self.tspc = spc
 		
-	def setArcPosition(self,center,radius,width,angle=90):
+	def setArcPosition(self,center):
 		self.axc = center[0]
 		self.ayc = center[1]
+
+		
+	def setArcProperties(self,radius,width,angle=90):
 		self.aradius = radius
 		self.awidth = width
 		self.aangle = angle
+		
+	def setArcMountedPosition(self,center):
+		self.axcm = center[0]
+		self.aycm = center[1]
+		
+	def changeArcPosition(self):
+		if self.mounted:
+			self.mounted = False
+		else:
+			self.mounted = True
 	
 	def createWindow(self):
 		#get instance handle
@@ -329,15 +347,22 @@ class WindowHandler:
 			dr = 6
 			alpha = 90
 			'''
-			xc = self.axc
-			yc = self.ayc
+			if self.mounted:
+				xc = self.axcm
+				yc = self.aycm
+			else:
+				xc = self.axc
+				yc = self.ayc
+
 			r = self.aradius
 			dr = self.awidth
 			alpha = self.aangle
-
+			
+			#print(xc,yc)
+			
 			## Text
-			'''
 			# Positions the text
+			'''
 			pleft = int(0.752*w)
 			ptop = int(0.1*h)
 			pright = int(0.8165*w)
@@ -349,16 +374,20 @@ class WindowHandler:
 			pright = self.tright
 			pbottom = self.tbottom
 			spc = self.tspc
-
+			
+			#print(pleft,ptop,pright,pbottom)
+			
 			sr = alpha
 			rr = r
 			for idx,action in enumerate(self.rightArcToDraw):
 				sr,rr = self.drawRightArc(hdc,(xc,yc),rr,dr,sr,action.getPercentage(), action.color)
+				#sr,rr = self.drawRightArc(hdc,(xc,yc),rr,dr,sr,1.0, action.color)
 
 			sl = alpha
 			rl = r
 			for idx,action in enumerate(self.leftArcToDraw):
 				sl,rl = self.drawLeftArc(hdc,(xc,yc),rl,dr,sl,action.getPercentage(), action.color)
+				#sl,rl = self.drawLeftArc(hdc,(xc,yc),rl,dr,sl,1.0, action.color)
 
 			for idx,group in enumerate(self.groupsToDraw):
 				pos = (pleft,ptop+idx*spc,pright,pbottom)
@@ -445,15 +474,19 @@ class ActionTracker(threading.Thread):
 			time.sleep(Ts)
 
 class HotkeyTracker(threading.Thread):
-	def __init__(self,actionList,equipmentList,groupList,resetKey='-'):
+	def __init__(self,actionList,equipmentList,groupList,windowHandler,resetKey='-',mountKey='+'):
 		self.actionList = actionList
 		self.equipmentList = equipmentList
 		self.groupList = groupList
+		self.windowHandler = windowHandler
 		self.resetKey = resetKey
+		self.mountKey = mountKey
+		
 		threading.Thread.__init__(self)
 		
 	def run(self):
 		keyboard.add_hotkey(self.resetKey,self.resetAllCountdowns,args=())
+		keyboard.add_hotkey(self.mountKey,self.mountUp,args=())
 		
 		for equip in self.equipmentList:
 			for key in equip.keys:
@@ -473,6 +506,12 @@ class HotkeyTracker(threading.Thread):
 				keyboard.add_hotkey(key+'+e',action.triggerByKey,args=())
 				keyboard.add_hotkey(key+'+z',action.triggerByKey,args=())
 				keyboard.add_hotkey(key+'+c',action.triggerByKey,args=())
+				
+				keyboard.add_hotkey(key+'+w+d',action.triggerByKey,args=())
+				keyboard.add_hotkey(key+'+w+a',action.triggerByKey,args=())
+				keyboard.add_hotkey(key+'+s+a',action.triggerByKey,args=())
+				keyboard.add_hotkey(key+'+s+d',action.triggerByKey,args=())
+				
 				keyboard.add_hotkey(key+'+W',action.triggerByKey,args=())
 				keyboard.add_hotkey(key+'+S',action.triggerByKey,args=())
 				keyboard.add_hotkey(key+'+A',action.triggerByKey,args=())
@@ -486,7 +525,11 @@ class HotkeyTracker(threading.Thread):
 				#keyboard.add_hotkey(key+'+down',action.triggerByKey,args=())
 				#keyboard.add_hotkey(key+'+left',action.triggerByKey,args=())
 				#keyboard.add_hotkey(key+'+right',action.triggerByKey,args=())
-				
+	
+	def mountUp(self):
+		self.windowHandler.changeArcPosition()
+	
+	
 	def resetAllCountdowns(self):
 		for action in self.actionList:
 			action.resetCountdown()

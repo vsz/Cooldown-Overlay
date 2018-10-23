@@ -12,6 +12,9 @@ debug = False
 ## Key to reset all countdowns
 resetKey = '-'
 
+## Key to change Arcs when mounted
+mountKey = '+'
+
 ## Add your tracked actions here
 actionList.append(TrackedAction('Strike',ColorCode.RED,[CooldownGroup.ATTACK],ActionType.ATKREGULAR,['['],visible=False,ap=ArcPlacement.RIGHT))
 
@@ -19,14 +22,14 @@ actionList.append(TrackedAction('Strike',ColorCode.RED,[CooldownGroup.ATTACK],Ac
 actionList.append(TrackedAction('Potion',ColorCode.PINK,[CooldownGroup.OBJECT],ActionType.CONSUMABLE,['1'],visible=False,ap=ArcPlacement.RIGHT))
 
 # Attack Runes
-actionList.append(TrackedAction('Rune',ColorCode.rgb2hex((255,100,0)),[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,[']'],ut=UseType.CROSSHAIR,visible=True))
+actionList.append(TrackedAction('Rune',ColorCode.rgb2hex((255,100,0)),[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,[']'],ut=UseType.CROSSHAIR,visible=False))
 actionList.append(TrackedAction('SD',ColorCode.RED,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,[';'],visible=False))
 actionList.append(TrackedAction('FireWall',ColorCode.RED,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['shift+!'],ut=UseType.CROSSHAIR,visible=False))
 actionList.append(TrackedAction('FireBomb',ColorCode.RED,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['shift+@'],ut=UseType.CROSSHAIR,visible=False))
 
 # Attack Spells
-actionList.append(TrackedAction('StrongIce',ColorCode.rgb2hex((0,150,255)),[CooldownGroup.ATTACK,CooldownGroup.STRONGSTRIKE],ActionType.ATKCOOLDOWN,['shift+{'],8.0,visible=True))
-actionList.append(TrackedAction('StrongTerra',ColorCode.rgb2hex((0,255,137)),[CooldownGroup.ATTACK,CooldownGroup.STRONGSTRIKE],ActionType.ATKCOOLDOWN,['F9'],8.0,visible=True))
+actionList.append(TrackedAction('StrongIce',ColorCode.rgb2hex((0,150,255)),[CooldownGroup.ATTACK,CooldownGroup.STRONGSTRIKE],ActionType.ATKCOOLDOWN,['shift+{'],8.0,visible=False))
+actionList.append(TrackedAction('StrongTerra',ColorCode.rgb2hex((0,255,137)),[CooldownGroup.ATTACK,CooldownGroup.STRONGSTRIKE],ActionType.ATKCOOLDOWN,['F9'],8.0,visible=False))
 
 actionList.append(TrackedAction('IceWave',ColorCode.rgb2hex((0,150,255)),[CooldownGroup.ATTACK],ActionType.ATKCOOLDOWN,['shift+}'],8.0,visible=True))
 actionList.append(TrackedAction('TerraWave',ColorCode.rgb2hex((0,255,137)),[CooldownGroup.ATTACK],ActionType.ATKCOOLDOWN,['F10'],4.0,visible=True))
@@ -54,13 +57,13 @@ equipmentList.append(TrackedEquipment('EnergyRing', ColorCode.LBLUE,[CooldownGro
 equipmentList.append(TrackedEquipment('OtherRing', ColorCode.ORANGE,[CooldownGroup.NONE],ActionType.EQUIPMENT,['F4','F5','F6','F7'],et=EquipmentType.RING,expires=False,visible=False))
 
 ## DO NOT DELETE GROUPS. IF YOU DONT WANT TO SEE IT, JUST SET 'visible=False' IN ARGUMENTS
-groupList.append(TrackedGroup('Potion',ColorCode.PINK,CooldownGroup.OBJECT,1.0))
-groupList.append(TrackedGroup('Attack',ColorCode.RED,CooldownGroup.ATTACK,2.0))
-groupList.append(TrackedGroup('Healing',ColorCode.LBLUE,CooldownGroup.HEAL,1.0))
+groupList.append(TrackedGroup('Potion',ColorCode.PINK,CooldownGroup.OBJECT,1.0,visible=False))
+groupList.append(TrackedGroup('Attack',ColorCode.RED,CooldownGroup.ATTACK,2.0,visible=False))
+groupList.append(TrackedGroup('Healing',ColorCode.LBLUE,CooldownGroup.HEAL,1.0,visible=False))
 groupList.append(TrackedGroup('Support',ColorCode.DGREEN,CooldownGroup.SUPPORT,2.0,visible=False))
 groupList.append(TrackedGroup('Conjure',ColorCode.BLACK,CooldownGroup.CONJURE,2.0,visible=False))
-groupList.append(TrackedGroup('Special',ColorCode.ORANGE,CooldownGroup.SPECIAL,4.0))
-groupList.append(TrackedGroup('StrongStrike',ColorCode.ORANGE,CooldownGroup.STRONGSTRIKE,8.0,visible=False))
+groupList.append(TrackedGroup('Special',ColorCode.ORANGE,CooldownGroup.SPECIAL,4.0,visible=False))
+groupList.append(TrackedGroup('StrongStrike',ColorCode.rgb2hex((0,150,255)),CooldownGroup.STRONGSTRIKE,8.0,visible=True))
 
 ## DO NOT DELETE EQUIPMENT SLOTS
 equipmentSlotList.append(TrackedEquipmentSlot(EquipmentType.RING))
@@ -71,6 +74,9 @@ equipmentSlotList.append(TrackedEquipmentSlot(EquipmentType.SHIELD))
 equipmentSlotList.append(TrackedEquipmentSlot(EquipmentType.ARMOR))
 equipmentSlotList.append(TrackedEquipmentSlot(EquipmentType.LEGS))
 
+# Separators for the tracked actions section
+emptyLines = [3,5];
+
 ## Display configuration
 # Text position (Left, Top, Right, Bottom, Spacing)
 tleft = 1443
@@ -80,13 +86,15 @@ tbottom = 594
 tspc = 16
 
 # Arc Position (Xcenter, Ycenter, Radius, Width)
+# normal position
 axc = 944
 ayc = 428
+# mounted position
+axcm = 944+16
+aycm = 428+15
+
 aradius = 171
 awidth = 6
-
-# Separators for the tracked actions section
-emptyLines = [2,4,6,8];
 
 def debugMode():
 	print('Debug Mode: press hotkeys to see how to add them in the script')
@@ -99,9 +107,16 @@ def main():
 	if debug:
 		debugMode()
 
+	# Create transparent window
+	windowHandler = WindowHandler(actionList,groupList,equipmentList,emptyLines)
+	windowHandler.setTextPosition((tleft,ttop,tright,tbottom),tspc)
+	windowHandler.setArcPosition((axc,ayc))
+	windowHandler.setArcMountedPosition((axcm,aycm))
+	windowHandler.setArcProperties(aradius,awidth)
+
 	# Create threads
 	# Thread that detects keyboard hotkeys
-	tHotkeyTracker = HotkeyTracker(actionList,equipmentList,groupList,resetKey)
+	tHotkeyTracker = HotkeyTracker(actionList,equipmentList,groupList,windowHandler,resetKey,mountKey)
 	tHotkeyTracker.start()
 
 	# Thread that detects mouse buttons
@@ -112,11 +127,6 @@ def main():
 	tActionTracker = ActionTracker(actionList,equipmentList,groupList,equipmentSlotList)
 	tActionTracker.start()
 
-	# Create transparent window
-	windowHandler = WindowHandler(actionList,groupList,equipmentList,emptyLines)
-	windowHandler.setTextPosition((tleft,ttop,tright,tbottom),tspc)
-	windowHandler.setArcPosition((axc,ayc),aradius,awidth)
-	
 	try:
 		while(True):
 			win32gui.RedrawWindow(windowHandler.hWindow, None, None, win32con.RDW_INVALIDATE | win32con.RDW_ERASE)
