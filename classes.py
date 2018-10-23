@@ -81,11 +81,11 @@ class UseType(Enum):
 
 class WindowHandler:
 	def __init__(self,actionList,groupList,equipmentList,emptyLines):
-		self.hWindow = self.createWindow()
 		self.actionList = actionList
 		self.groupList = groupList
 		self.equipmentList = equipmentList
 		self.emptyLines = emptyLines
+		self.hWindow = self.createWindow()
 
 	def createWindow(self):
 		#get instance handle
@@ -293,7 +293,7 @@ class WindowHandler:
 			xc = int(w/2.033)
 			yc = int(h/2.522)
 			r = 171
-			dr = 12
+			dr = 6
 			alpha = 90
 			
 			## Text

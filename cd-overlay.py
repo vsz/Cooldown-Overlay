@@ -84,9 +84,6 @@ def main():
 	# Goes in debug mode
 	if debug:
 		debugMode()
-	
-	# Create transparent window
-	windowHandler = WindowHandler(actionList,groupList,equipmentList,emptyLines)
 
 	# Create threads
 	# Thread that detects keyboard hotkeys
@@ -100,6 +97,9 @@ def main():
 	# Thread that tracks actions
 	tActionTracker = ActionTracker(actionList,equipmentList,groupList,equipmentSlotList)
 	tActionTracker.start()
+
+	# Create transparent window
+	windowHandler = WindowHandler(actionList,groupList,equipmentList,emptyLines)
 
 	try:
 		while(True):
