@@ -13,7 +13,6 @@ debug = False
 resetKey = '-'
 
 ## Add your tracked actions here
-
 actionList.append(TrackedAction('Strike',ColorCode.RED,[CooldownGroup.ATTACK],ActionType.ATKREGULAR,['['],visible=False,ap=ArcPlacement.RIGHT))
 
 # Objects

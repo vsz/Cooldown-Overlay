@@ -81,11 +81,16 @@ class UseType(Enum):
 
 class WindowHandler:
 	def __init__(self,actionList,groupList,equipmentList,emptyLines):
-		self.actionList = actionList
-		self.groupList = groupList
-		self.equipmentList = equipmentList
+		# Filter what do draw
+		self.groupsToDraw = [g for g in groupList if g.visible]
+		self.actionsToDraw = [a for a in actionList if a.visible]
+		self.equipmentToDraw = [e for e in equipmentList if e.visible]
+		self.rightArcToDraw = [a for a in actionList if a.arcPlacement == ArcPlacement.RIGHT]
+		self.leftArcToDraw = [a for a in actionList if a.arcPlacement == ArcPlacement.LEFT]
+		
 		self.emptyLines = emptyLines
-
+		
+		# Initialize positions of text and arcs
 		self.tleft=0
 		self.ttop=0
 		self.tright=0
@@ -99,7 +104,6 @@ class WindowHandler:
 		self.aangle=0
 		
 		self.hWindow = self.createWindow()
-
 
 	def setTextPosition(self,ltrb,spc):
 		self.tleft = ltrb[0]
@@ -345,32 +349,24 @@ class WindowHandler:
 			pright = self.tright
 			pbottom = self.tbottom
 			spc = self.tspc
-			
-			
-			# Filter what do draw
-			groupsToDraw = [g for g in self.groupList if g.visible]
-			actionsToDraw = [a for a in self.actionList if a.visible]
-			equipmentToDraw = [e for e in self.equipmentList if e.visible]
-			rightArcToDraw = [a for a in self.actionList if a.arcPlacement == ArcPlacement.RIGHT]
-			leftArcToDraw = [a for a in self.actionList if a.arcPlacement == ArcPlacement.LEFT]
 
 			sr = alpha
 			rr = r
-			for idx,action in enumerate(rightArcToDraw):
+			for idx,action in enumerate(self.rightArcToDraw):
 				sr,rr = self.drawRightArc(hdc,(xc,yc),rr,dr,sr,action.getPercentage(), action.color)
 
 			sl = alpha
 			rl = r
-			for idx,action in enumerate(leftArcToDraw):
+			for idx,action in enumerate(self.leftArcToDraw):
 				sl,rl = self.drawLeftArc(hdc,(xc,yc),rl,dr,sl,action.getPercentage(), action.color)
 
-			for idx,group in enumerate(groupsToDraw):
+			for idx,group in enumerate(self.groupsToDraw):
 				pos = (pleft,ptop+idx*spc,pright,pbottom)
 				self.drawTextLabel(hdc,pos,group.color,group.labelText)
 				self.drawTimerLabel(hdc,pos,group.color,group.countdown)		
 			
 			k=idx+2
-			for idx,action in enumerate(actionsToDraw):
+			for idx,action in enumerate(self.actionsToDraw):
 				if (idx+1) in self.emptyLines : k=k+1
 				
 				pos = (pleft,ptop+(idx+k)*spc,pright,pbottom)
@@ -378,7 +374,7 @@ class WindowHandler:
 				self.drawTimerLabel(hdc,pos,action.color,action.countdown)
 
 			k=k+idx+2
-			for idx,equip in enumerate(equipmentToDraw):
+			for idx,equip in enumerate(self.equipmentToDraw):
 				#if (idx+1) in emptyLines : k=k+1
 
 				pos = (pleft,ptop+(idx+k)*spc,pright,pbottom)
