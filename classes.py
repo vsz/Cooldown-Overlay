@@ -395,6 +395,7 @@ class TrackedAction:
 		self.armed = False
 		self.visible = visible
 		self.equipmentType = et
+		self.scale=t
 		
 	def __str__(self):
 		stringKey = ""
@@ -404,6 +405,7 @@ class TrackedAction:
 
 	def setTime(self,time):
 		self.time = max(self.time,time)
+		self.scale = self.time
 	
 	def setGroupTime(self,gtime):
 		self.groupTime = max(self.groupTime,gtime)
@@ -439,9 +441,13 @@ class TrackedAction:
 	
 	def setCountdown(self,cd):
 		self.countdown = max(self.countdown,cd)
+		self.scale = self.countdown
 	
 	def resetCountdown(self):
 		self.countdown = 0.0
+
+	def getPercentage(self):
+		return self.countdown/self.scale
 
 	def triggerByKey(self):
 		#print(self.labelText + " triggered by Key")

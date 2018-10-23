@@ -1,4 +1,5 @@
 from classes import *
+import math
 
 # Initialize
 actionList = []
@@ -170,22 +171,70 @@ def wndProc(hWnd, message, wParam, lParam):
 		hf = win32gui.CreateFontIndirect(lf)
 
 		win32gui.SelectObject(hdc, hf)
-
+		
+		br=win32gui.CreateSolidBrush(win32api.RGB(255,0,0))
+		win32gui.SelectObject(hdc, br)
+		
 		# Get relative dimensions
 		rect = win32gui.GetClientRect(hWnd)
 		w = rect[2]
 		h = rect[3]
+		
+		# Filter what do draw
+		groupsToDraw = [g for g in groupList if g.visible]
+		actionsToDraw = [a for a in actionList if a.visible]
+		equipmentToDraw = [e for e in equipmentList if e.visible]
+		
+		# Bars
+		# Positions the bars
+		xc = int(w/2.033)
+		yc = int(h/2.522)
+		r = 171
+		alpha0 = -45
+		alpha = 90
+		
+		a1 = math.radians(alpha/2)
+		
+		dr = 12	
+		a2 = math.asin(r*math.sin(a1)/(r+dr))
+		
+		dx = r*math.cos(a2)
+		dy = r*math.sin(a2)
+		
+		xs = int(xc + dx)
+		ys = int(yc + dy)
+		a2d = math.degrees(a2)
+		
+		#win32gui.Ellipse(hdc,xcenter-radius,ycenter-radius,xcenter+radius,ycenter+radius)
+		
+		span=2*a2d
+		
+		n=actionList[1].getPercentage()
+		
+		
+		
+		win32gui.BeginPath(hdc)
+		win32gui.MoveToEx(hdc,xs,ys)
+		win32gui.AngleArc(hdc,xc,yc,r+dr,-a2d,int(n*span))
+		win32gui.AngleArc(hdc,xc,yc,r,int(a2d-(1-n)*span),-int(n*span))
+		win32gui.EndPath(hdc)
+		
+		win32gui.StrokeAndFillPath(hdc)
+		
+		#win32gui.AngleArc(hdc,xc+w,yc,r-w,-alpha0,-alpha)
+		
 
+
+
+		## Text
+		# Positions the text
 		pleft = int(0.752*w)
 		ptop = int(0.1*h)
 		pright = int(0.8165*w)
 		pbottom = int(0.55*h)
 		spc = int(0.015*h)
 		
-		# Filter what do draw
-		groupsToDraw = [g for g in groupList if g.visible]
-		actionsToDraw = [a for a in actionList if a.visible]
-		equipmentToDraw = [e for e in equipmentList if e.visible]
+
 		
 		for idx,group in enumerate(groupsToDraw):
 			pos = (pleft,ptop+idx*spc,pright,pbottom)
