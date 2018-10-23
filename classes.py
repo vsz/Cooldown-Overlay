@@ -9,7 +9,7 @@ import win32con
 import win32gui
 import win32ui
 
-class TextColor:		
+class ColorCode:		
 	# Colors
 	BLACK = 0x00000000
 	BLUE = 0x00ff0000
@@ -29,6 +29,11 @@ class TextColor:
 		iValue = int(strValue, 16)
 		
 		return iValue
+
+class ArcPlacement(Enum):
+	NONE = 0
+	RIGHT = 1
+	LEFT = 2
 
 class ActionType(Enum):
 	CONSUMABLE = 1
@@ -379,7 +384,7 @@ class TrackedEquipment:
 
 class TrackedAction:
 	
-	def __init__(self,lt,color,cg,at,keys,t=0.0,iv=0.0,et=EquipmentType.NONE,ut=UseType.TARGET,visible=True):
+	def __init__(self,lt,color,cg,at,keys,t=1.0,iv=0.0,et=EquipmentType.NONE,ut=UseType.TARGET,visible=True,ap=ArcPlacement.NONE):
 		self.labelText = lt
 		self.color = color
 		self.cooldownGroups = cg
@@ -396,6 +401,7 @@ class TrackedAction:
 		self.visible = visible
 		self.equipmentType = et
 		self.scale=t
+		self.arcPlacement = ap
 		
 	def __str__(self):
 		stringKey = ""
