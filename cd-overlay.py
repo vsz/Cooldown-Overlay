@@ -79,21 +79,40 @@ emptyLines = [3,5];
 
 ## Display configuration
 # Text position (Left, Top, Right, Bottom, Spacing)
-tleft = 1443
-ttop = 108
-tright = 1567
-tbottom = 594
+# try to read json, otherwise set to top left
+try:
+	setupMode = SetupMode()
+	config = setupMode.readJSON()
+	tleft = config['TLX']
+	ttop = config['TLY']
+	tright = config['BRX']
+	tbottom = config['BRY']
+except:
+	tleft = 0
+	ttop = 0
+	tright = 150
+	tbottom = 500	
 tspc = 16
 
 # Arc Position (Xcenter, Ycenter, Radius, Width)
 # normal position
-axc = 944
-ayc = 428
+# try to read json, otherwise set to 0 for errorCheck
+try:
+	setupMode = SetupMode()
+	config = setupMode.readJSON()
+	axc = config['X']
+	ayc = config['Y']
+except:
+	axc = 0
+	ayc = 0
 # mounted position
-axcm = 944+16
-aycm = 428+15
-
-aradius = 171
+axcm = axc+16
+aycm = ayc+15
+#try to read json, otherwise set to 0 for errorCheck
+try:
+	aradius = config['R']
+except:
+	aradius = 0
 awidth = 6
 
 def debugMode():
@@ -102,11 +121,29 @@ def debugMode():
 		s = keyboard.read_hotkey(suppress=False)
 		print(s)
 
+#basic error checking for correct json		
+def errorCheck():
+	if axc == 0:
+		print("Error: X value isn't properly set in config.json, please run setup.py")
+		time.sleep(10)
+		quit()
+	if ayc == 0:
+		print("Error: Y value isn't properly set in config.json, please run setup.py")
+		time.sleep(10)
+		quit()
+	if aradius == 0:
+		print("Error: Radius value isn't properly set in config.json, please run setup.py")
+		time.sleep(10)
+		quit()
+			
 def main():
 	# Goes in debug mode
 	if debug:
-		debugMode()
-
+		debugMode()	
+	
+	#checks for errors in json
+	errorCheck()
+	
 	# Create transparent window
 	windowHandler = WindowHandler(actionList,groupList,equipmentList,emptyLines)
 	windowHandler.setTextPosition((tleft,ttop,tright,tbottom),tspc)

@@ -9,7 +9,8 @@ import win32con
 import win32gui
 import win32ui
 import math
-
+import json
+		
 class ColorCode:		
 	# Colors
 	BLACK = 0x00000000
@@ -78,6 +79,21 @@ class EquipmentType(Enum):
 class UseType(Enum):
 	TARGET = 1
 	CROSSHAIR = 2
+
+class SetupMode:
+	def __init__(self):
+		config = {}
+		
+	def writeJSON(self, testMessage):
+		config = testMessage
+		with open('config.json', 'w') as f:
+			json.dump(config, f)
+			
+	def readJSON(self):
+		with open('config.json', 'r') as f:
+			config = json.load(f)
+		return config
+	
 
 class WindowHandler:
 	def __init__(self,actionList,groupList,equipmentList,emptyLines):
@@ -359,6 +375,8 @@ class WindowHandler:
 			alpha = self.aangle
 			
 			#print(xc,yc)
+			#print(r)
+			
 			
 			## Text
 			# Positions the text
