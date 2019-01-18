@@ -6,9 +6,6 @@ groupList = []
 equipmentList = []
 equipmentSlotList = []
 
-## Use debug = True to see keys you are pressing (good to configure hotkeys!)
-debug = False
-
 ## Key to reset all countdowns
 resetKey = '-'
 
@@ -77,42 +74,34 @@ equipmentSlotList.append(TrackedEquipmentSlot(EquipmentType.LEGS))
 # Separators for the tracked actions section
 emptyLines = [3,5];
 
-## Display configuration
-# Text position (Left, Top, Right, Bottom, Spacing)
-tleft = 1443
-ttop = 108
-tright = 1567
-tbottom = 594
-tspc = 16
-
-# Arc Position (Xcenter, Ycenter, Radius, Width)
-# normal position
-axc = 944
-ayc = 428
-# mounted position
-axcm = 944+16
-aycm = 428+15
-
-aradius = 171
-awidth = 6
-
 def debugMode():
 	print('Debug Mode: press hotkeys to see how to add them in the script')
 	while(True):
 		s = keyboard.read_hotkey(suppress=False)
 		print(s)
 
-def main():
-	# Goes in debug mode
-	if debug:
-		debugMode()
+def main(options):
+	# Setup mode config
+	setup = False
+	if len(options) > 1:			
+		if options[1] == "setup": 
+			print("Starting in setup mode")
+			setup = True
+
+	# Create position handler
+	positionHandler = PositionHandler()
+	tPosition = positionHandler.getTextPosition()
+	tSpacing = positionHandler.getTextSpacing()
+	aPosition = positionHandler.getArcPosition()
+	aMountedPosition = positionHandler.getArcMountedPosition()
+	aProperties = positionHandler.getArcProperties()
 
 	# Create transparent window
 	windowHandler = WindowHandler(actionList,groupList,equipmentList,emptyLines)
-	windowHandler.setTextPosition((tleft,ttop,tright,tbottom),tspc)
-	windowHandler.setArcPosition((axc,ayc))
-	windowHandler.setArcMountedPosition((axcm,aycm))
-	windowHandler.setArcProperties(aradius,awidth)
+	windowHandler.setTextPosition(tPosition,tSpacing)
+	windowHandler.setArcPosition(aPosition)
+	windowHandler.setArcMountedPosition(aMountedPosition)
+	windowHandler.setArcProperties(aProperties)
 
 	# Create threads
 	# Thread that detects keyboard hotkeys
@@ -151,4 +140,4 @@ def main():
 		print("Closing...")	
 
 if __name__ == '__main__':
-	main()
+	main(sys.argv)

@@ -9,6 +9,8 @@ import win32con
 import win32gui
 import win32ui
 import math
+import sys
+import json
 
 class ColorCode:		
 	# Colors
@@ -79,6 +81,40 @@ class UseType(Enum):
 	TARGET = 1
 	CROSSHAIR = 2
 
+class PositionHandler:
+	def __init__(self):
+		self.config = self.loadPosition()
+		
+	def savePosition(self, testMessage):
+		self.config = testMessage
+		with open('config.json', 'w') as f:
+			json.dump(self.config, f)
+			
+	def loadPosition(self):
+		with open('config.json', 'r') as f:
+			self.config = json.load(f)
+		return self.config
+		
+	def getTextPosition(self):
+		tPosition = (self.config['tleft'], self.config['ttop'], self.config['tright'], self.config['tbottom'])
+		return tPosition
+	
+	def getTextSpacing(self):
+		tSpacing = self.config['tspc']
+		return tSpacing
+		
+	def getArcPosition(self):
+		aPosition = (self.config['axc'], self.config['ayc'])
+		return aPosition
+		
+	def getArcMountedPosition(self):
+		aMountedPosition = (self.config['axcm'], self.config['aycm'])
+		return aMountedPosition
+
+	def getArcProperties(self):
+		aProperties = (self.config['aradius'], self.config['awidth'])
+		return aProperties
+
 class WindowHandler:
 	def __init__(self,actionList,groupList,equipmentList,emptyLines):
 		# Filter what do draw
@@ -120,11 +156,10 @@ class WindowHandler:
 	def setArcPosition(self,center):
 		self.axc = center[0]
 		self.ayc = center[1]
-
 		
-	def setArcProperties(self,radius,width,angle=90):
-		self.aradius = radius
-		self.awidth = width
+	def setArcProperties(self,properties,angle=90):
+		self.aradius = properties[0]
+		self.awidth = properties[1]
 		self.aangle = angle
 		
 	def setArcMountedPosition(self,center):
@@ -340,13 +375,6 @@ class WindowHandler:
 
 			# Bars
 			# Positions the bars
-			'''
-			xc = int(w/2.033)
-			yc = int(h/2.522)
-			r = 171
-			dr = 6
-			alpha = 90
-			'''
 			if self.mounted:
 				xc = self.axcm
 				yc = self.aycm
@@ -362,13 +390,6 @@ class WindowHandler:
 			
 			## Text
 			# Positions the text
-			'''
-			pleft = int(0.752*w)
-			ptop = int(0.1*h)
-			pright = int(0.8165*w)
-			pbottom = int(0.55*h)
-			spc = int(0.015*h)
-			'''
 			pleft = self.tleft
 			ptop = self.ttop
 			pright = self.tright
@@ -381,7 +402,6 @@ class WindowHandler:
 			rr = r
 			for idx,action in enumerate(self.rightArcToDraw):
 				sr,rr = self.drawRightArc(hdc,(xc,yc),rr,dr,sr,action.getPercentage(), action.color)
-				#sr,rr = self.drawRightArc(hdc,(xc,yc),rr,dr,sr,1.0, action.color)
 
 			sl = alpha
 			rl = r
@@ -555,7 +575,7 @@ class MouseTracker(threading.Thread):
 		for action in self.actionList:
 			if action.useType == UseType.CROSSHAIR:
 				action.triggerByLeftMouse()
-				
+
 class TrackedGroup:
 
 	def __init__(self,lt,color,cg,time=0.0,visible=True):
