@@ -83,40 +83,131 @@ class UseType(Enum):
 
 class PositionHandler:
 	def __init__(self):
-		self.config = self.loadPosition()
+		self.position = self.loadPositionFromFile()
 		
-	def savePosition(self, testMessage):
-		self.config = testMessage
+	def savePositionToFile(self):
 		with open('config.json', 'w') as f:
-			json.dump(self.config, f)
+			json.dump(self.position, f)
+		print ('File saved!')
 			
-	def loadPosition(self):
+	def loadPositionFromFile(self):
 		with open('config.json', 'r') as f:
-			self.config = json.load(f)
-		return self.config
+			self.position = json.load(f)
+		return self.position
 		
+	def moveArcsRight(self):
+		self.position['axc'] += 1
+
+	def moveArcsLeft(self):
+		self.position['axc'] -= 1
+
+	def moveArcsUp(self):
+		self.position['ayc'] -= 1
+
+	def moveArcsDown(self):
+		self.position['ayc'] += 1
+
+	def increaseArcRadius(self):
+		self.position['aradius'] += 1
+
+	def decreaseArcRadius(self):
+		self.position['aradius'] -= 1
+
+	def increaseArcWidth(self):
+		self.position['awidth'] += 1
+
+	def decreaseArcWidth(self):
+		self.position['awidth'] -= 1
+
+	def moveTextLeft(self):
+		self.position['tleft'] -= 1
+		self.position['tright'] -= 1
+
+	def moveTextRight(self):
+		self.position['tleft'] += 1
+		self.position['tright'] += 1
+
+	def moveTextUp(self):
+		self.position['ttop'] -= 1
+		self.position['tbottom'] -= 1
+
+	def moveTextDown(self):
+		self.position['ttop'] += 1
+		self.position['tbottom'] += 1
+
+	def increaseTextUpperLimit(self):
+		self.position['ttop'] -= 1
+
+	def increaseTextLowerLimit(self):
+		self.position['tbottom'] += 1
+
+	def increaseTextLeftLimit(self):
+		self.position['tleft'] -= 1
+
+	def increaseTextRightLimit(self):
+		self.position['tright'] += 1
+
+	def decreaseTextUpperLimit(self):
+		self.position['ttop'] += 1
+
+	def decreaseTextLowerLimit(self):
+		self.position['tbottom'] -= 1
+
+	def decreaseTextLeftLimit(self):
+		self.position['tleft'] += 1
+
+	def decreaseTextRightLimit(self):
+		self.position['tright'] -= 1
+
+	def increaseTextSpacing(self):
+		self.position['tspc'] += 1
+
+	def decreaseTextSpacing(self):
+		self.position['tspc'] -= 1
+
+	def moveTextToPosition(self):
+		tWidth = self.position['tright'] - self.position['tleft']
+		tHeight = self.position['tbottom'] - self.position['ttop']
+
+		xc,yc = mouse.get_position()
+
+		self.position['tleft'] = xc
+		self.position['tright'] = xc + tWidth
+		self.position['ttop'] = yc
+		self.position['tbottom'] = yc + tHeight
+
+	def moveArcToPosition(self):
+		xc,yc = mouse.get_position()
+
+		self.position['axc'] = xc
+		self.position['ayc'] = yc
+
 	def getTextPosition(self):
-		tPosition = (self.config['tleft'], self.config['ttop'], self.config['tright'], self.config['tbottom'])
+		tPosition = (self.position['tleft'], self.position['ttop'], self.position['tright'], self.position['tbottom'],self.position['tspc'])
 		return tPosition
 	
-	def getTextSpacing(self):
-		tSpacing = self.config['tspc']
+	def getTextSpacing(self): 
+		tSpacing = self.position['tspc']
 		return tSpacing
 		
 	def getArcPosition(self):
-		aPosition = (self.config['axc'], self.config['ayc'])
+		aPosition = (self.position['axc'], self.position['ayc'])
 		return aPosition
 		
 	def getArcMountedPosition(self):
-		aMountedPosition = (self.config['axcm'], self.config['aycm'])
+		aMountedPosition = (self.position['axcm'], self.position['aycm'])
 		return aMountedPosition
 
 	def getArcProperties(self):
-		aProperties = (self.config['aradius'], self.config['awidth'])
+		aProperties = (self.position['aradius'], self.position['awidth'])
 		return aProperties
 
+	def setAsArcMountedPosition(self):
+		self.position['axcm'] = self.position['axc']
+		self.position['aycm'] = self.position['ayc']
+
 class WindowHandler:
-	def __init__(self,actionList,groupList,equipmentList,emptyLines):
+	def __init__(self,actionList,groupList,equipmentList,emptyLines,positionHandler):
 		# Filter what do draw
 		self.groupsToDraw = [g for g in groupList if g.visible]
 		self.actionsToDraw = [a for a in actionList if a.visible]
@@ -127,31 +218,37 @@ class WindowHandler:
 		self.emptyLines = emptyLines
 		
 		# Initialize positions of text and arcs
-		self.tleft=0
-		self.ttop=0
-		self.tright=0
-		self.tbottom=0
-		self.tspc=0
-		
-		self.axc=0
-		self.ayc=0
-		self.aradius=0
-		self.awidth=0
-		self.aangle=0
-		
-		self.axcm=0
-		self.aycm=0
-		
+		self.positionHandler = positionHandler
+		self.updatePositions()
+	
 		self.mounted = False
-		
-		self.hWindow = self.createWindow()
+		self.setup = False
 
-	def setTextPosition(self,ltrb,spc):
-		self.tleft = ltrb[0]
-		self.ttop = ltrb[1]
-		self.tright = ltrb[2]
-		self.tbottom = ltrb[3]
-		self.tspc = spc
+		self.hWindow = self.createWindow()
+		rect = win32gui.GetClientRect(self. hWindow)
+		self.setWindowSize((rect[2],rect[3]))
+ 
+	def setupMode(self): 
+		self.setup = True
+
+	def setWindowSize(self,size):
+		self.size = size
+
+	def getWindowSize(self):
+		return self.size
+
+	def updatePositions(self):
+		self.setTextPosition(self.positionHandler.getTextPosition())
+		self.setArcPosition(self.positionHandler.getArcPosition())
+		self.setArcMountedPosition(self.positionHandler.getArcMountedPosition())
+		self.setArcProperties(self.positionHandler.getArcProperties())		
+
+	def setTextPosition(self,pos):
+		self.tleft = pos[0]
+		self.ttop = pos[1]
+		self.tright = pos[2]
+		self.tbottom = pos[3]
+		self.tspc = pos[4]
 		
 	def setArcPosition(self,center):
 		self.axc = center[0]
@@ -182,12 +279,12 @@ class WindowHandler:
 		# create and initialize window class
 		wndClass				= win32gui.WNDCLASS()
 		wndClass.style			= win32con.CS_HREDRAW | win32con.CS_VREDRAW
-		wndClass.lpfnWndProc	= self.wndProc
 		wndClass.hInstance		= hInstance
 		wndClass.hIcon			= win32gui.LoadIcon(0, win32con.IDI_APPLICATION)
 		wndClass.hCursor		= win32gui.LoadCursor(None, win32con.IDC_ARROW)
 		wndClass.hbrBackground	= win32gui.GetStockObject(win32con.WHITE_BRUSH)
 		wndClass.lpszClassName	= className
+		wndClass.lpfnWndProc	= self.wndProc
 
 		# register window class
 		wndClassAtom = None
@@ -368,10 +465,8 @@ class WindowHandler:
 			br=win32gui.CreateSolidBrush(win32api.RGB(255,0,0))
 			win32gui.SelectObject(hdc, br)
 			
-			# Get relative dimensions
-			rect = win32gui.GetClientRect(hWnd)
-			w = rect[2]
-			h = rect[3]
+			# Update positions
+			self.updatePositions()
 
 			# Bars
 			# Positions the bars
@@ -397,42 +492,57 @@ class WindowHandler:
 			spc = self.tspc
 			
 			#print(pleft,ptop,pright,pbottom)
-			
-			sr = alpha
-			rr = r
-			for idx,action in enumerate(self.rightArcToDraw):
-				sr,rr = self.drawRightArc(hdc,(xc,yc),rr,dr,sr,action.getPercentage(), action.color)
+			if self.setup:
+				sr = alpha
+				rr = r
+				for _ in range(2):
+					sr,rr = self.drawRightArc(hdc,(xc,yc),rr,dr,sr,1.0,ColorCode.ORANGE)
 
-			sl = alpha
-			rl = r
-			for idx,action in enumerate(self.leftArcToDraw):
-				sl,rl = self.drawLeftArc(hdc,(xc,yc),rl,dr,sl,action.getPercentage(), action.color)
-				#sl,rl = self.drawLeftArc(hdc,(xc,yc),rl,dr,sl,1.0, action.color)
+				sl = alpha
+				rl = r
+				for _ in range(2):
+					sl,rl = self.drawLeftArc(hdc,(xc,yc),rl,dr,sl,1.0,ColorCode.ORANGE)
 
-			for idx,group in enumerate(self.groupsToDraw):
-				pos = (pleft,ptop+idx*spc,pright,pbottom)
-				self.drawTextLabel(hdc,pos,group.color,group.labelText)
-				self.drawTimerLabel(hdc,pos,group.color,group.countdown)		
-			
-			k=idx+2
-			for idx,action in enumerate(self.actionsToDraw):
-				if (idx+1) in self.emptyLines : k=k+1
+				for i in range(50):
+					pos = (pleft,ptop+i*spc,pright,pbottom)
+					self.drawTextLabel(hdc,pos,ColorCode.ORANGE,'ExampleText')
+					self.drawTimerLabel(hdc,pos,ColorCode.ORANGE,float(i))
+
+			else:
+				sr = alpha
+				rr = r
+				for idx,action in enumerate(self.rightArcToDraw):
+					sr,rr = self.drawRightArc(hdc,(xc,yc),rr,dr,sr,action.getPercentage(), action.color)
+
+				sl = alpha
+				rl = r
+				for idx,action in enumerate(self.leftArcToDraw):
+					sl,rl = self.drawLeftArc(hdc,(xc,yc),rl,dr,sl,action.getPercentage(), action.color)
+
+				for idx,group in enumerate(self.groupsToDraw):
+					pos = (pleft,ptop+idx*spc,pright,pbottom)
+					self.drawTextLabel(hdc,pos,group.color,group.labelText)
+					self.drawTimerLabel(hdc,pos,group.color,group.countdown)		
 				
-				pos = (pleft,ptop+(idx+k)*spc,pright,pbottom)
-				self.drawTextLabel(hdc,pos,action.color,action.labelText)
-				self.drawTimerLabel(hdc,pos,action.color,action.countdown)
+				k=idx+2
+				for idx,action in enumerate(self.actionsToDraw):
+					if (idx+1) in self.emptyLines : k=k+1
+					
+					pos = (pleft,ptop+(idx+k)*spc,pright,pbottom)
+					self.drawTextLabel(hdc,pos,action.color,action.labelText)
+					self.drawTimerLabel(hdc,pos,action.color,action.countdown)
 
-			k=k+idx+2
-			for idx,equip in enumerate(self.equipmentToDraw):
-				#if (idx+1) in emptyLines : k=k+1
+				k=k+idx+2
+				for idx,equip in enumerate(self.equipmentToDraw):
+					#if (idx+1) in emptyLines : k=k+1
 
-				pos = (pleft,ptop+(idx+k)*spc,pright,pbottom)
-				self.drawTextLabel(hdc,pos,equip.color,equip.labelText)
-				self.drawTimerLabel(hdc,pos,equip.color,equip.countdown)
-				
+					pos = (pleft,ptop+(idx+k)*spc,pright,pbottom)
+					self.drawTextLabel(hdc,pos,equip.color,equip.labelText)
+					self.drawTimerLabel(hdc,pos,equip.color,equip.countdown)
+					
 
-			win32gui.EndPaint(hWnd, paintStruct)
-			return 0
+				win32gui.EndPaint(hWnd, paintStruct)
+				return 0
 
 		elif message == win32con.WM_DESTROY:
 			win32gui.PostQuitMessage(0)
@@ -440,7 +550,7 @@ class WindowHandler:
 
 		else:
 			return win32gui.DefWindowProc(hWnd, message, wParam, lParam)
-	
+
 class ActionTracker(threading.Thread):
 	def __init__(self,actionList,equipmentList,groupList,equipmentSlotList):
 		self.actionList = actionList
@@ -448,9 +558,23 @@ class ActionTracker(threading.Thread):
 		self.groupList = groupList
 		self.equipmentSlotList = equipmentSlotList
 		self.abort = False
+		self.setup = False
+
 		threading.Thread.__init__(self)
-		
+	
+	def setupMode(self):
+		self.setup = True
+
 	def run(self):
+		if self.setup:
+			self.runSetup()
+		else:
+			self.runTracker()
+
+	def runSetup(self):
+		pass
+
+	def runTracker(self):
 		# Window and Timer update period
 		Ts = 0.05
 		
@@ -494,19 +618,61 @@ class ActionTracker(threading.Thread):
 			time.sleep(Ts)
 
 class HotkeyTracker(threading.Thread):
-	def __init__(self,actionList,equipmentList,groupList,windowHandler,resetKey='-',mountKey='+'):
+	def __init__(self,actionList,equipmentList,groupList,windowHandler,positionHandler,resetKey='-',mountKey='+'):
 		self.actionList = actionList
 		self.equipmentList = equipmentList
 		self.groupList = groupList
 		self.windowHandler = windowHandler
+		self.positionHandler = positionHandler
 		self.resetKey = resetKey
 		self.mountKey = mountKey
-		
+		self.setup = False
+
 		threading.Thread.__init__(self)
-		
-	def run(self):
+	
+	def setupMode(self):
+		self.setup = True
+
+	def runSetup(self):
+		keyboard.add_hotkey('w',self.positionHandler.moveArcsUp,args=())	
+		keyboard.add_hotkey('s',self.positionHandler.moveArcsDown,args=())
+		keyboard.add_hotkey('a',self.positionHandler.moveArcsLeft,args=())
+		keyboard.add_hotkey('d',self.positionHandler.moveArcsRight,args=())
+
+		keyboard.add_hotkey('e',self.positionHandler.increaseArcRadius,args=())	
+		keyboard.add_hotkey('ctrl+e',self.positionHandler.decreaseArcRadius,args=())
+		keyboard.add_hotkey('q',self.positionHandler.increaseArcWidth,args=())
+		keyboard.add_hotkey('ctrl+q',self.positionHandler.decreaseArcWidth,args=())
+
+		keyboard.add_hotkey('up',self.positionHandler.moveTextUp,args=())	
+		keyboard.add_hotkey('down',self.positionHandler.moveTextDown,args=())
+		keyboard.add_hotkey('left',self.positionHandler.moveTextLeft,args=())
+		keyboard.add_hotkey('right',self.positionHandler.moveTextRight,args=())
+
+		keyboard.add_hotkey('ctrl+up',self.positionHandler.increaseTextUpperLimit,args=())	
+		keyboard.add_hotkey('ctrl+down',self.positionHandler.increaseTextLowerLimit,args=())
+		keyboard.add_hotkey('ctrl+left',self.positionHandler.increaseTextLeftLimit,args=())
+		keyboard.add_hotkey('ctrl+right',self.positionHandler.increaseTextRightLimit,args=())
+
+		keyboard.add_hotkey('shift+up',self.positionHandler.decreaseTextUpperLimit,args=())	
+		keyboard.add_hotkey('shift+down',self.positionHandler.decreaseTextLowerLimit,args=())
+		keyboard.add_hotkey('shift+left',self.positionHandler.decreaseTextLeftLimit,args=())
+		keyboard.add_hotkey('shift+right',self.positionHandler.decreaseTextRightLimit,args=())
+
+		keyboard.add_hotkey('ctrl+space',self.positionHandler.increaseTextSpacing,args=())
+		keyboard.add_hotkey('shift+space',self.positionHandler.decreaseTextSpacing,args=())
+
+		keyboard.add_hotkey('m',self.positionHandler.setAsArcMountedPosition,args=())		
+
+		keyboard.add_hotkey('o',self.positionHandler.moveArcToPosition,args=())
+		keyboard.add_hotkey('p',self.positionHandler.moveTextToPosition,args=())
+
+
+		keyboard.add_hotkey('ctrl+s',self.positionHandler.savePositionToFile,args=())		
+
+	def runTracker(self):
 		keyboard.add_hotkey(self.resetKey,self.resetAllCountdowns,args=())
-		keyboard.add_hotkey(self.mountKey,self.mountUp,args=())
+		keyboard.add_hotkey(self.mountKey,self.mountAction,args=())
 		
 		for equip in self.equipmentList:
 			for key in equip.keys:
@@ -545,8 +711,13 @@ class HotkeyTracker(threading.Thread):
 				#keyboard.add_hotkey(key+'+down',action.triggerByKey,args=())
 				#keyboard.add_hotkey(key+'+left',action.triggerByKey,args=())
 				#keyboard.add_hotkey(key+'+right',action.triggerByKey,args=())
+	def run(self):
+		if self.setup:
+			self.runSetup()
+		else:
+			self.runTracker()
 	
-	def mountUp(self):
+	def mountAction(self):
 		self.windowHandler.changeArcPosition()
 	
 	
@@ -558,13 +729,27 @@ class HotkeyTracker(threading.Thread):
 			group.resetCountdown()
 
 class MouseTracker(threading.Thread):
-	def __init__(self,actionList):
+	def __init__(self,actionList,positionHandler):
 		self.actionList = actionList
+		self.positionHandler = positionHandler
+		self.setup = False
 		threading.Thread.__init__(self)
-		
-	def run(self):
+
+	def setupMode(self):
+		self.setup = True
+
+	def runTracker(self):
 		mouse.on_right_click(lambda: self.rightClick())
 		mouse.on_click(lambda: self.leftClick())
+
+	def runSetup(self):
+		pass
+
+	def run(self):
+		if self.setup:
+			self.runSetup()
+		else:
+			self.runTracker()
 
 	def rightClick(self):	
 		for action in self.actionList:

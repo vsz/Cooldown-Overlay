@@ -81,39 +81,39 @@ def debugMode():
 		print(s)
 
 def main(options):
-	# Setup mode config
-	setup = False
+	# Checks for setup  flag
 	if len(options) > 1:			
 		if options[1] == "setup": 
-			print("Starting in setup mode")
+			print("Starting in setup mode.")
 			setup = True
+	else:
+		setup = False
 
 	# Create position handler
 	positionHandler = PositionHandler()
-	tPosition = positionHandler.getTextPosition()
-	tSpacing = positionHandler.getTextSpacing()
-	aPosition = positionHandler.getArcPosition()
-	aMountedPosition = positionHandler.getArcMountedPosition()
-	aProperties = positionHandler.getArcProperties()
 
 	# Create transparent window
-	windowHandler = WindowHandler(actionList,groupList,equipmentList,emptyLines)
-	windowHandler.setTextPosition(tPosition,tSpacing)
-	windowHandler.setArcPosition(aPosition)
-	windowHandler.setArcMountedPosition(aMountedPosition)
-	windowHandler.setArcProperties(aProperties)
+	windowHandler = WindowHandler(actionList,groupList,equipmentList,emptyLines, positionHandler)
 
-	# Create threads
 	# Thread that detects keyboard hotkeys
-	tHotkeyTracker = HotkeyTracker(actionList,equipmentList,groupList,windowHandler,resetKey,mountKey)
-	tHotkeyTracker.start()
+	tHotkeyTracker = HotkeyTracker(actionList,equipmentList,groupList,windowHandler,positionHandler,resetKey,mountKey)
 
 	# Thread that detects mouse buttons
-	tMouseTracker = MouseTracker(actionList)
-	tMouseTracker.start()
-	
+	tMouseTracker = MouseTracker(actionList,positionHandler)
+
 	# Thread that tracks actions
 	tActionTracker = ActionTracker(actionList,equipmentList,groupList,equipmentSlotList)
+	
+	# Setup mode
+	if setup:
+		windowHandler.setupMode()
+		tMouseTracker.setupMode()
+		tHotkeyTracker.setupMode()
+		tActionTracker.setupMode()
+
+	# Start threads
+	tMouseTracker.start()
+	tHotkeyTracker.start()
 	tActionTracker.start()
 
 	try:
