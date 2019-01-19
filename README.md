@@ -6,7 +6,7 @@ To use the script, some basic Python and programming is desirable, but not neces
 # Features
 * Transparent window
 * Text color selection
-* Key modifiers for hotkeys: Left Control ('Lcontrol'), Left Shift ('Lshift'), Left Alt ('Lmenu')
+* Key modifiers for hotkeys: Control ('control'), Shift ('shift'), Alt ('alt')
 * Support for actions used with crosshairs, timers only start after a left click
 * Support for cooldown groups
 
@@ -108,7 +108,8 @@ Examples of visible and not visible group:
 1. To run the script, you'll need to have python3 installed, as well as two libraries: pywin32 and pyhooked.
 	1. It is recommended that you install pip to manage your libraries. If you have pip installed, you can open the command line, navigate to the script folder and type 'pip install -r requirements.txt' to get the correct versions of the libraries used to run the script.
 1. After installing python3 and the required libraries, open the command prompt, navigate to the script folder and type 'python cd-overlay.py'
-1. Enjoy!
+	1. To configure placement of text and arc on screen, run the overlay on setup mode using 'python cd-overlay.py setup'
+1. Enjoy! You can also create shortcuts in the script folder with the same commands you use to execute the script on the command prompt.
 
 
 

@@ -667,8 +667,24 @@ class HotkeyTracker(threading.Thread):
 		keyboard.add_hotkey('o',self.positionHandler.moveArcToPosition,args=())
 		keyboard.add_hotkey('p',self.positionHandler.moveTextToPosition,args=())
 
+		keyboard.add_hotkey('ctrl+s',self.positionHandler.savePositionToFile,args=())
 
-		keyboard.add_hotkey('ctrl+s',self.positionHandler.savePositionToFile,args=())		
+		print('Arc configuration:')
+		print('w,s,a,d - moves the arcs')
+		print('e / ctrl+e - increases/decreases arc radius')
+		print('q / ctrl+q - increases/decreases arc width')
+		print('o - moves arc center to mouse position')
+		print('m - sets current arc position as mounted position')
+
+		print('\nText configuration:')
+		print('arrows - moves texts position')
+		print('ctrl+arrows - increases text box boundaries')
+		print('shift+arrows - decreases text box boundaries')
+		print('ctrl+space - increases text spacing')
+		print('shift+space - decreases text spacing')
+		print('p - moves top left corner of text box to mouse position')
+
+		print('\nctrl+s - save configuration to file')
 
 	def runTracker(self):
 		keyboard.add_hotkey(self.resetKey,self.resetAllCountdowns,args=())
