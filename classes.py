@@ -11,6 +11,7 @@ import win32ui
 import math
 import sys
 import json
+import re
 
 class ColorCode:		
 	# Colors
@@ -32,6 +33,71 @@ class ColorCode:
 		iValue = int(strValue, 16)
 		
 		return iValue
+
+class ChatMode:
+	OFF = 'chatOff'
+	ON = 'chatOn'
+
+class ClientOptionsParser:
+	def __init__(self, path, filename, characterName, chatMode=ChatMode.OFF):
+		self.chatMode = chatMode
+		self.getCharacterHotkeySet(path,filename,characterName)
+		self.createHotkeyBindingList()
+		#self.setHotkeyBindingListActionSettings()
+
+		for hkb in self.hotkeyList:
+			hkb.print()
+			#pass
+
+	def getCharacterHotkeySet(self,path,filename,characterName):
+		with open(path+filename, 'r') as f:
+			self.hotkeySet = json.load(f)['hotkeyOptions']['hotkeySets'][characterName]
+
+	def createHotkeyBindingList(self):
+		hkList = []
+		for action in self.hotkeySet[self.chatMode]:
+			s = action['actionsetting']['action']
+			
+			# Checks if binding is a button in action bar
+			if s.startswith('TriggerActionButton'):
+				[bar, button] = [int(x) for x in re.findall('\d+', s)]
+
+				# Looks for an actionsetting in the clientoption mappings
+				for mapping in self.hotkeySet['actionBarOptions']['mappings']:
+					if [bar, button] == [mapping['actionBar'], mapping['actionButton']] and 'actionsetting' in mapping.keys():
+						actionsetting = mapping['actionsetting']
+						hotkey = action['keysequence']
+
+						# Appends hotkey binding
+						hkList.append(HotkeyBinding(bar,button,hotkey,actionsetting))
+
+		self.hotkeyList = hkList
+
+	def setHotkeyBindingListActionSettings(self):
+		for mapping in self.hotkeySet['actionBarOptions']['mappings']:
+			for hkb in self.hotkeyList:
+				if hkb.bar == mapping['actionBar'] and hkb.button == mapping['actionButton']:
+					hkb.action = mapping['actionsetting']
+				if hkb.action is None:
+					self.hotkeyList.remove(hkb)
+
+
+			
+
+			
+
+
+
+
+class HotkeyBinding:
+	def __init__(self, bar, button, hotkey, action):
+		self.bar = bar
+		self.button = button
+		self.hotkey = hotkey
+		self.action = action
+
+	def print(self):
+		print('Bar %s, Button %s, Hotkey %s, Action : %s'%(self.bar, self.button, self.hotkey, self.action))
 
 class ArcPlacement(Enum):
 	NONE = 0
@@ -87,12 +153,12 @@ class PositionHandler:
 		
 	def savePositionToFile(self):
 		with open('config.json', 'w') as f:
-			json.dump(self.position, f)
+			json.dump({'position':self.position}, f)
 		print ('File saved!')
 			
 	def loadPositionFromFile(self):
 		with open('config.json', 'r') as f:
-			self.position = json.load(f)
+			self.position = json.load(f)['position']
 		return self.position
 		
 	def moveArcsRight(self):
