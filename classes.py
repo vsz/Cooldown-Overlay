@@ -40,17 +40,18 @@ class ChatMode:
 
 class ClientOptionsParser:
 	def __init__(self, path, filename, characterName, chatMode=ChatMode.OFF):
-		self.chatMode = chatMode
 		self.getCharacterHotkeySet(path,filename,characterName)
-		self.createHotkeyBindingList()
+		self.createHotkeyBindingList(chatMode)
+		for hk in self.hotkeyList:
+			hk.print()
 
 	def getCharacterHotkeySet(self,path,filename,characterName):
 		with open(path+filename, 'r') as f:
 			self.hotkeySet = json.load(f)['hotkeyOptions']['hotkeySets'][characterName]
 
-	def createHotkeyBindingList(self):
+	def createHotkeyBindingList(self,chatMode):
 		hkList = []
-		for action in self.hotkeySet[self.chatMode]:
+		for action in self.hotkeySet[chatMode]:
 			s = action['actionsetting']['action']
 			
 			# Checks if binding is a button in action bar
@@ -68,13 +69,6 @@ class ClientOptionsParser:
 
 		self.hotkeyList = hkList
 
-	def setHotkeyBindingListActionSettings(self):
-		for mapping in self.hotkeySet['actionBarOptions']['mappings']:
-			for hkb in self.hotkeyList:
-				if hkb.bar == mapping['actionBar'] and hkb.button == mapping['actionButton']:
-					hkb.action = mapping['actionsetting']
-				if hkb.action is None:
-					self.hotkeyList.remove(hkb)
 
 class HotkeyBinding:
 	def __init__(self, bar, button, hotkey, action):

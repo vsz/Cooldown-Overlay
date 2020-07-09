@@ -1,0 +1,3157 @@
+{
+    "items":{
+        "3203":{
+            "info": {
+                "item":"Animate Dead Rune",
+                "groups":["summon","support","object"]
+            },
+            "displayinfpythono":{
+				"name":"AnimateDead",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+                "rightarc":false
+            }
+        },
+        "3161":{
+            "info": {
+                "item":"Avalanche Rune",
+                "groups":["attack","object"]
+            },
+            "displayinfo":{
+                "name":"AVA",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+                "rightarc":false
+            }
+        },
+        "3178":{
+            "info": {
+                "item":"Chameleon Rune",
+                "groups":["support","object"]
+            },
+            "displayinfo":{
+                "name":"Chameleon",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+                "rightarc":false
+            }
+        },
+        "3177":{
+            "info": {
+                "item":"Convince Creature Rune",
+                "groups":["summon","support","object"]
+            },
+            "displayinfo":{
+                "name":"Convince",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+				"rightarc":false
+            }
+        },
+        "3148":{
+            "info": {
+                "item":"Destroy Field Rune",
+                "groups":["support","object"]
+            },
+            "displayinfo":{
+                "name":"DestroyField",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+                "rightarc":false
+            }
+        },
+        "3197":{
+            "info": {
+                "item":"Desintegrate Rune",
+                "groups":["support","object"]
+            },
+            "displayinfo":{
+                "name":"Desintegrate",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+                "rightarc":false
+            }
+        },
+        "3149":{
+            "info": {
+                "item":"Energy Bomb Rune",
+                "groups":["attack","field","object"]
+            },
+            "displayinfo":{
+                "name":"EBomb",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+                "rightarc":false
+            }
+        },
+        "3164":{
+            "info": {
+                "item":"Energy Field Rune",
+                "groups":["attack","field","object"]
+            },
+            "displayinfo":{
+                "name":"EField",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+                "rightarc":false
+            }
+        },
+        "3166":{
+            "info": {
+                "item":"Energy Wall Rune",
+                "groups":["attack","field","object"]
+            },
+            "displayinfo":{
+                "name":"EWall",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+                "rightarc":false
+            }
+        },
+        "3200":{
+            "info": {
+                "item":"Explosion Rune",
+                "groups":["attack","object"]
+            },
+            "displayinfo":{
+                "name":"Explo",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+                "rightarc":false
+            }
+        },
+        "3192":{
+            "info": {
+                "item":"Fire Bomb Rune",
+                "groups":["attack","field","object"]
+            },
+            "displayinfo":{
+                "name":"FBomb",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+                "rightarc":false
+            }
+        },
+        "3188":{
+            "info": {
+                "item":"Fire Field Rune",
+                "groups":["attack","field","object"]
+            },
+            "displayinfo":{
+                "name":"FField",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+                "rightarc":false
+            }
+        },
+        "3190":{
+            "info": {
+                "item":"Fire Wall Rune",
+                "groups":["attack","field","object"]
+            },
+            "displayinfo":{
+                "name":"FWall",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+                "rightarc":false
+            }
+        },
+        "3189":{
+            "info": {
+                "item":"Fireball Rune",
+                "groups":["attack","object"]
+            },
+            "displayinfo":{
+                "name":"FBall",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+                "rightarc":false
+            }
+        },
+        "3191":{
+            "info": {
+                "item":"Great Fireball Rune",
+                "groups":["attack","object"]
+            },
+            "displayinfo":{
+                "name":"GFB",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+                "rightarc":false
+            }
+        },
+        "3198":{
+            "info": {
+                "item":"Heavy Magic Missile Rune",
+                "groups":["attack","object"]
+            },
+            "displayinfo":{
+                "name":"HMM",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+                "rightarc":false
+            }
+        },
+        "3182":{
+            "info": {
+                "item":"Holy Missile Rune",
+                "groups":["attack","object"]
+            },
+            "displayinfo":{
+                "name":"HolyMissile",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+                "rightarc":false
+            }
+        },
+        "3158":{
+            "info": {
+                "item":"Icicle Rune",
+                "groups":["attack","object"]
+            },
+            "displayinfo":{
+                "name":"Icicle",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+                "rightarc":false
+            }
+        },
+        "3152":{
+            "info": {
+                "item":"Intense Healing Rune",
+                "groups":["healing","object"]
+            },
+            "displayinfo":{
+                "name":"IH",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+                "rightarc":false
+            }
+        },
+        "3174":{
+            "info": {
+                "item":"Light Magic Missile Rune",
+                "groups":["attack","object"]
+            },
+            "displayinfo":{
+                "name":"LMM",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+                "rightarc":false
+            }
+        },
+        "3180":{
+            "info": {
+                "item":"Magic Wall Rune",
+                "groups":["attack","object"]
+            },
+            "displayinfo":{
+                "name":"MWall",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+                "rightarc":false
+            }
+        },
+        "3165":{
+            "info": {
+                "item":"Paralyse Rune",
+                "groups":["attack","object"],
+                "cooldown":6
+            },
+            "displayinfo":{
+                "name":"Paralyse",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+                "rightarc":false
+            }
+        },
+        "3173":{
+            "info": {
+                "item":"Poison Bomb Rune",
+                "groups":["attack","field","object"]
+            },
+            "displayinfo":{
+                "name":"PBomb",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+                "rightarc":false
+            }
+        },
+        "3172":{
+            "info": {
+                "item":"Poison Field Rune",
+                "groups":["attack","field","object"]
+            },
+            "displayinfo":{
+                "name":"PField",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+                "rightarc":false
+            }
+        },
+        "3176":{
+            "info": {
+                "item":"Poison Wall Rune",
+                "groups":["attack","field","object"]
+            },
+            "displayinfo":{
+                "name":"PWall",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+                "rightarc":false
+            }
+        },
+        "3195":{
+            "info": {
+                "item":"Soulfire Rune",
+                "groups":["attack","object"]
+            },
+            "displayinfo":{
+                "name":"Soulfire",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+                "rightarc":false
+            }
+        },
+        "3179":{
+            "info": {
+                "item":"Stalagmite Rune",
+                "groups":["attack","object"]
+            },
+            "displayinfo":{
+                "name":"Stalagmite",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+                "rightarc":false
+            }
+        },
+        "3175":{
+            "info": {
+                "item":"Stone Shower Rune",
+                "groups":["attack","object"]
+            },
+            "displayinfo":{
+                "name":"SShower",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+                "rightarc":false
+            }
+        },
+        "3155":{
+            "info": {
+                "item":"Sudden Death Rune",
+                "groups":["attack","object"]
+            },
+            "displayinfo":{
+                "name":"SD",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+                "rightarc":false
+            }
+        },
+        "3202":{
+            "info": {
+                "item":"Thunderstorm Rune",
+                "groups":["attack","object"]
+            },
+            "displayinfo":{
+                "name":"THS",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+                "rightarc":false
+            }
+        },
+        "3160":{
+            "info": {
+                "item":"Ultimate Healing Rune",
+                "groups":["healing","object"]
+            },
+            "displayinfo":{
+                "name":"UH",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+                "rightarc":false
+            }
+        },
+        "3156":{
+            "info": {
+                "item":"Wild Growth Rune",
+                "groups":["attack","object"]
+            },
+            "displayinfo":{
+                "name":"WGrowth",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+                "rightarc":false
+            }
+        },
+        "239":{
+            "info": {
+                "item":"Great Health Potion",
+                "groups":["object"]
+            },
+            "displayinfo":{
+                "name":"Potion",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+                "rightarc":false
+            }
+        },
+        "238":{
+            "info": {
+                "item":"Great Mana Potion",
+                "groups":["object"]
+            },
+            "displayinfo":{
+                "name":"Potion",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+                "rightarc":false
+            }
+        },
+        "7642":{
+            "info": {
+                "item":"Great Spirit Potion",
+                "groups":["object"]
+            },
+            "displayinfo":{
+                "name":"Potion",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+                "rightarc":false
+            }
+        },
+        "266":{
+            "info": {
+                "item":"Health Potion",
+                "groups":["object"]
+            },
+            "displayinfo":{
+                "name":"Potion",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+                "rightarc":false
+            }
+        },
+        "268":{
+            "info": {
+                "item":"Mana Potion",
+                "groups":["object"]
+            },
+            "displayinfo":{
+                "name":"Potion",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+                "rightarc":false
+            }
+        },
+        "236":{
+            "info": {
+                "item":"Strong Health Potion",
+                "groups":["object"]
+            },
+            "displayinfo":{
+                "name":"Potion",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+                "rightarc":false
+            }
+        },
+        "237":{
+            "info": {
+                "item":"Strong Mana Potion",
+                "groups":["object"]
+            },
+            "displayinfo":{
+                "name":"Potion",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+                "rightarc":false
+            }
+        },
+        "23375":{
+            "info": {
+                "item":"Supreme Health Potion",
+                "groups":["object"]
+            },
+            "displayinfo":{
+                "name":"Potion",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+                "rightarc":false
+            }
+        },
+        "7643":{
+            "info": {
+                "item":"Ultimate Health Potion",
+                "groups":["object"]
+            },
+            "displayinfo":{
+                "name":"Potion",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+                "rightarc":false
+            }
+        },
+        "23373":{
+            "info": {
+                "item":"Ultimate Mana Potion",
+                "groups":["object"]
+            },
+            "displayinfo":{
+                "name":"Potion",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+                "rightarc":false
+            }
+        },
+        "23374":{
+            "info": {
+                "item":"Ultimate Spitit Potion",
+                "groups":["object"]
+            },
+            "displayinfo":{
+                "name":"Potion",
+                "color":[255,0,0],
+                "text":false,
+                "leftarc":false,
+                "rightarc":false
+            }
+        }
+    },
+    "spells":{
+		"exori gran ico":{
+			"info":{
+				"spell":"Annihilation",
+				"cooldown":30,
+				"duration":0,
+				"groups":[
+					"attack",
+					"special"
+				]
+			},
+			"displayinfo":{
+				"name":"Annihilation",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exori min flam":{
+			"info":{
+				"spell":"Apprentice's Strike",
+				"cooldown":2,
+				"duration":0,
+				"groups":[
+					"attack"
+				]
+			},
+			"displayinfo":{
+				"name":"Apprentice's Strike",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exevo infir con":{
+			"info":{
+				"spell":"Arrow Call",
+				"cooldown":2,
+				"duration":0,
+				"groups":[
+					"support"
+				]
+			},
+			"displayinfo":{
+				"name":"Arrow Call",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exori":{
+			"info":{
+				"spell":"Berserk",
+				"cooldown":4,
+				"duration":0,
+				"groups":[
+					"attack"
+				]
+			},
+			"displayinfo":{
+				"name":"Berserk",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"utito tempo":{
+			"info":{
+				"spell":"Blood Rage",
+				"cooldown":2,
+				"duration":0,
+				"groups":[
+					"support"
+				]
+			},
+			"displayinfo":{
+				"name":"Blood Rage",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exura infir ico":{
+			"info":{
+				"spell":"Bruise Bane",
+				"cooldown":1,
+				"duration":0,
+				"groups":[
+					"healing"
+				]
+			},
+			"displayinfo":{
+				"name":"Bruise Bane",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exori ico":{
+			"info":{
+				"spell":"Brutal Strike",
+				"cooldown":6,
+				"duration":0,
+				"groups":[
+					"attack"
+				]
+			},
+			"displayinfo":{
+				"name":"Brutal Strike",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exori infir vis":{
+			"info":{
+				"spell":"Buzz",
+				"cooldown":2,
+				"duration":0,
+				"groups":[
+					"attack"
+				]
+			},
+			"displayinfo":{
+				"name":"Buzz",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exana ina":{
+			"info":{
+				"spell":"Cancel Invisibility",
+				"cooldown":2,
+				"duration":0,
+				"groups":[
+					"support"
+				]
+			},
+			"displayinfo":{
+				"name":"Cancel Invisibility",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exeta res":{
+			"info":{
+				"spell":"Challenge",
+				"cooldown":2,
+				"duration":0,
+				"groups":[
+					"support"
+				]
+			},
+			"displayinfo":{
+				"name":"Challenge",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"utani tempo hur":{
+			"info":{
+				"spell":"Charge",
+				"cooldown":2,
+				"duration":0,
+				"groups":[
+					"support"
+				]
+			},
+			"displayinfo":{
+				"name":"Charge",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exevo infir frigo hur":{
+			"info":{
+				"spell":"Chill Out",
+				"cooldown":4,
+				"duration":0,
+				"groups":[
+					"attack"
+				]
+			},
+			"displayinfo":{
+				"name":"Chill Out",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exevo con":{
+			"info":{
+				"spell":"Conjure Arrow",
+				"cooldown":2,
+				"duration":0,
+				"groups":[
+					"support"
+				]
+			},
+			"displayinfo":{
+				"name":"Conjure Arrow",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exevo gran con hur":{
+			"info":{
+				"spell":"Conjure Diamond Arrow",
+				"cooldown":600,
+				"duration":0,
+				"groups":[
+					"support",
+					"conjure"
+				]
+			},
+			"displayinfo":{
+				"name":"Conjure Diamond Arrow",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exevo con flam":{
+			"info":{
+				"spell":"Conjure Explosive Arrow",
+				"cooldown":2,
+				"duration":0,
+				"groups":[
+					"support"
+				]
+			},
+			"displayinfo":{
+				"name":"Conjure Explosive Arrow",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exevo gran con vis":{
+			"info":{
+				"spell":"Conjure Spectral Bolt",
+				"cooldown":600,
+				"duration":0,
+				"groups":[
+					"support",
+					"conjure"
+				]
+			},
+			"displayinfo":{
+				"name":"Conjure Spectral Bolt",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exevo gran mort":{
+			"info":{
+				"spell":"Conjure Wand of Darkness",
+				"cooldown":1800,
+				"duration":900,
+				"groups":[
+					"support"
+				]
+			},
+			"displayinfo":{
+				"name":"Conjure Wand of Darkness",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"utevo res ina":{
+			"info":{
+				"spell":"Creature Illusion",
+				"cooldown":2,
+				"duration":0,
+				"groups":[
+					"support"
+				]
+			},
+			"displayinfo":{
+				"name":"Creature Illusion",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exana kor":{
+			"info":{
+				"spell":"Cure Bleeding",
+				"cooldown":6,
+				"duration":0,
+				"groups":[
+					"healing"
+				]
+			},
+			"displayinfo":{
+				"name":"Cure Bleeding",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exana flam":{
+			"info":{
+				"spell":"Cure Burning",
+				"cooldown":6,
+				"duration":0,
+				"groups":[
+					"healing"
+				]
+			},
+			"displayinfo":{
+				"name":"Cure Burning",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exana mort":{
+			"info":{
+				"spell":"Cure Curse",
+				"cooldown":6,
+				"duration":0,
+				"groups":[
+					"healing"
+				]
+			},
+			"displayinfo":{
+				"name":"Cure Curse",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exana vis":{
+			"info":{
+				"spell":"Cure Electrification",
+				"cooldown":6,
+				"duration":0,
+				"groups":[
+					"healing"
+				]
+			},
+			"displayinfo":{
+				"name":"Cure Electrification",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exana pox":{
+			"info":{
+				"spell":"Cure Poison",
+				"cooldown":6,
+				"duration":0,
+				"groups":[
+					"healing"
+				]
+			},
+			"displayinfo":{
+				"name":"Cure Poison",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"utori mort":{
+			"info":{
+				"spell":"Curse",
+				"cooldown":40,
+				"duration":0,
+				"groups":[
+					"attack"
+				]
+			},
+			"displayinfo":{
+				"name":"Curse",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exori mort":{
+			"info":{
+				"spell":"Death Strike",
+				"cooldown":2,
+				"duration":0,
+				"groups":[
+					"attack"
+				]
+			},
+			"displayinfo":{
+				"name":"Death Strike",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exevo mas san":{
+			"info":{
+				"spell":"Divine Caldera",
+				"cooldown":4,
+				"duration":0,
+				"groups":[
+					"attack"
+				]
+			},
+			"displayinfo":{
+				"name":"Divine Caldera",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exura san":{
+			"info":{
+				"spell":"Divine Healing",
+				"cooldown":1,
+				"duration":0,
+				"groups":[
+					"healing"
+				]
+			},
+			"displayinfo":{
+				"name":"Divine Healing",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exori san":{
+			"info":{
+				"spell":"Divine Missile",
+				"cooldown":2,
+				"duration":0,
+				"groups":[
+					"attack"
+				]
+			},
+			"displayinfo":{
+				"name":"Divine Missile",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"utori vis":{
+			"info":{
+				"spell":"Electrify",
+				"cooldown":30,
+				"duration":0,
+				"groups":[
+					"attack"
+				]
+			},
+			"displayinfo":{
+				"name":"Electrify",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"utori mas sio":{
+			"info":{
+				"spell":"Enchant Party",
+				"cooldown":2,
+				"duration":120,
+				"groups":[
+					"support"
+				]
+			},
+			"displayinfo":{
+				"name":"Enchant Party",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exeta con":{
+			"info":{
+				"spell":"Enchant Spear",
+				"cooldown":2,
+				"duration":0,
+				"groups":[
+					"support"
+				]
+			},
+			"displayinfo":{
+				"name":"Enchant Spear",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exevo vis lux":{
+			"info":{
+				"spell":"Energy Beam",
+				"cooldown":4,
+				"duration":0,
+				"groups":[
+					"attack"
+				]
+			},
+			"displayinfo":{
+				"name":"Energy Beam",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exori vis":{
+			"info":{
+				"spell":"Energy Strike",
+				"cooldown":2,
+				"duration":0,
+				"groups":[
+					"attack"
+				]
+			},
+			"displayinfo":{
+				"name":"Energy Strike",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exevo vis hur":{
+			"info":{
+				"spell":"Energy Wave",
+				"cooldown":8,
+				"duration":0,
+				"groups":[
+					"attack"
+				]
+			},
+			"displayinfo":{
+				"name":"Energy Wave",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"utori pox":{
+			"info":{
+				"spell":"Envenom",
+				"cooldown":40,
+				"duration":0,
+				"groups":[
+					"attack"
+				]
+			},
+			"displayinfo":{
+				"name":"Envenom",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exevo gran mas frigo":{
+			"info":{
+				"spell":"Eternal Winter",
+				"cooldown":40,
+				"duration":0,
+				"groups":[
+					"attack",
+					"special"
+				]
+			},
+			"displayinfo":{
+				"name":"Eternal Winter",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exori con":{
+			"info":{
+				"spell":"Ethereal Spear",
+				"cooldown":2,
+				"duration":0,
+				"groups":[
+					"attack"
+				]
+			},
+			"displayinfo":{
+				"name":"Ethereal Spear",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exori gran":{
+			"info":{
+				"spell":"Fierce Berserk",
+				"cooldown":6,
+				"duration":0,
+				"groups":[
+					"attack"
+				]
+			},
+			"displayinfo":{
+				"name":"Fierce Berserk",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exiva":{
+			"info":{
+				"spell":"Find Person",
+				"cooldown":2,
+				"duration":0,
+				"groups":[
+					"support"
+				]
+			},
+			"displayinfo":{
+				"name":"Find Person",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exevo flam hur":{
+			"info":{
+				"spell":"Fire Wave",
+				"cooldown":4,
+				"duration":0,
+				"groups":[
+					"attack"
+				]
+			},
+			"displayinfo":{
+				"name":"Fire Wave",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exori flam":{
+			"info":{
+				"spell":"Flame Strike",
+				"cooldown":2,
+				"duration":0,
+				"groups":[
+					"attack"
+				]
+			},
+			"displayinfo":{
+				"name":"Flame Strike",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exevo pan":{
+			"info":{
+				"spell":"Food (Spell)",
+				"cooldown":2,
+				"duration":0,
+				"groups":[
+					"support"
+				]
+			},
+			"displayinfo":{
+				"name":"Food (Spell)",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exori min":{
+			"info":{
+				"spell":"Front Sweep",
+				"cooldown":6,
+				"duration":0,
+				"groups":[
+					"attack"
+				]
+			},
+			"displayinfo":{
+				"name":"Front Sweep",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exevo gran vis lux":{
+			"info":{
+				"spell":"Great Energy Beam",
+				"cooldown":6,
+				"duration":0,
+				"groups":[
+					"attack"
+				]
+			},
+			"displayinfo":{
+				"name":"Great Energy Beam",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"utevo gran lux":{
+			"info":{
+				"spell":"Great Light",
+				"cooldown":2,
+				"duration":0,
+				"groups":[
+					"support"
+				]
+			},
+			"displayinfo":{
+				"name":"Great Light",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exori mas":{
+			"info":{
+				"spell":"Groundshaker",
+				"cooldown":8,
+				"duration":0,
+				"groups":[
+					"attack"
+				]
+			},
+			"displayinfo":{
+				"name":"Groundshaker",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"utani hur":{
+			"info":{
+				"spell":"Haste",
+				"cooldown":2,
+				"duration":30,
+				"groups":[
+					"support"
+				]
+			},
+			"displayinfo":{
+				"name":"Haste",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exura sio":{
+			"info":{
+				"spell":"Heal Friend",
+				"cooldown":2,
+				"duration":0,
+				"groups":[
+					"healing"
+				]
+			},
+			"displayinfo":{
+				"name":"Heal Friend",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"utura mas sio":{
+			"info":{
+				"spell":"Heal Party",
+				"cooldown":2,
+				"duration":120,
+				"groups":[
+					"support"
+				]
+			},
+			"displayinfo":{
+				"name":"Heal Party",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exevo gran mas flam":{
+			"info":{
+				"spell":"Hell's Core",
+				"cooldown":40,
+				"duration":0,
+				"groups":[
+					"attack",
+					"special"
+				]
+			},
+			"displayinfo":{
+				"name":"Hell's Core",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"utori san":{
+			"info":{
+				"spell":"Holy Flash",
+				"cooldown":40,
+				"duration":0,
+				"groups":[
+					"attack"
+				]
+			},
+			"displayinfo":{
+				"name":"Holy Flash",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exori frigo":{
+			"info":{
+				"spell":"Ice Strike",
+				"cooldown":2,
+				"duration":0,
+				"groups":[
+					"attack"
+				]
+			},
+			"displayinfo":{
+				"name":"Ice Strike",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exevo frigo hur":{
+			"info":{
+				"spell":"Ice Wave",
+				"cooldown":4,
+				"duration":0,
+				"groups":[
+					"attack"
+				]
+			},
+			"displayinfo":{
+				"name":"Ice Wave",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"utori flam":{
+			"info":{
+				"spell":"Ignite",
+				"cooldown":30,
+				"duration":0,
+				"groups":[
+					"attack"
+				]
+			},
+			"displayinfo":{
+				"name":"Ignite",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"utori kor":{
+			"info":{
+				"spell":"Inflict Wound",
+				"cooldown":30,
+				"duration":0,
+				"groups":[
+					"attack"
+				]
+			},
+			"displayinfo":{
+				"name":"Inflict Wound",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exura gran":{
+			"info":{
+				"spell":"Intense Healing",
+				"cooldown":1,
+				"duration":0,
+				"groups":[
+					"healing"
+				]
+			},
+			"displayinfo":{
+				"name":"Intense Healing",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"utura gran":{
+			"info":{
+				"spell":"Intense Recovery",
+				"cooldown":60,
+				"duration":0,
+				"groups":[
+					"healing"
+				]
+			},
+			"displayinfo":{
+				"name":"Intense Recovery",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exura gran ico":{
+			"info":{
+				"spell":"Intense Wound Cleansing",
+				"cooldown":600,
+				"duration":0,
+				"groups":[
+					"healing"
+				]
+			},
+			"displayinfo":{
+				"name":"Intense Wound Cleansing",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"utana vid":{
+			"info":{
+				"spell":"Invisible",
+				"cooldown":2,
+				"duration":300,
+				"groups":[
+					"support"
+				]
+			},
+			"displayinfo":{
+				"name":"Invisible",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exani hur":{
+			"info":{
+				"spell":"Levitate",
+				"cooldown":2,
+				"duration":0,
+				"groups":[
+					"support"
+				]
+			},
+			"displayinfo":{
+				"name":"Levitate",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"utevo lux":{
+			"info":{
+				"spell":"Light",
+				"cooldown":2,
+				"duration":370,
+				"groups":[
+					"support"
+				]
+			},
+			"displayinfo":{
+				"name":"Light",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exura":{
+			"info":{
+				"spell":"Light Healing",
+				"cooldown":1,
+				"duration":0,
+				"groups":[
+					"healing"
+				]
+			},
+			"displayinfo":{
+				"name":"Light Healing",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exori amp vis":{
+			"info":{
+				"spell":"Lightning",
+				"cooldown":8,
+				"duration":0,
+				"groups":[
+					"attack",
+					"strong"
+				]
+			},
+			"displayinfo":{
+				"name":"Lightning",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exura infir":{
+			"info":{
+				"spell":"Magic Patch",
+				"cooldown":1,
+				"duration":0,
+				"groups":[
+					"healing"
+				]
+			},
+			"displayinfo":{
+				"name":"Magic Patch",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exani tera":{
+			"info":{
+				"spell":"Magic Rope",
+				"cooldown":2,
+				"duration":0,
+				"groups":[
+					"support"
+				]
+			},
+			"displayinfo":{
+				"name":"Magic Rope",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"utamo vita":{
+			"info":{
+				"spell":"Magic Shield",
+				"cooldown":2,
+				"duration":200,
+				"groups":[
+					"support"
+				]
+			},
+			"displayinfo":{
+				"name":"Magic Shield",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exura gran mas res":{
+			"info":{
+				"spell":"Mass Healing",
+				"cooldown":2,
+				"duration":0,
+				"groups":[
+					"healing"
+				]
+			},
+			"displayinfo":{
+				"name":"Mass Healing",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exori infir tera":{
+			"info":{
+				"spell":"Mud Attack",
+				"cooldown":2,
+				"duration":0,
+				"groups":[
+					"attack"
+				]
+			},
+			"displayinfo":{
+				"name":"Mud Attack",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exori moe ico":{
+			"info":{
+				"spell":"Physical Strike",
+				"cooldown":2,
+				"duration":0,
+				"groups":[
+					"attack"
+				]
+			},
+			"displayinfo":{
+				"name":"Physical Strike",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exevo dis flam hur":{
+			"info":{
+				"spell":"Practise Fire Wave",
+				"cooldown":4,
+				"duration":0,
+				"groups":[
+					"attack"
+				]
+			},
+			"displayinfo":{
+				"name":"Practise Fire Wave",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exura dis":{
+			"info":{
+				"spell":"Practise Healing",
+				"cooldown":1,
+				"duration":0,
+				"groups":[
+					"healing"
+				]
+			},
+			"displayinfo":{
+				"name":"Practise Healing",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"utamo mas sio":{
+			"info":{
+				"spell":"Protect Party",
+				"cooldown":2,
+				"duration":120,
+				"groups":[
+					"support"
+				]
+			},
+			"displayinfo":{
+				"name":"Protect Party",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"utamo tempo":{
+			"info":{
+				"spell":"Protector",
+				"cooldown":2,
+				"duration":13,
+				"groups":[
+					"support"
+				]
+			},
+			"displayinfo":{
+				"name":"Protector",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exevo gran mas vis":{
+			"info":{
+				"spell":"Rage of the Skies",
+				"cooldown":40,
+				"duration":0,
+				"groups":[
+					"attack",
+					"special"
+				]
+			},
+			"displayinfo":{
+				"name":"Rage of the Skies",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"utura":{
+			"info":{
+				"spell":"Recovery",
+				"cooldown":60,
+				"duration":60,
+				"groups":[
+					"healing"
+				]
+			},
+			"displayinfo":{
+				"name":"Recovery",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exura gran san":{
+			"info":{
+				"spell":"Salvation",
+				"cooldown":1,
+				"duration":0,
+				"groups":[
+					"healing"
+				]
+			},
+			"displayinfo":{
+				"name":"Salvation",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exevo infir flam hur":{
+			"info":{
+				"spell":"Scorch",
+				"cooldown":4,
+				"duration":0,
+				"groups":[
+					"attack"
+				]
+			},
+			"displayinfo":{
+				"name":"Scorch",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"utito tempo san":{
+			"info":{
+				"spell":"Sharpshooter",
+				"cooldown":2,
+				"duration":10,
+				"groups":[
+					"support"
+				]
+			},
+			"displayinfo":{
+				"name":"Sharpshooter",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exori gran vis":{
+			"info":{
+				"spell":"Strong Energy Strike",
+				"cooldown":8,
+				"duration":0,
+				"groups":[
+					"attack",
+					"strong"
+				]
+			},
+			"displayinfo":{
+				"name":"Strong Energy Strike",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exori gran con":{
+			"info":{
+				"spell":"Strong Ethereal Spear",
+				"cooldown":8,
+				"duration":0,
+				"groups":[
+					"attack"
+				]
+			},
+			"displayinfo":{
+				"name":"Strong Ethereal Spear",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exori gran flam":{
+			"info":{
+				"spell":"Strong Flame Strike",
+				"cooldown":8,
+				"duration":0,
+				"groups":[
+					"attack",
+					"strong"
+				]
+			},
+			"displayinfo":{
+				"name":"Strong Flame Strike",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"utani gran hur":{
+			"info":{
+				"spell":"Strong Haste",
+				"cooldown":2,
+				"duration":21,
+				"groups":[
+					"support"
+				]
+			},
+			"displayinfo":{
+				"name":"Strong Haste",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exori gran frigo":{
+			"info":{
+				"spell":"Strong Ice Strike",
+				"cooldown":8,
+				"duration":0,
+				"groups":[
+					"attack",
+					"strong"
+				]
+			},
+			"displayinfo":{
+				"name":"Strong Ice Strike",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exevo gran frigo hur":{
+			"info":{
+				"spell":"Strong Ice Wave",
+				"cooldown":8,
+				"duration":0,
+				"groups":[
+					"attack"
+				]
+			},
+			"displayinfo":{
+				"name":"Strong Ice Wave",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exori gran tera":{
+			"info":{
+				"spell":"Strong Terra Strike",
+				"cooldown":8,
+				"duration":0,
+				"groups":[
+					"attack",
+					"strong"
+				]
+			},
+			"displayinfo":{
+				"name":"Strong Terra Strike",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"utevo res":{
+			"info":{
+				"spell":"Summon Creature",
+				"cooldown":2,
+				"duration":0,
+				"groups":[
+					"support"
+				]
+			},
+			"displayinfo":{
+				"name":"Summon Creature",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"utevo gran res sac":{
+			"info":{
+				"spell":"Summon Emberwing",
+				"cooldown":1800,
+				"duration":900,
+				"groups":[
+					"support"
+				]
+			},
+			"displayinfo":{
+				"name":"Summon Emberwing",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"utevo gran res dru":{
+			"info":{
+				"spell":"Summon Grovebeast",
+				"cooldown":1800,
+				"duration":900,
+				"groups":[
+					"support"
+				]
+			},
+			"displayinfo":{
+				"name":"Summon Grovebeast",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"utevo gran res eq":{
+			"info":{
+				"spell":"Summon Skullfrost",
+				"cooldown":1800,
+				"duration":900,
+				"groups":[
+					"support"
+				]
+			},
+			"displayinfo":{
+				"name":"Summon Skullfrost",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"utevo gran res ven":{
+			"info":{
+				"spell":"Summon Thundergiant",
+				"cooldown":1800,
+				"duration":900,
+				"groups":[
+					"support"
+				]
+			},
+			"displayinfo":{
+				"name":"Summon Thundergiant",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"utamo tempo san":{
+			"info":{
+				"spell":"Swift Foot",
+				"cooldown":2,
+				"duration":10,
+				"groups":[
+					"support"
+				]
+			},
+			"displayinfo":{
+				"name":"Swift Foot",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exori tera":{
+			"info":{
+				"spell":"Terra Strike",
+				"cooldown":2,
+				"duration":0,
+				"groups":[
+					"attack"
+				]
+			},
+			"displayinfo":{
+				"name":"Terra Strike",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exevo tera hur":{
+			"info":{
+				"spell":"Terra Wave",
+				"cooldown":4,
+				"duration":0,
+				"groups":[
+					"attack"
+				]
+			},
+			"displayinfo":{
+				"name":"Terra Wave",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"utito mas sio":{
+			"info":{
+				"spell":"Train Party",
+				"cooldown":2,
+				"duration":120,
+				"groups":[
+					"support"
+				]
+			},
+			"displayinfo":{
+				"name":"Train Party",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exori max vis":{
+			"info":{
+				"spell":"Ultimate Energy Strike",
+				"cooldown":30,
+				"duration":0,
+				"groups":[
+					"attack",
+					"special"
+				]
+			},
+			"displayinfo":{
+				"name":"Ultimate Energy Strike",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exori max flam":{
+			"info":{
+				"spell":"Ultimate Flame Strike",
+				"cooldown":30,
+				"duration":0,
+				"groups":[
+					"attack",
+					"special"
+				]
+			},
+			"displayinfo":{
+				"name":"Ultimate Flame Strike",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exura vita":{
+			"info":{
+				"spell":"Ultimate Healing",
+				"cooldown":1,
+				"duration":0,
+				"groups":[
+					"healing"
+				]
+			},
+			"displayinfo":{
+				"name":"Ultimate Healing",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exori max frigo":{
+			"info":{
+				"spell":"Ultimate Ice Strike",
+				"cooldown":30,
+				"duration":0,
+				"groups":[
+					"attack",
+					"special"
+				]
+			},
+			"displayinfo":{
+				"name":"Ultimate Ice Strike",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"utevo vis lux":{
+			"info":{
+				"spell":"Ultimate Light",
+				"cooldown":2,
+				"duration":1980,
+				"groups":[
+					"support"
+				]
+			},
+			"displayinfo":{
+				"name":"Ultimate Light",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exori max tera":{
+			"info":{
+				"spell":"Ultimate Terra Strike",
+				"cooldown":30,
+				"duration":0,
+				"groups":[
+					"attack",
+					"special"
+				]
+			},
+			"displayinfo":{
+				"name":"Ultimate Terra Strike",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exori hur":{
+			"info":{
+				"spell":"Whirlwind Throw",
+				"cooldown":6,
+				"duration":0,
+				"groups":[
+					"attack"
+				]
+			},
+			"displayinfo":{
+				"name":"Whirlwind Throw",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exura ico":{
+			"info":{
+				"spell":"Wound Cleansing",
+				"cooldown":1,
+				"duration":0,
+				"groups":[
+					"healing"
+				]
+			},
+			"displayinfo":{
+				"name":"Wound Cleansing",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		},
+		"exevo gran mas tera":{
+			"info":{
+				"spell":"Wrath of Nature",
+				"cooldown":40,
+				"duration":0,
+				"groups":[
+					"attack",
+					"special"
+				]
+			},
+			"displayinfo":{
+				"name":"Wrath of Nature",
+				"color":[
+					255,
+					0,
+					0
+				],
+				"text":false,
+				"leftarc":false,
+				"rightarc":false,
+				"track":[
+					"duration",
+					"cooldown"
+				]
+			}
+		}
+	}	
+}
