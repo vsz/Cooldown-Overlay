@@ -20,8 +20,8 @@ actionList.append(TrackedAction('Potion',ColorCode.PINK,[CooldownGroup.OBJECT],A
 # Attack Runes
 actionList.append(TrackedAction('Rune',ColorCode.rgb2hex((255,100,0)),[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['\\'],ut=UseType.CROSSHAIR,visible=False))
 #actionList.append(TrackedAction('Rune',ColorCode.rgb2hex((100,255,0)),[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['ctrl+\\'],ut=UseType.CROSSHAIR,visible=False))
-#actionList.append(TrackedAction('Rune',ColorCode.rgb2hex((100,255,0)),[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['ctrl+/'],ut=UseType.CROSSHAIR,visible=False))
-actionList.append(TrackedAction('SD',ColorCode.RED,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['/'],visible=False))
+actionList.append(TrackedAction('Rune',ColorCode.rgb2hex((100,255,0)),[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['ctrl+/'],ut=UseType.CROSSHAIR,visible=False))
+#actionList.append(TrackedAction('SD',ColorCode.RED,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['/'],visible=False))
 #actionList.append(TrackedAction('FireWall',ColorCode.RED,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['shift+!'],ut=UseType.CROSSHAIR,visible=False))
 actionList.append(TrackedAction('FireBomb',ColorCode.RED,[CooldownGroup.ATTACK,CooldownGroup.OBJECT],ActionType.ATKRUNE,['/'],ut=UseType.CROSSHAIR,visible=False))
 

@@ -43,11 +43,6 @@ class ClientOptionsParser:
 		self.chatMode = chatMode
 		self.getCharacterHotkeySet(path,filename,characterName)
 		self.createHotkeyBindingList()
-		#self.setHotkeyBindingListActionSettings()
-
-		for hkb in self.hotkeyList:
-			hkb.print()
-			#pass
 
 	def getCharacterHotkeySet(self,path,filename,characterName):
 		with open(path+filename, 'r') as f:
@@ -80,14 +75,6 @@ class ClientOptionsParser:
 					hkb.action = mapping['actionsetting']
 				if hkb.action is None:
 					self.hotkeyList.remove(hkb)
-
-
-			
-
-			
-
-
-
 
 class HotkeyBinding:
 	def __init__(self, bar, button, hotkey, action):
