@@ -38,52 +38,11 @@ class ChatMode:
 	OFF = 'chatOff'
 	ON = 'chatOn'
 
-class ClientOptionsParser:
-	def __init__(self, path, filename, characterName, chatMode=ChatMode.OFF):
-		self.getCharacterHotkeySet(path,filename,characterName)
-		self.createHotkeyBindingList(chatMode)
-		for hk in self.hotkeyList:
-			hk.print()
-
-	def getCharacterHotkeySet(self,path,filename,characterName):
-		with open(path+filename, 'r') as f:
-			self.hotkeySet = json.load(f)['hotkeyOptions']['hotkeySets'][characterName]
-
-	def createHotkeyBindingList(self,chatMode):
-		hkList = []
-		for action in self.hotkeySet[chatMode]:
-			s = action['actionsetting']['action']
-			
-			# Checks if binding is a button in action bar
-			if s.startswith('TriggerActionButton'):
-				[bar, button] = [int(x) for x in re.findall('\d+', s)]
-
-				# Looks for an actionsetting in the clientoption mappings
-				for mapping in self.hotkeySet['actionBarOptions']['mappings']:
-					if [bar, button] == [mapping['actionBar'], mapping['actionButton']] and 'actionsetting' in mapping.keys():
-						actionsetting = mapping['actionsetting']
-						hotkey = action['keysequence']
-
-						# Appends hotkey binding
-						hkList.append(HotkeyBinding(bar,button,hotkey,actionsetting))
-
-		self.hotkeyList = hkList
-
-
-class HotkeyBinding:
-	def __init__(self, bar, button, hotkey, action):
-		self.bar = bar
-		self.button = button
-		self.hotkey = hotkey
-		self.action = action
-
-	def print(self):
-		print('Bar %s, Button %s, Hotkey %s, Action : %s'%(self.bar, self.button, self.hotkey, self.action))
-
 class ArcPlacement(Enum):
 	NONE = 0
 	RIGHT = 1
 	LEFT = 2
+	BOTH = 3
 
 class ActionType(Enum):
 	CONSUMABLE = 1
@@ -111,7 +70,8 @@ class CooldownGroup(Enum):
 	SPECIAL = 5
 	CONJURE = 6
 	STRONGSTRIKE = 7
-	NONE = 8
+	FIELD = 8
+	NONE = 9
 
 class EquipmentType(Enum):
 	RING = 1
@@ -128,18 +88,144 @@ class UseType(Enum):
 	TARGET = 1
 	CROSSHAIR = 2
 
+class OptionsHandler:
+	def __init__(self, characterName, chatMode=ChatMode.OFF):
+		self.getUserOptions()
+		self.getCharacterHotkeySet(characterName)
+		self.createHotkeyBindingList(chatMode)
+		self.createGroupList()
+		self.createActionList()
+
+		self.printHotkeyList()
+		#self.printActionList()
+
+	def printActionList(self):
+		for action in self.actionList:
+			print(action)
+
+	def getUserOptions(self):
+		with open('config.json', 'r') as f:
+			self.userOptions = json.load(f)['useroptions']
+
+		self.path = self.userOptions['clientoptions']['path']
+		self.filename = self.userOptions['clientoptions']['filename']
+
+	def createGroupList(self):
+		self.groupList = []
+		
+		# Get group information from file
+		with open('config.json', 'r') as f:
+			groups = json.load(f)['groups']
+
+		# Populate group list
+		for g in groups:
+			name = groups[g]['displayinfo']['name']
+			color = ColorCode.rgb2hex(groups[g]['displayinfo']['color'])
+			cdg = CooldownGroup[g.upper()]
+			cooldown = groups[g]['info']['cooldown']
+			visible = groups[g]['displayinfo']['text']
+
+			tg = TrackedGroup(name,color,cdg,cooldown,visible=visible)
+			self.groupList.append(tg)
+
+	def createActionList(self):
+		self.actionList = []
+
+		# Load objects and spells information from file
+		with open('config.json','r') as f:
+			data = json.load(f)
+			items = data['items']
+			spells = data['spells']
+
+		for hk in self.hotkeyList:
+			# Objects
+			if 'useObject' in hk.action:
+				itemId = str(hk.action['useObject'])
+				if itemId in items:
+					name = items[itemId]['displayinfo']['name']
+					color = ColorCode.rgb2hex(items[itemId]['displayinfo']['color'])
+					cdg = [CooldownGroup[g.upper()] for g in items[itemId]['info']['groups']]
+					hotkey = [hk.hotkey]
+					if hk.action['useType'].startswith('UseOn'):
+						usetype = UseType.TARGET
+					elif hk.action['useType'].startswith('Select'):
+						usetype = UseType.CROSSHAIR
+					text = items[itemId]['displayinfo']['text']
+					arc = ArcPlacement[items[itemId]['displayinfo']['arc'].upper()]
+
+					ta = TrackedAction(name,color,cdg,ActionType.ATKRUNE,hotkey,ut=usetype,visible=text,ap=arc)
+					self.actionList.append(ta)
+
+			# Spells
+			if 'chatText' in hk.action:
+				spell = hk.action['chatText']
+				if hk.action['chatText'] in spells:
+					name = spells[spell]['displayinfo']['name']
+					color = ColorCode.rgb2hex(spells[spell]['displayinfo']['color'])
+					cdg = [CooldownGroup[g.upper()] for g in spells[spell]['info']['groups']]
+					hotkey = [hk.hotkey]
+					cooldown = spells[spell]['info']['cooldown']
+					duration = spells[spell]['info']['duration']
+					text = spells[spell]['displayinfo']['text']
+					arc = ArcPlacement[spells[spell]['displayinfo']['arc'].upper()]
+
+					ta = TrackedAction(name,color,cdg,ActionType.ATKRUNE,hotkey,max(cooldown,duration),visible=text,ap=arc)
+					self.actionList.append(ta)
+
+	def getCharacterHotkeySet(self,characterName):
+		with open(self.path+self.filename, 'r') as f:
+			self.hotkeySet = json.load(f)['hotkeyOptions']['hotkeySets'][characterName]
+
+	def createHotkeyBindingList(self,chatMode):
+		hkList = []
+		for action in self.hotkeySet[chatMode]:
+			s = action['actionsetting']['action']
+			
+			# Checks if binding is a button in action bar
+			if s.startswith('TriggerActionButton'):
+				[bar, button] = [int(x) for x in re.findall('\d+', s)]
+
+				# Looks for an actionsetting in the clientoption mappings
+				for mapping in self.hotkeySet['actionBarOptions']['mappings']:
+					if [bar, button] == [mapping['actionBar'], mapping['actionButton']] and 'actionsetting' in mapping.keys():
+						actionsetting = mapping['actionsetting']
+						hotkey = action['keysequence']
+
+						# Appends hotkey binding
+						hkList.append(HotkeyBinding(bar,button,hotkey,actionsetting))
+
+		self.hotkeyList = hkList
+
+	def printHotkeyList(self):
+		for hk in self.hotkeyList:
+			hk.print()
+
+class HotkeyBinding:
+	def __init__(self, bar, button, hotkey, action):
+		self.bar = bar
+		self.button = button
+		self.hotkey = hotkey
+		self.action = action
+
+	def print(self):
+		print('Bar %s, Button %s, Hotkey %s, Action : %s'%(self.bar, self.button, self.hotkey, self.action))
+
 class PositionHandler:
 	def __init__(self):
 		self.position = self.loadPositionFromFile()
 		
 	def savePositionToFile(self):
+		with open('config.json', 'r') as f:
+			data = json.load(f)
+			data['useroptions']['position'] = self.position
+			
 		with open('config.json', 'w') as f:
-			json.dump({'position':self.position}, f)
+			json.dump(data, f)
 		print ('File saved!')
 			
 	def loadPositionFromFile(self):
 		with open('config.json', 'r') as f:
-			self.position = json.load(f)['position']
+			self.position = json.load(f)['useroptions']['position']
 		return self.position
 		
 	def moveArcsRight(self):
@@ -556,6 +642,7 @@ class WindowHandler:
 					self.drawTimerLabel(hdc,pos,ColorCode.ORANGE,float(i))
 
 			else:
+				idx = 0
 				sr = alpha
 				rr = r
 				for idx,action in enumerate(self.rightArcToDraw):
