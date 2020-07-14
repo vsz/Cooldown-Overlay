@@ -115,7 +115,7 @@ class OptionsHandler:
 			print(action)
 
 	def getUserOptions(self):
-		with open('config.json', 'r') as f:
+		with open('config.json', 'r', encoding='utf-8') as f:
 			self.userOptions = json.load(f)['useroptions']
 
 		self.path = self.userOptions['clientoptions']['path']
