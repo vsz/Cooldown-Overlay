@@ -95,15 +95,16 @@ class OptionsHandler:
 		self.createHotkeyBindingList(chatMode)
 		self.createGroupList()
 		self.createActionList()
-		if self.autoposition:
-			self.determinePosition()
+		self.determinePosition()
 
 		#self.printHotkeyList()
 		#self.printActionList()
 
 	def determinePosition(self):
-		self.getClientWindowOptions()
-
+		self.position = self.userOptions['position']
+		if self.autoposition:
+			self.getClientWindowOptions()
+		
 	def getClientWindowOptions(self):
 		with open(self.path+self.filename, 'r') as f:
 			self.clientWindowOptions = json.load(f)['clientWindowOptions']
@@ -186,7 +187,12 @@ class OptionsHandler:
 
 	def getCharacterHotkeySet(self,characterName):
 		with open(self.path+self.filename, 'r') as f:
-			self.hotkeySet = json.load(f)['hotkeyOptions']['hotkeySets'][characterName]
+			hotkeySets = json.load(f)['hotkeyOptions']['hotkeySets']
+			if characterName in hotkeySets:
+				self.hotkeySet = hotkeySets[characterName]
+			else:
+				raise Exception("Character name not found in hotkeys.")
+			
 
 	def createHotkeyBindingList(self,chatMode):
 		hkList = []
@@ -223,8 +229,9 @@ class HotkeyBinding:
 		print('Bar %s, Button %s, Hotkey %s, Action : %s'%(self.bar, self.button, self.hotkey, self.action))
 
 class PositionHandler:
-	def __init__(self):
-		self.position = self.loadPositionFromFile()
+	def __init__(self,optionsHandler):
+		self.optionsHandler = optionsHandler
+		self.position = self.optionsHandler.position
 		
 	def savePositionToFile(self):
 		with open('config.json', 'r') as f:
@@ -234,11 +241,6 @@ class PositionHandler:
 		with open('config.json', 'w') as f:
 			json.dump(data, f)
 		print ('File saved!')
-			
-	def loadPositionFromFile(self):
-		with open('config.json', 'r') as f:
-			self.position = json.load(f)['useroptions']['position']
-		return self.position
 		
 	def moveArcsRight(self):
 		self.position['axc'] += 1
@@ -352,15 +354,15 @@ class PositionHandler:
 		self.position['aycm'] = self.position['ayc']
 
 class WindowHandler:
-	def __init__(self,actionList,groupList,equipmentList,emptyLines,positionHandler):
-		# Filter what do draw
-		self.groupsToDraw = [g for g in groupList if g.visible]
-		self.actionsToDraw = [a for a in actionList if a.visible]
-		self.equipmentToDraw = [e for e in equipmentList if e.visible]
-		self.rightArcToDraw = [a for a in actionList if a.arcPlacement == ArcPlacement.RIGHT]
-		self.leftArcToDraw = [a for a in actionList if a.arcPlacement == ArcPlacement.LEFT]
-		
+	def __init__(self,optionsHandler,equipmentList,emptyLines,positionHandler):
+
 		self.emptyLines = emptyLines
+		self.equipmentToDraw = [e for e in equipmentList if e.visible]
+
+		# Initialize options on what do draw
+		self.optionsHandler = optionsHandler
+		self.updateVisibility()
+
 		
 		# Initialize positions of text and arcs
 		self.positionHandler = positionHandler
@@ -381,6 +383,13 @@ class WindowHandler:
 
 	def getWindowSize(self):
 		return self.size
+
+	def updateVisibility(self):
+		# Filter what do draw
+		self.groupsToDraw = [g for g in self.optionsHandler.groupList if g.visible]
+		self.actionsToDraw = [a for a in self.optionsHandler.actionList if a.visible]
+		self.rightArcToDraw = [a for a in self.optionsHandler.actionList if a.arcPlacement == ArcPlacement.RIGHT]
+		self.leftArcToDraw = [a for a in self.optionsHandler.actionList if a.arcPlacement == ArcPlacement.LEFT]
 
 	def updatePositions(self):
 		self.setTextPosition(self.positionHandler.getTextPosition())
@@ -698,11 +707,14 @@ class WindowHandler:
 			return win32gui.DefWindowProc(hWnd, message, wParam, lParam)
 
 class ActionTracker(threading.Thread):
-	def __init__(self,actionList,equipmentList,groupList,equipmentSlotList):
-		self.actionList = actionList
+	def __init__(self,optionsHandler,equipmentList,equipmentSlotList):
+		self.optionsHandler = optionsHandler
+		self.actionList = optionsHandler.actionList
+		self.groupList = optionsHandler.groupList
+
 		self.equipmentList = equipmentList
-		self.groupList = groupList
 		self.equipmentSlotList = equipmentSlotList
+
 		self.abort = False
 		self.setup = False
 
@@ -764,10 +776,13 @@ class ActionTracker(threading.Thread):
 			time.sleep(Ts)
 
 class HotkeyTracker(threading.Thread):
-	def __init__(self,actionList,equipmentList,groupList,windowHandler,positionHandler,resetKey='-',mountKey='+'):
-		self.actionList = actionList
+	def __init__(self,optionsHandler,equipmentList,windowHandler,positionHandler,resetKey='-',mountKey='+'):
+		self.optionsHandler = optionsHandler
+		self.actionList = self.optionsHandler.actionList
+		self.groupList = self.optionsHandler.groupList
+
 		self.equipmentList = equipmentList
-		self.groupList = groupList
+		
 		self.windowHandler = windowHandler
 		self.positionHandler = positionHandler
 		self.resetKey = resetKey
@@ -891,8 +906,9 @@ class HotkeyTracker(threading.Thread):
 			group.resetCountdown()
 
 class MouseTracker(threading.Thread):
-	def __init__(self,actionList,positionHandler):
-		self.actionList = actionList
+	def __init__(self,optionsHandler,positionHandler):
+		self.optionsHandler = optionsHandler
+		self.actionList = self.optionsHandler.actionList
 		self.positionHandler = positionHandler
 		self.setup = False
 		threading.Thread.__init__(self)

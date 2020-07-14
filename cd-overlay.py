@@ -44,19 +44,19 @@ def main(options):
 	optionsHandler = OptionsHandler(charName)
 
 	# Create position handler
-	positionHandler = PositionHandler()
+	positionHandler = PositionHandler(optionsHandler)
 
 	# Create transparent window
-	windowHandler = WindowHandler(optionsHandler.actionList,optionsHandler.groupList,equipmentList,emptyLines, positionHandler)
+	windowHandler = WindowHandler(optionsHandler,equipmentList,emptyLines, positionHandler)
 
 	# Thread that detects keyboard hotkeys
-	tHotkeyTracker = HotkeyTracker(optionsHandler.actionList,equipmentList,optionsHandler.groupList,windowHandler,positionHandler,resetKey,mountKey)
+	tHotkeyTracker = HotkeyTracker(optionsHandler,equipmentList,windowHandler,positionHandler,resetKey,mountKey)
 
 	# Thread that detects mouse buttons
-	tMouseTracker = MouseTracker(optionsHandler.actionList,positionHandler)
+	tMouseTracker = MouseTracker(optionsHandler,positionHandler)
 
 	# Thread that tracks actions
-	tActionTracker = ActionTracker(optionsHandler.actionList,equipmentList,optionsHandler.groupList,equipmentSlotList)
+	tActionTracker = ActionTracker(optionsHandler,equipmentList,equipmentSlotList)
 	
 	# Setup mode
 	if setup:
