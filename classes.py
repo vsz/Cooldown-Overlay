@@ -95,9 +95,20 @@ class OptionsHandler:
 		self.createHotkeyBindingList(chatMode)
 		self.createGroupList()
 		self.createActionList()
+		if self.autoposition:
+			self.determinePosition()
 
-		self.printHotkeyList()
+		#self.printHotkeyList()
 		#self.printActionList()
+
+	def determinePosition(self):
+		self.getClientWindowOptions()
+
+	def getClientWindowOptions(self):
+		with open(self.path+self.filename, 'r') as f:
+			self.clientWindowOptions = json.load(f)['clientWindowOptions']
+			print(self.clientWindowOptions)
+
 
 	def printActionList(self):
 		for action in self.actionList:
@@ -109,6 +120,7 @@ class OptionsHandler:
 
 		self.path = self.userOptions['clientoptions']['path']
 		self.filename = self.userOptions['clientoptions']['filename']
+		self.autoposition = self.userOptions['autoposition']
 
 	def createGroupList(self):
 		self.groupList = []
