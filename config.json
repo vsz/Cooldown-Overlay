@@ -3418,7 +3418,7 @@
     },
     "useroptions":{
         "clientoptions":{
-            "path":"C:/Users/Vítor/AppData/Local/Tibia/packages/Tibia/conf/",
+            "path":"C:/Users/username/AppData/Local/Tibia/packages/Tibia/conf/",
             "filename":"clientoptions.json"
         },
         "autoposition":true,

@@ -1230,18 +1230,14 @@ class TrackedAction:
 			self.setCountdown(self.time)
 			self.setScale(self.time)
 			self.resetTrigger()
-			print(self.labelText+" Trigger by Action")
+			#print(self.labelText+" Trigger by Action")
 			
 		if self.groupTrigger and not self.trigger:
 			self.run()
-			if self.countdown>0:
-				pass
-			else:
-				self.setScale(self.groupTime)
+			if self.countdown==0: self.setScale(self.groupTime)
 			self.setCountdown(self.groupTime)
-	
 			self.resetGroupTrigger()
-			print(self.labelText+" Trigger by Group")
+			#print(self.labelText+" Trigger by Group")
 		
 		if self.running : self.decrementCountdown(Ts)
 		
