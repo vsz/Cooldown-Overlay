@@ -1,8 +1,6 @@
 from classes import *
 
 # Initialize
-actionList = []
-groupList = []
 equipmentList = []
 equipmentSlotList = []
 

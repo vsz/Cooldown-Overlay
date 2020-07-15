@@ -985,8 +985,11 @@ class TrackedGroup:
 				
 	def triggerGroup(self):
 		for action in self.actionList:
-			action.triggerByGroup()
-			action.setGroupTime(self.time)
+			if action.trigger:
+				pass
+			else:
+				action.triggerByGroup()
+				action.setGroupTime(self.time)
 			
 		for action in self.affectedActionList:
 			action.triggerByGroup()
@@ -1187,8 +1190,10 @@ class TrackedAction:
 	
 	def setCountdown(self,cd):
 		self.countdown = max(self.countdown,cd)
-		self.scale = self.countdown
-	
+		
+	def setScale(self,s):
+		self.scale = s
+
 	def resetCountdown(self):
 		self.countdown = 0.0
 
@@ -1215,7 +1220,6 @@ class TrackedAction:
 			if self.armed:
 				self.unarm()
 				
-
 	def triggerByGroup(self):
 		self.groupTrigger = True
 	
@@ -1224,21 +1228,20 @@ class TrackedAction:
 		if self.trigger and not self.groupTrigger:
 			self.run()
 			self.setCountdown(self.time)
+			self.setScale(self.time)
 			self.resetTrigger()
-			#print(self.labelText+" Trigger by Action")
+			print(self.labelText+" Trigger by Action")
 			
 		if self.groupTrigger and not self.trigger:
 			self.run()
+			if self.countdown>0:
+				pass
+			else:
+				self.setScale(self.groupTime)
 			self.setCountdown(self.groupTime)
+	
 			self.resetGroupTrigger()
-			#print(self.labelText+" Trigger by Group")
-		
-		if self.trigger and self.groupTrigger:
-			self.run()
-			self.setCountdown(max(self.groupTime,self.time))
-			self.resetTrigger()
-			self.resetGroupTrigger()
-			#print(self.labelText+" Action triggered the group")
+			print(self.labelText+" Trigger by Group")
 		
 		if self.running : self.decrementCountdown(Ts)
 		

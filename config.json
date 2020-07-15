@@ -707,7 +707,7 @@
                     204
                 ],
                 "text":false,
-                "arc":"none"
+                "arc":"left"
             }
         },
         "236":{
@@ -906,11 +906,11 @@
                 "name":"Berserk",
                 "color":[
                     255,
-                    0,
+                    51,
                     0
                 ],
-                "text":false,
-                "arc":"none",
+                "text":true,
+                "arc":"right",
                 "track":[
                     "duration",
                     "cooldown"
@@ -978,11 +978,11 @@
                 "name":"Brutal Strike",
                 "color":[
                     255,
-                    0,
-                    0
+                    194,
+                    179
                 ],
-                "text":false,
-                "arc":"none",
+                "text":true,
+                "arc":"right",
                 "track":[
                     "duration",
                     "cooldown"
@@ -1065,7 +1065,7 @@
             "info":{
                 "spell":"Charge",
                 "cooldown":2,
-                "duration":0,
+                "duration":5,
                 "groups":[
                     "support"
                 ]
@@ -1073,11 +1073,11 @@
             "displayinfo":{
                 "name":"Charge",
                 "color":[
-                    255,
-                    0,
-                    0
+                    210,
+                    210,
+                    210
                 ],
-                "text":false,
+                "text":true,
                 "arc":"none",
                 "track":[
                     "duration",
@@ -1916,12 +1916,12 @@
             "displayinfo":{
                 "name":"Groundshaker",
                 "color":[
-                    255,
-                    0,
+                    128,
+                    26,
                     0
                 ],
-                "text":false,
-                "arc":"none",
+                "text":true,
+                "arc":"right",
                 "track":[
                     "duration",
                     "cooldown"
@@ -1940,9 +1940,9 @@
             "displayinfo":{
                 "name":"Haste",
                 "color":[
-                    255,
-                    0,
-                    0
+                    220,
+                    220,
+                    220
                 ],
                 "text":true,
                 "arc":"none",
@@ -3245,14 +3245,14 @@
                 ]
             },
             "displayinfo":{
-                "name":"Whirlwind Throw",
+                "name":"WW Throw",
                 "color":[
                     255,
-                    0,
-                    0
+                    112,
+                    77
                 ],
-                "text":false,
-                "arc":"none",
+                "text":true,
+                "arc":"right",
                 "track":[
                     "duration",
                     "cooldown"
@@ -3271,12 +3271,12 @@
             "displayinfo":{
                 "name":"Wound Cleansing",
                 "color":[
-                    255,
                     0,
-                    0
+                    255,
+                    255
                 ],
                 "text":false,
-                "arc":"none",
+                "arc":"left",
                 "track":[
                     "duration",
                     "cooldown"
@@ -3418,7 +3418,7 @@
     },
     "useroptions":{
         "clientoptions":{
-            "path":"C:/Users/username/AppData/Local/Tibia/packages/Tibia/conf/",
+            "path":"C:/Users/Vítor/AppData/Local/Tibia/packages/Tibia/conf/",
             "filename":"clientoptions.json"
         },
         "autoposition":true,
