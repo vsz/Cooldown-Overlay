@@ -97,19 +97,8 @@ class OptionsHandler:
 		self.createActionList()
 		self.determinePosition()
 
-		#self.printHotkeyList()
-		#self.printActionList()
-
 	def determinePosition(self):
 		self.position = self.userOptions['position']
-		if self.autoposition:
-			self.getClientWindowOptions()
-		
-	def getClientWindowOptions(self):
-		with open(self.path+self.filename, 'r') as f:
-			self.clientWindowOptions = json.load(f)['clientWindowOptions']
-			print(self.clientWindowOptions)
-
 
 	def printActionList(self):
 		for action in self.actionList:
@@ -1225,16 +1214,18 @@ class TrackedAction:
 	
 	def track(self,Ts):
 		
-		if self.trigger and not self.groupTrigger:
+		if self.trigger:
 			self.run()
+			if self.countdown<self.time:
+				self.setScale(self.time)
 			self.setCountdown(self.time)
-			self.setScale(self.time)
 			self.resetTrigger()
 			#print(self.labelText+" Trigger by Action")
 			
-		if self.groupTrigger and not self.trigger:
+		elif self.groupTrigger:
 			self.run()
-			if self.countdown==0: self.setScale(self.groupTime)
+			if self.countdown==0 or self.groupTime>self.scale: 
+				self.setScale(self.groupTime)
 			self.setCountdown(self.groupTime)
 			self.resetGroupTrigger()
 			#print(self.labelText+" Trigger by Group")
