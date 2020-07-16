@@ -175,13 +175,15 @@ class OptionsHandler:
 					self.actionList.append(ta)
 
 	def getCharacterHotkeySet(self,characterName):
-		with open(self.path+self.filename, 'r') as f:
-			hotkeySets = json.load(f)['hotkeyOptions']['hotkeySets']
-			if characterName in hotkeySets:
-				self.hotkeySet = hotkeySets[characterName]
-			else:
-				raise Exception("Character name not found in hotkeys.")
-			
+		try:
+			with open(self.path+self.filename, 'r') as f:
+				hotkeySets = json.load(f)['hotkeyOptions']['hotkeySets']
+				if characterName in hotkeySets:
+					self.hotkeySet = hotkeySets[characterName]
+				else:
+					raise Exception("Character name not found in hotkeys.")
+		except:
+			raise Exception("Could not open file in "+self.path+self.filename)
 
 	def createHotkeyBindingList(self,chatMode):
 		hkList = []
