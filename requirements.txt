@@ -1,3 +1,3 @@
 keyboard==0.13.2
 mouse==0.7.0
-pywin32==223
+pywin32==301
